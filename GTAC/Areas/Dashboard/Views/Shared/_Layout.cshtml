@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Dashboard</title>
+    <title>@ViewData["Title"] - GTAC Dashboard</title>
 
     <!-- Custom fonts for this template-->
     <link href="~/assets-dashboard/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -40,10 +40,47 @@
             <hr class="sidebar-divider my-0">
 
             <!-- Nav Item - Dashboard -->
-            <li class="nav-item active">
+            <li class="nav-item @ViewData["NavDashboard"]">
                 <a class="nav-link" href="index.html">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span>
+                </a>
+            </li>
+            <!-- Nav Item - Schedules -->
+            <li class="nav-item @ViewData["NavSchedules"]">
+                <a class="nav-link" href="index.html">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Schedules</span>
+                </a>
+            </li>
+            <!-- Nav Item - Modules -->
+            <li class="nav-item @ViewData["NavModules"]">
+                <a class="nav-link" href="index.html">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Modules</span>
+                </a>
+            </li>
+            <!-- Nav Item - Quizzes -->
+            <li class="nav-item @ViewData["NavQuizzes"]">
+                <a class="nav-link" href="index.html">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Quizzes</span>
+                </a>
+            </li>
+
+            <!-- Nav Item - Students -->
+            <li class="nav-item @ViewData["NavStudents"]">
+                <a class="nav-link" href="index.html">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Students</span>
+                </a>
+            </li>
+
+            <!-- Nav Item - Certificates -->
+            <li class="nav-item @ViewData["NavCertificates"]">
+                <a class="nav-link" href="index.html">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Certificates</span>
                 </a>
             </li>
 
