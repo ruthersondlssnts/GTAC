@@ -1,4 +1,4 @@
-﻿@model GTAC.Models.Schedule
+﻿@model GTAC.Models.RequestReschedule
 
 @{
     ViewData["Title"] = "Edit";
@@ -6,7 +6,7 @@
 
 <h1>Edit</h1>
 
-<h4>Schedule</h4>
+<h4>RequestReschedule</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -34,9 +34,9 @@
                 <span asp-validation-for="DayFour" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="StudentId" class="control-label"></label>
-                <select asp-for="StudentId" class="form-control" asp-items="ViewBag.StudentId"></select>
-                <span asp-validation-for="StudentId" class="text-danger"></span>
+                <label asp-for="ScheduleId" class="control-label"></label>
+                <select asp-for="ScheduleId" class="form-control" asp-items="ViewBag.ScheduleId"></select>
+                <span asp-validation-for="ScheduleId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ApprovedAt" class="control-label"></label>

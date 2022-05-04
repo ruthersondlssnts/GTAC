@@ -1,0 +1,71 @@
+﻿@model IEnumerable<GTAC.Models.RequestReschedule>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DayOne)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DayTwo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DayThree)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DayFour)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ApprovedAt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Schedule)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DayOne)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DayTwo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DayThree)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DayFour)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ApprovedAt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Schedule.Id)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using GTAC.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace GTAC.Areas.Identity.Pages.Account
 {
@@ -85,6 +86,10 @@ namespace GTAC.Areas.Identity.Pages.Account
             public string Email { get; set; }
 
             [Required]
+            [Display(Name = "Instructor")]
+            public string Instructor { get; set; }
+
+            [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
@@ -99,19 +104,12 @@ namespace GTAC.Areas.Identity.Pages.Account
         public async Task OnGetAsync(string returnUrl = null)
         {
             ReturnUrl = returnUrl;
-            var instructors = _userManager.GetUsersInRoleAsync("Instructor").Result;
-            var instructorsWithTotalStudents = _context.Schedules
-                     .Include(s => s.Student)
-                     .Where(s => s.Status == Status.Approved && s.Date.Date > DateTime.Now)
-                     .ToList()
-                     .GroupBy(s => s.Student.InstructorId)
-                     .Select(s => new { InstructorId = s.Key, TotalStudents = s.Count() })
-                     .OrderBy(s => s.TotalStudents)
-                     .ToList();
-
-            var diff = instructors.Where(ins => !instructorsWithTotalStudents.Any(inswstud => ins.Id == inswstud.InstructorId));
-            
-
+            var instructors = (from user in _context.Users
+                               join user_role in _context.UserRoles on user.Id equals user_role.UserId
+                               join role in _context.Roles on user_role.RoleId equals role.Id
+                               where role.Name == "Instructor"
+                               select new { Id = user.Id, FullName = user.Firstname + " " + user.Lastname }).ToList();
+            ViewData["Instructors"] = new SelectList(instructors, "Id", "FullName");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
 
@@ -151,15 +149,8 @@ namespace GTAC.Areas.Identity.Pages.Account
                     var student = new Student();
                     student.Id = Guid.NewGuid();
                     student.UserId = user.Id;
-                    student.InstructorId = _context.Schedules
-                        .Include(s => s.Student)
-                        .Where(s => s.Status == Status.Approved && s.Date.Date > DateTime.Now)
-                        .ToList()
-                        .GroupBy(s => s.Student.InstructorId)
-                        .Select(x => new { InstructorId = x.Key, TotalStudents = x.Count() })
-                        .OrderByDescending(x => x.TotalStudents)
-                        .FirstOrDefault().InstructorId;
 
+                    student.InstructorId = Input.Instructor;
                     _context.Students.Add(student);
                     await _context.SaveChangesAsync();
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)

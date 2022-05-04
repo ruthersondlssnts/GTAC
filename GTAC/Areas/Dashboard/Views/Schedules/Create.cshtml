@@ -1,53 +1,124 @@
 ﻿@model GTAC.Models.Schedule
 
 @{
-    ViewData["Title"] = "Appointments";
+    ViewData["Title"] = "Create";
     ViewData["NavSchedules"] = "active";
 }
-
 <style>
     .day.disabled {
         background: #d7bfbf !important;
     }
+
+    option:disabled {
+        color: #d7bfbf !important;
+    }
 </style>
 <div class="row">
-    <div class="col-lg-6">
+    <div class="col-lg-5">
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Create an Appointment</h6>
+                <h6 class="m-0 font-weight-bold text-primary">Set your Schedule</h6>
             </div>
             <div class="card-body">
-                <form asp-action="Create" id="form_save_appointment">
-                    <input type="text" asp-for="Date" class="form-control" style="opacity:0;position:absolute" />
-
+                <form asp-action="Create">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <div style="overflow:hidden;">
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label class="control-label">Select An Available Date</label>
-                                    <div id="appointment_date_picker"></div>
-                                    <span asp-validation-for="Date" class="text-danger"></span>
+                    <input type="text" asp-for="DayOne" style="opacity:0; position:absolute" />
+                    <input type="text" asp-for="DayTwo" style="opacity:0; position:absolute" />
+                    <input type="text" asp-for="DayThree" style="opacity:0; position:absolute" />
+                    <input type="text" asp-for="DayFour" style="opacity:0; position:absolute" />
+
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label class="control-label">Day 1</label>
+                            <div class="input-group date" id="datepicker1" data-target-input="nearest">
+                                <input type="text" class="form-control datetimepicker-input datetimepicker-input1" data-target="#datepicker1" />
+                                <div class="input-group-append" data-target="#datepicker1" data-toggle="datetimepicker">
+                                    <div class="input-group-text" style="background:white"><i class="fa fa-calendar"></i></div>
                                 </div>
                             </div>
+                            <span asp-validation-for="DayOne" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="control-label">Time Schedule</label>
+                            <select class="form-control" id="timepicker1">
+                                <option value="">Please Select Time</option>
+                                <option value="7:30 AM">7:30am to 9:30am</option>
+                                <option value="10:00 AM">10:00am to 12:00nn</option>
+                                <option value="1:00 AM">1:00pm to 3:00pm</option>
+                                <option value="3:00 AM">3:00pm to 5:00pm</option>
+                            </select>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-md-6 d-none" id="time_content">
-                            <label class="control-label">Available Time Schedule</label>
-                            <select asp-for="Time" class="form-control">
+                        <div class="form-group col-md-6">
+                            <label class="control-label">Day 2</label>
+                            <div class="input-group date" id="datepicker2" data-target-input="nearest">
+                                <input type="text" class="form-control datetimepicker-input datetimepicker-input2" data-target="#datepicker2" />
+                                <div class="input-group-append" data-target="#datepicker2" data-toggle="datetimepicker">
+                                    <div class="input-group-text" style="background:white"><i class="fa fa-calendar"></i></div>
+                                </div>
+                            </div>
+                            <span asp-validation-for="DayTwo" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="control-label">Time Schedule</label>
+                            <select class="form-control" id="timepicker2">
+                                <option value="">Please Select Time</option>
+                                <option value="7:30 AM">7:30am to 9:30am</option>
+                                <option value="10:00 AM">10:00am to 12:00nn</option>
+                                <option value="1:00 AM">1:00pm to 3:00pm</option>
+                                <option value="3:00 AM">3:00pm to 5:00pm</option>
                             </select>
-                            <span asp-validation-for="Time" class="text-danger"></span>
                         </div>
-                        <div class="form-group col-md-12">
-                            <label asp-for="Concerns" class="control-label"></label>
-                            <textarea asp-for="Concerns" class="form-control"></textarea>
-                            <span asp-validation-for="Concerns" class="text-danger"></span>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label class="control-label">Day 3</label>
+                            <div class="input-group date" id="datepicker3" data-target-input="nearest">
+                                <input type="text" class="form-control datetimepicker-input datetimepicker-input3" data-target="#datepicker3" />
+                                <div class="input-group-append" data-target="#datepicker3" data-toggle="datetimepicker">
+                                    <div class="input-group-text" style="background:white"><i class="fa fa-calendar"></i></div>
+                                </div>
+                            </div>
+                            <span asp-validation-for="DayThree" class="text-danger"></span>
                         </div>
-                        <div class="form-group col-md-12">
-                            <input type="submit" value="Save" class="btn btn-primary" /> |
-                            <a asp-action="Index">Back to List</a>
+                        <div class="form-group col-md-6">
+                            <label class="control-label">Time Schedule</label>
+                            <select class="form-control" id="timepicker3">
+                                <option value="">Please Select Time</option>
+                                <option value="7:30 AM">7:30am to 9:30am</option>
+                                <option value="10:00 AM">10:00am to 12:00nn</option>
+                                <option value="1:00 AM">1:00pm to 3:00pm</option>
+                                <option value="3:00 AM">3:00pm to 5:00pm</option>
+                            </select>
                         </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label class="control-label">Day 4</label>
+                            <div class="input-group date" id="datepicker4" data-target-input="nearest">
+                                <input type="text" class="form-control datetimepicker-input datetimepicker-input4" data-target="#datepicker4" />
+                                <div class="input-group-append" data-target="#datepicker4" data-toggle="datetimepicker">
+                                    <div class="input-group-text" style="background:white"><i class="fa fa-calendar"></i></div>
+                                </div>
+                            </div>
+                            <span asp-validation-for="DayFour" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="control-label">Time Schedule</label>
+                            <select class="form-control" id="timepicker4">
+                                <option value="">Please Select Time</option>
+                                <option value="7:30 AM">7:30am to 9:30am</option>
+                                <option value="10:00 AM">10:00am to 12:00nn</option>
+                                <option value="1:00 AM">1:00pm to 3:00pm</option>
+                                <option value="3:00 AM">3:00pm to 5:00pm</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12">
+                        <input type="submit" value="Save" class="btn btn-primary" /> |
+                        <a asp-action="Index">Back to List</a>
                     </div>
                 </form>
             </div>
@@ -56,70 +127,149 @@
 
 </div>
 
-
-
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script type="text/javascript">
+    <script>
+        $.ajax({
+            url: "/Dashboard/Schedules/GetDisabledDates",
+            type: "get",
+            success: function (res) {
+                $('#datepicker1').datetimepicker({
+                    format: 'L',
+                    useCurrent: false,
+                    minDate: new Date(),
+                    disabledDates: res.dates,
+                    daysOfWeekDisabled: [0, 6]
+                });
+                $('#datepicker2').datetimepicker({
+                    useCurrent: false,
+                    format: 'L',
+                    minDate: new Date(),
+                    disabledDates: res.dates,
+                    daysOfWeekDisabled: [0, 6]
+                });
 
-        $(function () {
-            //get disabled dates
+                $('#datepicker3').datetimepicker({
+                    useCurrent: false,
+                    format: 'L',
+                    minDate: new Date(),
+                    disabledDates: res.dates,
+                    daysOfWeekDisabled: [0, 6]
+                });
 
+                $('#datepicker4').datetimepicker({
+                    useCurrent: false,
+                    format: 'L',
+                    minDate: new Date(),
+                    disabledDates: res.dates,
+                    daysOfWeekDisabled: [0, 6]
+                });
+
+            },
+            error: function (err) {
+                console.log(err)
+            }
+        });
+
+
+
+        function getNextValidDate(date) {
+            let nextDate = null;
+            for (var i = 1; true; i++) {
+                nextDate = moment(date).add(i, 'days')
+                let day = moment(date).add(i, 'days').day();
+                if (day != '6' && day != '0') {
+                    break;
+                }
+            }
+            return nextDate;
+        }
+
+        $("#datepicker1").on("change.datetimepicker", function (e) {
+            $('#datepicker2').datetimepicker('minDate', moment(e.date).add(1, 'days'));
+            $('#datepicker2').datetimepicker('date', getNextValidDate(e.date));
+
+            getDisabledTimes(e.date, "#timepicker1")
+
+            if ($("#timepicker1").val()) {
+                let date_converted = moment(e.date).format('L');
+                $('#DayOne').attr('value', date_converted + " " + $("#timepicker1").val()).blur();
+            }
+        });
+        $("#datepicker2").on("change.datetimepicker", function (e) {
+            $('#datepicker3').datetimepicker('minDate', moment(e.date).add(1, 'days'));
+            $('#datepicker3').datetimepicker('date', getNextValidDate(e.date));
+
+            getDisabledTimes(e.date, "#timepicker2")
+
+            if ($("#timepicker2").val()) {
+                let date_converted = moment(e.date).format('L');
+                $('#DayTwo').attr('value', date_converted + " " + $("#timepicker2").val()).blur();
+            }
+        });
+
+        $("#datepicker3").on("change.datetimepicker", function (e) {
+            $('#datepicker4').datetimepicker('minDate', moment(e.date).add(1, 'days'));
+            $('#datepicker4').datetimepicker('date', getNextValidDate(e.date));
+
+            getDisabledTimes(e.date, "#timepicker3")
+
+            if ($("#timepicker3").val()) {
+                let date_converted = moment(e.date).format('L');
+                $('#DayThree').attr('value', date_converted + " " + $("#timepicker3").val()).blur();
+            }
+        });
+
+        $("#datepicker4").on("change.datetimepicker", function (e) {
+            let date_converted = moment(e.date).format('L');
+
+            getDisabledTimes(e.date, "#timepicker4")
+
+            if ($("#timepicker4").val()) {
+                $('#DayFour').attr('value', date_converted + " " + $("#timepicker4").val()).blur();
+            }
+        });
+
+
+        function getDisabledTimes(date, el) {
             $.ajax({
-                url: "/Dashboard/Schedules/GetDisabledDates",
+                url: "/Dashboard/Schedules/GetDisabledTime",
                 type: "get",
+                data: { date: moment(date).format('L') },
                 success: function (res) {
-                    $('#appointment_date_picker').datetimepicker({
-                        inline: true,
-                        format: 'L',
-                        useCurrent: false,
-                        minDate: new Date(),
-                        disabledDates: res.dates.map(x => x.date),
-                        daysOfWeekDisabled: [0]
-                    });
+                    console.log(res.times);
+                    let times = res.times;
+                    for (var i = 0; i < times.length; i++) {
+                        let selector = `option[value='${times[i]}']`;
+                        $(el).find(selector).prop('disabled', true);
+                        $(el).find(selector).css('color', "#d7bfbf !important");
+                    }
                 },
                 error: function (err) {
                     console.log(err)
                 }
             });
+        }
 
-
-            $('#appointment_date_picker').on('change.datetimepicker', ({ date, oldDate }) => {
-                let date_converted = moment(date).format('L');
-                $('#Date').attr('value', date_converted).blur();
-                $('#time_content').removeClass('d-none');
-                //get disabled time
-                $.ajax({
-                    url: "/Dashboard/Schedules/GetAvailableTime",
-                    type: "get",
-                    data: { date: date_converted },
-                    success: function (res) {
-                        let isWeekend = (new Date(date_converted).getDay() === 6);
-                        let time_options_element = '<option value="">Please Select An Available Time</option>';
-                        let schedules = isWeekend ? ["8am to 11am", "1pm to 4pm"] :
-                            ["7:30am to 9:30am", "10am to 12nn", "1pm to 3pm", "3pm to 5pm"];
-
-                        for (let i = 0; i < schedules.length; i++) {
-                            let isAlreadyTaken = false;
-
-                            for (let j = 0; j < res.times.length; j++) {
-                                if (res.times[j].time == schedules[i]) {
-                                    isAlreadyTaken = true;
-                                    break;
-                                }
-                            }
-
-                            time_options_element += `<option value="${schedules[i]}" ${isAlreadyTaken ? 'disabled style="color: #d7bfbf;"' : ''}>${schedules[i]}</option>`;
-                        }
-
-                        $("#Time").html(time_options_element);
-                    },
-                    error: function (err) {
-                        console.log(err)
-                    }
-                });
-
-            });
+        $("#timepicker1").on("change", function (e) {
+            if ($(".datetimepicker-input1").val()) {
+                $('#DayOne').attr('value', $(".datetimepicker-input1").val() + " " + $(this).val()).blur();
+            }
+        });
+        $("#timepicker2").on("change", function (e) {
+            if ($(".datetimepicker-input2").val()) {
+                $('#DayTwo').attr('value', $(".datetimepicker-input2").val() + " " + $(this).val()).blur();
+            }
+        });
+        $("#timepicker3").on("change", function (e) {
+            if ($(".datetimepicker-input3").val()) {
+                $('#DayThree').attr('value', $(".datetimepicker-input3").val() + " " + $(this).val()).blur();
+            }
+        });
+        $("#timepicker4").on("change", function (e) {
+            if ($(".datetimepicker-input4").val()) {
+                $('#DayFour').attr('value', $(".datetimepicker-input4").val() + " " + $(this).val()).blur();
+            }
         });
     </script>
 }

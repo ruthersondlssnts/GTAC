@@ -1,8 +1,7 @@
 ﻿@model IEnumerable<GTAC.Models.Schedule>
 
 @{
-    ViewData["Title"] = "Appointments";
-    ViewData["NavSchedules"] = "active";
+    ViewData["Title"] = "Index";
 }
 
 <div class="card shadow mb-4">
@@ -11,17 +10,26 @@
     </div>
 
     <div class="card-body">
-        <a asp-action="Create" class="btn btn-primary mb-3">Set A New Appointment</a>
+        <a asp-action="Create" class="btn btn-primary mb-3">Create</a>
         <div class="table-responsive">
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
-                        <th>Date</th>
-                        <th>Time</th>
-                        <th>Concern</th>
-                        <th>Approve At</th>
-                        <th>Status</th>
-                        <th>Student</th>
+                        <th>
+                            Day 1
+                        </th>
+                        <th>
+                            Day 2
+                        </th>
+                        <th>
+                            Day 3
+                        </th>
+                        <th>
+                            Day 4
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Status)
+                        </th>
                         <th></th>
                     </tr>
                 </thead>
@@ -30,27 +38,98 @@
                     {
                         <tr>
                             <td>
-                                @item.Date.ToString("dd MMM yyyy")
+                                @item.DayOne.ToString("ddd, MMM dd yyyy h:mm tt") - @item.DayOne.AddHours(2).ToString("h:mm tt")
                             </td>
                             <td>
-                                @item.Time
+                                @item.DayTwo.ToString("ddd, MMM dd yyyy h:mm tt") - @item.DayOne.AddHours(2).ToString("h:mm tt")
                             </td>
                             <td>
-                                @item.Concerns
+                                @item.DayThree.ToString("ddd, MMM dd yyyy h:mm tt") - @item.DayOne.AddHours(2).ToString("h:mm tt")
                             </td>
                             <td>
-                                @item.ApprovedAt
+                                @item.DayFour.ToString("ddd, MMM dd yyyy h:mm tt") - @item.DayOne.AddHours(2).ToString("h:mm tt")
                             </td>
+                            @*<td>
+                                    @Html.DisplayFor(modelItem => item.ApprovedAt)
+                                </td>*@
                             <td>
-                                @item.Status
+                                @Html.DisplayFor(modelItem => item.Status)
                             </td>
-                            <td>
-                                @item.Student.User.Firstname  @item.Student.User.Lastname
-                            </td>
+                            @*<td>
+                                    @Html.DisplayFor(modelItem => item.Student.UserId)
+                                </td>*@
                             <td>
                                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                                <a asp-action="Delete" asp-route-id="@item.Id">Cancel</a>
+                                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Your Pending Change Request</h6>
+    </div>
+
+    <div class="card-body">
+        <a asp-action="Create" class="btn btn-primary mb-3">Create</a>
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>
+                            Day 1
+                        </th>
+                        <th>
+                            Day 2
+                        </th>
+                        <th>
+                            Day 3
+                        </th>
+                        <th>
+                            Day 4
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Status)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @item.DayOne.ToString("ddd, MMM dd yyyy h:mm tt") - @item.DayOne.AddHours(2).ToString("h:mm tt")
+                            </td>
+                            <td>
+                                @item.DayTwo.ToString("ddd, MMM dd yyyy h:mm tt") - @item.DayOne.AddHours(2).ToString("h:mm tt")
+                            </td>
+                            <td>
+                                @item.DayThree.ToString("ddd, MMM dd yyyy h:mm tt") - @item.DayOne.AddHours(2).ToString("h:mm tt")
+                            </td>
+                            <td>
+                                @item.DayFour.ToString("ddd, MMM dd yyyy h:mm tt") - @item.DayOne.AddHours(2).ToString("h:mm tt")
+                            </td>
+                            @*<td>
+                                    @Html.DisplayFor(modelItem => item.ApprovedAt)
+                                </td>*@
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Status)
+                            </td>
+                            @*<td>
+                                    @Html.DisplayFor(modelItem => item.Student.UserId)
+                                </td>*@
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                             </td>
                         </tr>
                     }

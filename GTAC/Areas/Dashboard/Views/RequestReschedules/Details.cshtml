@@ -1,4 +1,4 @@
-﻿@model GTAC.Models.Schedule
+﻿@model GTAC.Models.RequestReschedule
 
 @{
     ViewData["Title"] = "Details";
@@ -7,7 +7,7 @@
 <h1>Details</h1>
 
 <div>
-    <h4>Schedule</h4>
+    <h4>RequestReschedule</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -47,10 +47,10 @@
             @Html.DisplayFor(model => model.Status)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Student)
+            @Html.DisplayNameFor(model => model.Schedule)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Student.UserId)
+            @Html.DisplayFor(model => model.Schedule.Id)
         </dd>
     </dl>
 </div>

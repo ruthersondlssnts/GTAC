@@ -17,41 +17,78 @@ namespace GTAC.Areas.Dashboard.Controllers
         private readonly ApplicationDbContext _context;
         private readonly UserManager<User> _userManager;
 
-        public SchedulesController(ApplicationDbContext context, UserManager<User> userManager)
+        public SchedulesController(
+            ApplicationDbContext context,
+            UserManager<User> userManager)
         {
             _context = context;
             _userManager = userManager;
         }
-
         public IActionResult GetDisabledDates()
         {
-            var dates = _context.Schedules.Where(x => x.Date >= DateTime.Now && x.Status != Status.Reject)
-                .GroupBy(x => x.Date)
+            var dates1 = _context.Schedules.Where(x => x.Status != Status.Reject && x.Status != Status.Done)
+                .GroupBy(x => x.DayOne.Date)
                 .Select(s => new { Date = s.Key, TotalSched = s.Count() })
                 .AsEnumerable()
-                .Where(s =>
-                    (s.Date.DayOfWeek != DayOfWeek.Saturday && s.TotalSched == 4) ||
-                    (s.Date.DayOfWeek == DayOfWeek.Saturday && s.TotalSched == 1))
+                .Where(s => s.Date.DayOfWeek != DayOfWeek.Saturday && s.Date.DayOfWeek != DayOfWeek.Sunday && s.TotalSched == 4)
+                .Select(s => s.Date)
                 .ToList();
+
+            var dates2 = _context.Schedules.Where(x => x.Status != Status.Reject && x.Status != Status.Done)
+                .GroupBy(x => x.DayTwo.Date)
+                .Select(s => new { Date = s.Key, TotalSched = s.Count() })
+                .AsEnumerable()
+                .Where(s => s.Date.DayOfWeek != DayOfWeek.Saturday && s.Date.DayOfWeek != DayOfWeek.Sunday && s.TotalSched == 4)
+                .Select(s => s.Date)
+                .ToList();
+
+            var dates3 = _context.Schedules.Where(x => x.Status != Status.Reject && x.Status != Status.Done)
+                .GroupBy(x => x.DayThree.Date)
+                .Select(s => new { Date = s.Key, TotalSched = s.Count() })
+                .AsEnumerable()
+                .Where(s => s.Date.DayOfWeek != DayOfWeek.Saturday && s.Date.DayOfWeek != DayOfWeek.Sunday && s.TotalSched == 4)
+                .Select(s => s.Date)
+                .ToList();
+
+            var dates4 = _context.Schedules.Where(x => x.Status != Status.Reject && x.Status != Status.Done)
+                .GroupBy(x => x.DayFour.Date)
+                .Select(s => new { Date = s.Key, TotalSched = s.Count() })
+                .AsEnumerable()
+                .Where(s => s.Date.DayOfWeek != DayOfWeek.Saturday && s.Date.DayOfWeek != DayOfWeek.Sunday && s.TotalSched == 4)
+                .Select(s => s.Date)
+                .ToList();
+
+            List<DateTime> dates = new List<DateTime>();
+            dates.AddRange(dates1);
+            dates.AddRange(dates2);
+            dates.AddRange(dates3);
+            dates.AddRange(dates4);
 
             return Json(new { dates });
         }
 
-        public async Task<IActionResult> GetAvailableTime(DateTime date)
+        public async Task<IActionResult> GetDisabledTime(DateTime date)
         {
-            var times = await _context.Schedules.Where(x => x.Date.Date == date.Date && x.Status != Status.Reject)
-                .GroupBy(x => x.Time)
-                .Select(s => new { Time = s.Key })
-                .ToListAsync();
+            var times = (await _context.Schedules.Where(x => (
+                    x.DayOne.Date == date.Date ||
+                    x.DayTwo.Date == date.Date ||
+                    x.DayThree.Date == date.Date ||
+                    x.DayFour.Date == date.Date) && (
+                    x.Status != Status.Reject &&
+                    x.Status != Status.Done))
+                .Select(x => new
+                {
+                    Date = x.DayOne.Date == date.Date ? x.DayOne : (x.DayTwo.Date == date.Date ? x.DayTwo :
+                        (x.DayThree.Date == date.Date ? x.DayThree : x.DayFour))
+                })
+                .ToListAsync()).Select(x => x.Date.ToString("h:mm tt")).ToList();
 
             return Json(new { times });
         }
-
-
         // GET: Dashboard/Schedules
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Schedules.Include(s => s.Student).ThenInclude(s => s.User);
+            var applicationDbContext = _context.Schedules.Include(s => s.Student);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -86,7 +123,7 @@ namespace GTAC.Areas.Dashboard.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Date,Time,Concerns")] Schedule schedule)
+        public async Task<IActionResult> Create([Bind("Id,DayOne,DayTwo,DayThree,DayFour,ApprovedAt")] Schedule schedule)
         {
             if (ModelState.IsValid)
             {
@@ -97,7 +134,7 @@ namespace GTAC.Areas.Dashboard.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-
+            ViewData["StudentId"] = new SelectList(_context.Students, "Id", "UserId", schedule.StudentId);
             return View(schedule);
         }
 
@@ -114,12 +151,7 @@ namespace GTAC.Areas.Dashboard.Controllers
             {
                 return NotFound();
             }
-            List<SelectListItem> timeSchedules = new List<SelectListItem>
-            {
-                new SelectListItem() { Value = "8am to 12pm" },
-                new SelectListItem() { Value = "1pm to 5pm" }
-            };
-            ViewData["TimeSchedules"] = new SelectList(timeSchedules, "Value", "Value");
+            ViewData["StudentId"] = new SelectList(_context.Students, "Id", "UserId", schedule.StudentId);
             return View(schedule);
         }
 
@@ -128,7 +160,7 @@ namespace GTAC.Areas.Dashboard.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Date,Time,StudentId,Concerns,ApprovedAt,Status")] Schedule schedule)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,DayOne,DayTwo,DayThree,DayFour,StudentId,ApprovedAt,Status")] Schedule schedule)
         {
             if (id != schedule.Id)
             {
@@ -139,15 +171,6 @@ namespace GTAC.Areas.Dashboard.Controllers
             {
                 try
                 {
-                    if (schedule.Status == Status.Approved)
-                    {
-                        schedule.ApprovedAt = DateTime.Now;
-                    }
-                    else if (schedule.Status == Status.Reject)
-                    {
-                        schedule.ApprovedAt = null;
-                    }
-
                     _context.Update(schedule);
                     await _context.SaveChangesAsync();
                 }
@@ -164,7 +187,7 @@ namespace GTAC.Areas.Dashboard.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-
+            ViewData["StudentId"] = new SelectList(_context.Students, "Id", "UserId", schedule.StudentId);
             return View(schedule);
         }
 
