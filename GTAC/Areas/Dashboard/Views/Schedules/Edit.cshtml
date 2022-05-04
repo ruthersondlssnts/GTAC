@@ -1,0 +1,52 @@
+﻿@model GTAC.Models.Schedule
+
+@{
+    ViewData["Title"] = "Appointments";
+    ViewData["NavSchedules"] = "active";
+}
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Edit an Appointment</h6>
+            </div>
+            <div class="card-body">
+                <form asp-action="Edit">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="StudentId" />
+                    <input type="hidden" asp-for="ApprovedAt" />
+                    <input type="hidden" asp-for="Concerns" />
+                    <div class="form-group col-md-6">
+                        <label asp-for="Date" class="control-label"></label>
+                        <input type="date" asp-for="Date" class="form-control" />
+                        <span asp-validation-for="Date" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="control-label">Available Time Schedule</label>
+                        <select asp-for="Time" class="form-control" asp-items="ViewBag.TimeSchedules">
+                        </select>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label asp-for="Status" class="control-label"></label>
+                        <select asp-for="Status" class="form-control" asp-items="Html.GetEnumSelectList<Status>()">
+                        </select>
+                        <span asp-validation-for="Status" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <input type="submit" value="Save" class="btn btn-primary" /> |
+                        <a asp-action="Index">Back to List</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

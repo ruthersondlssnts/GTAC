@@ -1,0 +1,61 @@
+﻿@model IEnumerable<GTAC.Models.Schedule>
+
+@{
+    ViewData["Title"] = "Appointments";
+    ViewData["NavSchedules"] = "active";
+}
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">List Of Appointments</h6>
+    </div>
+
+    <div class="card-body">
+        <a asp-action="Create" class="btn btn-primary mb-3">Set A New Appointment</a>
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Concern</th>
+                        <th>Approve At</th>
+                        <th>Status</th>
+                        <th>Student</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @item.Date.ToString("dd MMM yyyy")
+                            </td>
+                            <td>
+                                @item.Time
+                            </td>
+                            <td>
+                                @item.Concerns
+                            </td>
+                            <td>
+                                @item.ApprovedAt
+                            </td>
+                            <td>
+                                @item.Status
+                            </td>
+                            <td>
+                                @item.Student.User.Firstname  @item.Student.User.Lastname
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                                <a asp-action="Delete" asp-route-id="@item.Id">Cancel</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

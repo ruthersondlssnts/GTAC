@@ -18,6 +18,7 @@
 
     <!-- Custom styles for this template-->
     <link href="~/assets-dashboard/css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="~/lib/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
 </head>
 
 <body id="page-top">
@@ -41,16 +42,16 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item @ViewData["NavDashboard"]">
-                <a class="nav-link" href="index.html">
+                <a class="nav-link" asp-area="Dashboard" asp-controller="Home" asp-action="Index">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span>
                 </a>
             </li>
             <!-- Nav Item - Schedules -->
             <li class="nav-item @ViewData["NavSchedules"]">
-                <a class="nav-link" href="index.html">
+                <a class="nav-link" asp-area="Dashboard" asp-controller="Schedules" asp-action="Index">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Schedules</span>
+                    <span>Appointments</span>
                 </a>
             </li>
             <!-- Nav Item - Modules -->
@@ -396,10 +397,14 @@
                 </nav>
                 <!-- End of Topbar -->
                 <!-- Begin Page Content -->
-                @RenderBody()
+                <div class="container-fluid">
+                    <!-- Page Heading -->
+                    <h1 class="h3 mb-2 text-gray-800">@ViewData["Header"]</h1>
+                    @RenderBody()
+                </div>
                 <!-- /.container-fluid -->
+                <!-- End of Main Content -->
             </div>
-            <!-- End of Main Content -->
             <!-- Footer -->
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
@@ -454,7 +459,9 @@
     <!-- Page level custom scripts -->
     <script src="~/assets-dashboard/js/demo/chart-area-demo.js"></script>
     <script src="~/assets-dashboard/js/demo/chart-pie-demo.js"></script>
-
+    <script src="~/lib/moment.js/moment.min.js"></script>
+    <script src="~/lib/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+    @RenderSection("Scripts", required: false)
 </body>
 
 </html>

@@ -1,0 +1,55 @@
+﻿@model GTAC.Models.Schedule
+
+@{
+    ViewData["Title"] = "Appointments";
+    ViewData["NavSchedules"] = "active";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Schedule</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Date
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Date
+        </dd>
+        <dt class="col-sm-2">
+            Time
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Time)
+        </dd>
+        <dt class="col-sm-2">
+            Concerns
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Concerns)
+        </dd>
+        <dt class="col-sm-2">
+            ApprovedAt
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ApprovedAt)
+        </dd>
+        <dt class="col-sm-2">
+            Status
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+        <dt class="col-sm-2">
+            Student
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Student.UserId)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

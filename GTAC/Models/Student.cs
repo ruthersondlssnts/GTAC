@@ -12,12 +12,10 @@ namespace GTAC.Models
         public DateTime? GraduatedAt { get; set; }
         [Required]
         public string UserId { get; set; }
-        [Required]
         public string InstructorId { get; set; }
 
         [ForeignKey("InstructorId")]
         public virtual User Instructor { get; set; }
-
         [ForeignKey("UserId")]
         public virtual User User { get; set; }
     }

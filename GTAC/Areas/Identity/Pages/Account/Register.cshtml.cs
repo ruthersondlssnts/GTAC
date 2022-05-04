@@ -14,6 +14,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using GTAC.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace GTAC.Areas.Identity.Pages.Account
 {
@@ -24,17 +26,21 @@ namespace GTAC.Areas.Identity.Pages.Account
         private readonly UserManager<User> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly ApplicationDbContext _context;
 
         public RegisterModel(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _context = context;
+
         }
 
         [BindProperty]
@@ -46,6 +52,33 @@ namespace GTAC.Areas.Identity.Pages.Account
 
         public class InputModel
         {
+            [Required]
+            [Display(Name = "Firstname")]
+            public string Firstname { get; set; }
+
+            [Required]
+            [Display(Name = "Lastname")]
+            public string Lastname { get; set; }
+
+            [Required]
+            [Display(Name = "Middlename")]
+            public string Middlename { get; set; }
+
+            [Display(Name = "Suffix")]
+            public string Suffix { get; set; }
+
+            [Required]
+            [Display(Name = "Address")]
+            public string Address { get; set; }
+
+            [Required]
+            [Display(Name = "Phone Number")]
+            public string PhoneNumber { get; set; }
+
+            [Required]
+            [Display(Name = "Birthday")]
+            public string Birthday { get; set; }
+
             [Required]
             [EmailAddress]
             [Display(Name = "Email")]
@@ -66,32 +99,69 @@ namespace GTAC.Areas.Identity.Pages.Account
         public async Task OnGetAsync(string returnUrl = null)
         {
             ReturnUrl = returnUrl;
+            var instructors = _userManager.GetUsersInRoleAsync("Instructor").Result;
+            var instructorsWithTotalStudents = _context.Schedules
+                     .Include(s => s.Student)
+                     .Where(s => s.Status == Status.Approved && s.Date.Date > DateTime.Now)
+                     .ToList()
+                     .GroupBy(s => s.Student.InstructorId)
+                     .Select(s => new { InstructorId = s.Key, TotalStudents = s.Count() })
+                     .OrderBy(s => s.TotalStudents)
+                     .ToList();
+
+            var diff = instructors.Where(ins => !instructorsWithTotalStudents.Any(inswstud => ins.Id == inswstud.InstructorId));
+            
+
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl = returnUrl ?? Url.Content("~/");
+            returnUrl = returnUrl ?? Url.Content("~/Dashboard/Home");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new User { UserName = Input.Email, Email = Input.Email };
+                var user = new User
+                {
+                    UserName = Input.Email,
+                    Email = Input.Email,
+                    Firstname = Input.Firstname,
+                    Lastname = Input.Lastname,
+                    Middlename = Input.Middlename,
+                    Suffix = Input.Suffix,
+                    Address = Input.Address,
+                    Birthday = Convert.ToDateTime(Input.Birthday),
+                    PhoneNumber = Input.PhoneNumber
+                };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User created a new account with password.");
+                    //_logger.LogInformation("User created a new account with password.");
 
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                    var callbackUrl = Url.Page(
-                        "/Account/ConfirmEmail",
-                        pageHandler: null,
-                        values: new { area = "Identity", userId = user.Id, code = code, returnUrl = returnUrl },
-                        protocol: Request.Scheme);
+                    //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    //code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                    //var callbackUrl = Url.Page(
+                    //    "/Account/ConfirmEmail",
+                    //    pageHandler: null,
+                    //    values: new { area = "Identity", userId = user.Id, code = code, returnUrl = returnUrl },
+                    //    protocol: Request.Scheme);
 
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    //await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                    //    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    var student = new Student();
+                    student.Id = Guid.NewGuid();
+                    student.UserId = user.Id;
+                    student.InstructorId = _context.Schedules
+                        .Include(s => s.Student)
+                        .Where(s => s.Status == Status.Approved && s.Date.Date > DateTime.Now)
+                        .ToList()
+                        .GroupBy(s => s.Student.InstructorId)
+                        .Select(x => new { InstructorId = x.Key, TotalStudents = x.Count() })
+                        .OrderByDescending(x => x.TotalStudents)
+                        .FirstOrDefault().InstructorId;
 
+                    _context.Students.Add(student);
+                    await _context.SaveChangesAsync();
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
                         return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });

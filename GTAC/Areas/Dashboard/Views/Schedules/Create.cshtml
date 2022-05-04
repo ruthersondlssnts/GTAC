@@ -1,0 +1,125 @@
+﻿@model GTAC.Models.Schedule
+
+@{
+    ViewData["Title"] = "Appointments";
+    ViewData["NavSchedules"] = "active";
+}
+
+<style>
+    .day.disabled {
+        background: #d7bfbf !important;
+    }
+</style>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Create an Appointment</h6>
+            </div>
+            <div class="card-body">
+                <form asp-action="Create" id="form_save_appointment">
+                    <input type="text" asp-for="Date" class="form-control" style="opacity:0;position:absolute" />
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div style="overflow:hidden;">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="control-label">Select An Available Date</label>
+                                    <div id="appointment_date_picker"></div>
+                                    <span asp-validation-for="Date" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6 d-none" id="time_content">
+                            <label class="control-label">Available Time Schedule</label>
+                            <select asp-for="Time" class="form-control">
+                            </select>
+                            <span asp-validation-for="Time" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label asp-for="Concerns" class="control-label"></label>
+                            <textarea asp-for="Concerns" class="form-control"></textarea>
+                            <span asp-validation-for="Concerns" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <input type="submit" value="Save" class="btn btn-primary" /> |
+                            <a asp-action="Index">Back to List</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript">
+
+        $(function () {
+            //get disabled dates
+
+            $.ajax({
+                url: "/Dashboard/Schedules/GetDisabledDates",
+                type: "get",
+                success: function (res) {
+                    $('#appointment_date_picker').datetimepicker({
+                        inline: true,
+                        format: 'L',
+                        useCurrent: false,
+                        minDate: new Date(),
+                        disabledDates: res.dates.map(x => x.date),
+                        daysOfWeekDisabled: [0]
+                    });
+                },
+                error: function (err) {
+                    console.log(err)
+                }
+            });
+
+
+            $('#appointment_date_picker').on('change.datetimepicker', ({ date, oldDate }) => {
+                let date_converted = moment(date).format('L');
+                $('#Date').attr('value', date_converted).blur();
+                $('#time_content').removeClass('d-none');
+                //get disabled time
+                $.ajax({
+                    url: "/Dashboard/Schedules/GetAvailableTime",
+                    type: "get",
+                    data: { date: date_converted },
+                    success: function (res) {
+                        let isWeekend = (new Date(date_converted).getDay() === 6);
+                        let time_options_element = '<option value="">Please Select An Available Time</option>';
+                        let schedules = isWeekend ? ["8am to 11am", "1pm to 4pm"] :
+                            ["7:30am to 9:30am", "10am to 12nn", "1pm to 3pm", "3pm to 5pm"];
+
+                        for (let i = 0; i < schedules.length; i++) {
+                            let isAlreadyTaken = false;
+
+                            for (let j = 0; j < res.times.length; j++) {
+                                if (res.times[j].time == schedules[i]) {
+                                    isAlreadyTaken = true;
+                                    break;
+                                }
+                            }
+
+                            time_options_element += `<option value="${schedules[i]}" ${isAlreadyTaken ? 'disabled style="color: #d7bfbf;"' : ''}>${schedules[i]}</option>`;
+                        }
+
+                        $("#Time").html(time_options_element);
+                    },
+                    error: function (err) {
+                        console.log(err)
+                    }
+                });
+
+            });
+        });
+    </script>
+}

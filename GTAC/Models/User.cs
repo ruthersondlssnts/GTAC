@@ -16,10 +16,6 @@ namespace GTAC.Models
         [Required]
         public string Address { get; set; }
         [Required]
-        public string Contact { get; set; }
-        [Required]
-        public string Gender { get; set; }
-        [Required]
         public DateTime Birthday { get; set; }
     }
 }

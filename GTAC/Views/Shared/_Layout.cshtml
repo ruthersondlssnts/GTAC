@@ -114,6 +114,7 @@
                 <li><a href="#"><i class="fa fa-instagram"></i></a></li>
                 <li><a href="#"><i class="fa fa-pinterest"></i></a></li>
             </ul>
+
         </div>
     </div>
     <!--sidebar menu end-->
@@ -159,11 +160,10 @@
                 </div>
                 <div class="collapse navbar-collapse" id="edumint_main_menu">
                     <ul class="navbar-nav menu-open text-right">
-                        <li><a asp-area="Dashboard" asp-controller="Home" asp-action="Index">Dashboard</a></li>
                         <li><a href="contact.html">Course</a></li>
                         <li><a href="contact.html">Contact Us</a></li>
-                        <li><a href="contact.html">Login</a></li>
-                        <li><a href="contact.html">Register</a></li>
+                        <partial name="_LoginPartial" />
+
                     </ul>
                 </div>
                 <div class="nav-right-part nav-right-part-desktop">
@@ -175,9 +175,9 @@
     <!-- navbar end -->
 
     @RenderBody()
-
     <!-- footer area start -->
-    <footer class="footer-area bg-overlay" style="background-image: url('assets-home/img/bg/3.png');">
+    <footer class="footer-area bg-overlay" style="background-image: url('assets-home/img/bg/3.png');
+    ">
         <div class="container">
             <div class="subscribe-area-inner style-white pl-0 pr-0 pt-0">
                 <div class="row">

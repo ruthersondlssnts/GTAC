@@ -10,11 +10,13 @@ namespace GTAC.Models
         public Guid Id { get; set; }
         [Required]
         public DateTime Date { get; set; }
+
         [Required]
+        public string Time { get; set; }
+
         public Guid StudentId { get; set; }
         public string Concerns { get; set; }
         public DateTime? ApprovedAt { get; set; }
-        [Required]
         public Status Status { get; set; }
 
         [ForeignKey("StudentId")]

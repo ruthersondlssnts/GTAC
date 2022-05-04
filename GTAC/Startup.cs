@@ -1,4 +1,5 @@
 using GTAC.Data;
+using GTAC.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -30,15 +31,17 @@ namespace GTAC
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>(options =>
+            services.AddIdentity<User, IdentityRole>(options =>
             {
                 options.SignIn.RequireConfirmedAccount = false;
+                options.User.RequireUniqueEmail = true;
                 options.Password.RequireUppercase = false;
-                options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequiredUniqueChars = 0;
 
             })
-            .AddEntityFrameworkStores<ApplicationDbContext>();
+            .AddDefaultUI()
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
             services.AddControllersWithViews();
             services.AddRazorPages();
         }
