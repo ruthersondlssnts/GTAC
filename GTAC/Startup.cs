@@ -1,4 +1,5 @@
 using GTAC.Data;
+using GTAC.Helpers;
 using GTAC.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -42,8 +43,11 @@ namespace GTAC
             .AddDefaultUI()
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
+
             services.AddControllersWithViews();
             services.AddRazorPages();
+
+            services.AddScoped<IUserClaimsPrincipalFactory<User>, AppUserClaimsPrincipalFactory>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

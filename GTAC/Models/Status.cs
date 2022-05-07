@@ -5,6 +5,7 @@
         Pending,
         Approved,
         Reject,
-        Done
+        Done,
+        PendingRequest
     }
 }

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GTAC.Data;
 using GTAC.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace GTAC.Areas.Dashboard.Controllers
 {
@@ -14,10 +15,13 @@ namespace GTAC.Areas.Dashboard.Controllers
     public class RequestReschedulesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<User> _userManager;
 
-        public RequestReschedulesController(ApplicationDbContext context)
+        public RequestReschedulesController(ApplicationDbContext context,
+            UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Dashboard/RequestReschedules
@@ -63,6 +67,7 @@ namespace GTAC.Areas.Dashboard.Controllers
             if (ModelState.IsValid)
             {
                 requestReschedule.Id = Guid.NewGuid();
+                requestReschedule.CreatedAt = DateTime.Now;
                 _context.Add(requestReschedule);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -93,7 +98,7 @@ namespace GTAC.Areas.Dashboard.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,DayOne,DayTwo,DayThree,DayFour,ScheduleId,ApprovedAt,Status")] RequestReschedule requestReschedule)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,DayOne,DayTwo,DayThree,DayFour,ScheduleId,CreatedAt,ApprovedAt,Status")] RequestReschedule requestReschedule)
         {
             if (id != requestReschedule.Id)
             {
@@ -104,6 +109,18 @@ namespace GTAC.Areas.Dashboard.Controllers
             {
                 try
                 {
+                    var schedule = await _context.Schedules.FindAsync(requestReschedule.ScheduleId);
+
+                    if (requestReschedule.Status == Status.Approved)
+                    {
+                        schedule.DayOne = requestReschedule.DayOne;
+                        schedule.DayTwo = requestReschedule.DayTwo;
+                        schedule.DayThree = requestReschedule.DayThree;
+                        schedule.DayFour = requestReschedule.DayFour;
+                        schedule.ApprovedAt = DateTime.Now;
+                        requestReschedule.ApprovedAt = DateTime.Now;
+                    }
+                    schedule.Status = Status.Approved;
                     _context.Update(requestReschedule);
                     await _context.SaveChangesAsync();
                 }
@@ -150,8 +167,14 @@ namespace GTAC.Areas.Dashboard.Controllers
         {
             var requestReschedule = await _context.RequestReschedule.FindAsync(id);
             _context.RequestReschedule.Remove(requestReschedule);
+            var sched = await _context.Schedules.FindAsync(requestReschedule.ScheduleId);
+            sched.Status = Status.Approved;
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            if (User.IsInRole("Admin"))
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            return RedirectToAction("Index", "Schedules");
         }
 
         private bool RequestRescheduleExists(Guid id)

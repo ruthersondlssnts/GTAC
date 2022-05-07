@@ -20,7 +20,7 @@
                 <h6 class="m-0 font-weight-bold text-primary">Set your Schedule</h6>
             </div>
             <div class="card-body">
-                <form asp-action="Create">
+                <form asp-action="Create" id="create_form">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <input type="text" asp-for="DayOne" style="opacity:0; position:absolute" />
                     <input type="text" asp-for="DayTwo" style="opacity:0; position:absolute" />
@@ -31,7 +31,7 @@
                         <div class="form-group col-md-6">
                             <label class="control-label">Day 1</label>
                             <div class="input-group date" id="datepicker1" data-target-input="nearest">
-                                <input type="text" class="form-control datetimepicker-input datetimepicker-input1" data-target="#datepicker1" />
+                                <input onkeypress="return false;" type="text" class="form-control datetimepicker-input datetimepicker-input1" data-target="#datepicker1" />
                                 <div class="input-group-append" data-target="#datepicker1" data-toggle="datetimepicker">
                                     <div class="input-group-text" style="background:white"><i class="fa fa-calendar"></i></div>
                                 </div>
@@ -40,7 +40,7 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label class="control-label">Time Schedule</label>
-                            <select class="form-control" id="timepicker1">
+                            <select class="form-control" id="timepicker1" disabled>
                                 <option value="">Please Select Time</option>
                                 <option value="7:30 AM">7:30am to 9:30am</option>
                                 <option value="10:00 AM">10:00am to 12:00nn</option>
@@ -53,7 +53,7 @@
                         <div class="form-group col-md-6">
                             <label class="control-label">Day 2</label>
                             <div class="input-group date" id="datepicker2" data-target-input="nearest">
-                                <input type="text" class="form-control datetimepicker-input datetimepicker-input2" data-target="#datepicker2" />
+                                <input onkeypress="return false;" type="text" class="form-control datetimepicker-input datetimepicker-input2" data-target="#datepicker2" />
                                 <div class="input-group-append" data-target="#datepicker2" data-toggle="datetimepicker">
                                     <div class="input-group-text" style="background:white"><i class="fa fa-calendar"></i></div>
                                 </div>
@@ -62,7 +62,7 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label class="control-label">Time Schedule</label>
-                            <select class="form-control" id="timepicker2">
+                            <select class="form-control" id="timepicker2" disabled>
                                 <option value="">Please Select Time</option>
                                 <option value="7:30 AM">7:30am to 9:30am</option>
                                 <option value="10:00 AM">10:00am to 12:00nn</option>
@@ -75,7 +75,7 @@
                         <div class="form-group col-md-6">
                             <label class="control-label">Day 3</label>
                             <div class="input-group date" id="datepicker3" data-target-input="nearest">
-                                <input type="text" class="form-control datetimepicker-input datetimepicker-input3" data-target="#datepicker3" />
+                                <input onkeypress="return false;" type="text" class="form-control datetimepicker-input datetimepicker-input3" data-target="#datepicker3" />
                                 <div class="input-group-append" data-target="#datepicker3" data-toggle="datetimepicker">
                                     <div class="input-group-text" style="background:white"><i class="fa fa-calendar"></i></div>
                                 </div>
@@ -84,7 +84,7 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label class="control-label">Time Schedule</label>
-                            <select class="form-control" id="timepicker3">
+                            <select class="form-control" id="timepicker3" disabled>
                                 <option value="">Please Select Time</option>
                                 <option value="7:30 AM">7:30am to 9:30am</option>
                                 <option value="10:00 AM">10:00am to 12:00nn</option>
@@ -97,7 +97,7 @@
                         <div class="form-group col-md-6">
                             <label class="control-label">Day 4</label>
                             <div class="input-group date" id="datepicker4" data-target-input="nearest">
-                                <input type="text" class="form-control datetimepicker-input datetimepicker-input4" data-target="#datepicker4" />
+                                <input onkeypress="return false;" type="text" class="form-control datetimepicker-input datetimepicker-input4" data-target="#datepicker4" />
                                 <div class="input-group-append" data-target="#datepicker4" data-toggle="datetimepicker">
                                     <div class="input-group-text" style="background:white"><i class="fa fa-calendar"></i></div>
                                 </div>
@@ -106,7 +106,7 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label class="control-label">Time Schedule</label>
-                            <select class="form-control" id="timepicker4">
+                            <select class="form-control" id="timepicker4" disabled>
                                 <option value="">Please Select Time</option>
                                 <option value="7:30 AM">7:30am to 9:30am</option>
                                 <option value="10:00 AM">10:00am to 12:00nn</option>
@@ -130,10 +130,14 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script>
+
+        var disabledDates = [];
         $.ajax({
             url: "/Dashboard/Schedules/GetDisabledDates",
             type: "get",
             success: function (res) {
+                disabledDates = res.dates
+
                 $('#datepicker1').datetimepicker({
                     format: 'L',
                     useCurrent: false,
@@ -173,21 +177,22 @@
 
 
 
+
         function getNextValidDate(date) {
             let nextDate = null;
             for (var i = 1; true; i++) {
-                nextDate = moment(date).add(i, 'days')
+                nextDate = moment(date).add(i, 'days').format('L');
                 let day = moment(date).add(i, 'days').day();
-                if (day != '6' && day != '0') {
-                    break;
+                if (day != '6' && day != '0' && disabledDates.findIndex(x => moment(x).format('L') == nextDate) == -1) {
+                    return nextDate;
                 }
             }
-            return nextDate;
         }
 
         $("#datepicker1").on("change.datetimepicker", function (e) {
-            $('#datepicker2').datetimepicker('minDate', moment(e.date).add(1, 'days'));
-            $('#datepicker2').datetimepicker('date', getNextValidDate(e.date));
+            let nextValidDate = getNextValidDate(e.date);
+            $('#datepicker2').datetimepicker('minDate', nextValidDate);
+            $('#datepicker2').datetimepicker('date', nextValidDate);
 
             getDisabledTimes(e.date, "#timepicker1")
 
@@ -197,8 +202,9 @@
             }
         });
         $("#datepicker2").on("change.datetimepicker", function (e) {
-            $('#datepicker3').datetimepicker('minDate', moment(e.date).add(1, 'days'));
-            $('#datepicker3').datetimepicker('date', getNextValidDate(e.date));
+            let nextValidDate = getNextValidDate(e.date);
+            $('#datepicker3').datetimepicker('minDate', nextValidDate);
+            $('#datepicker3').datetimepicker('date', nextValidDate);
 
             getDisabledTimes(e.date, "#timepicker2")
 
@@ -209,8 +215,9 @@
         });
 
         $("#datepicker3").on("change.datetimepicker", function (e) {
-            $('#datepicker4').datetimepicker('minDate', moment(e.date).add(1, 'days'));
-            $('#datepicker4').datetimepicker('date', getNextValidDate(e.date));
+            let nextValidDate = getNextValidDate(e.date);
+            $('#datepicker4').datetimepicker('minDate', nextValidDate);
+            $('#datepicker4').datetimepicker('date', nextValidDate);
 
             getDisabledTimes(e.date, "#timepicker3")
 
@@ -232,18 +239,20 @@
 
 
         function getDisabledTimes(date, el) {
-            $.ajax({
+            console.log(el, moment(date).format('L'))
+
+            return $.ajax({
                 url: "/Dashboard/Schedules/GetDisabledTime",
                 type: "get",
                 data: { date: moment(date).format('L') },
                 success: function (res) {
-                    console.log(res.times);
+                    $(el).prop('disabled', false);
                     let times = res.times;
                     for (var i = 0; i < times.length; i++) {
                         let selector = `option[value='${times[i]}']`;
                         $(el).find(selector).prop('disabled', true);
-                        $(el).find(selector).css('color', "#d7bfbf !important");
                     }
+
                 },
                 error: function (err) {
                     console.log(err)
@@ -252,23 +261,32 @@
         }
 
         $("#timepicker1").on("change", function (e) {
-            if ($(".datetimepicker-input1").val()) {
+            if ($(".datetimepicker-input1").val() && $(this).val()) {
                 $('#DayOne').attr('value', $(".datetimepicker-input1").val() + " " + $(this).val()).blur();
+            }
+            else {
+                $('#DayOne').attr('value', '').blur();
             }
         });
         $("#timepicker2").on("change", function (e) {
-            if ($(".datetimepicker-input2").val()) {
+            if ($(".datetimepicker-input2").val() && $(this).val()) {
                 $('#DayTwo').attr('value', $(".datetimepicker-input2").val() + " " + $(this).val()).blur();
+            } else {
+                $('#DayTwo').attr('value', '').blur();
             }
         });
         $("#timepicker3").on("change", function (e) {
-            if ($(".datetimepicker-input3").val()) {
+            if ($(".datetimepicker-input3").val() && $(this).val()) {
                 $('#DayThree').attr('value', $(".datetimepicker-input3").val() + " " + $(this).val()).blur();
+            } else {
+                $('#DayThree').attr('value', '').blur();
             }
         });
         $("#timepicker4").on("change", function (e) {
-            if ($(".datetimepicker-input4").val()) {
+            if ($(".datetimepicker-input4").val() && $(this).val()) {
                 $('#DayFour').attr('value', $(".datetimepicker-input4").val() + " " + $(this).val()).blur();
+            } else {
+                $('#DayFour').attr('value', '').blur();
             }
         });
     </script>

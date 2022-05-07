@@ -6,29 +6,29 @@
 
 <div class="card shadow mb-4">
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">List Of Appointments</h6>
+        <h6 class="m-0 font-weight-bold text-primary">Schedules</h6>
     </div>
 
     <div class="card-body">
-        <a asp-action="Create" class="btn btn-primary mb-3">Create</a>
+        @*<a asp-action="Create" class="btn btn-primary mb-3">Create</a>*@
         <div class="table-responsive">
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
                         <th>
-                            Day 1
+                            Student
                         </th>
                         <th>
-                            Day 2
+                            Schedule
                         </th>
                         <th>
-                            Day 3
+                            Time
                         </th>
                         <th>
-                            Day 4
+                            Status
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.Status)
+                            Approved At
                         </th>
                         <th></th>
                     </tr>
@@ -38,26 +38,42 @@
                     {
                         <tr>
                             <td>
-                                @item.DayOne.ToString("ddd, MMM dd yyyy h:mm tt") - @item.DayOne.AddHours(2).ToString("h:mm tt")
+                                @item.Student.User.Firstname @item.Student.User.Lastname
                             </td>
                             <td>
-                                @item.DayTwo.ToString("ddd, MMM dd yyyy h:mm tt") - @item.DayOne.AddHours(2).ToString("h:mm tt")
+                                <div>
+                                    <b>Day 1:</b> @item.DayOne.ToString("dddd, MMM dd yyyy")
+                                </div>
+                                <div>
+                                    <b>Day 2:</b> @item.DayTwo.ToString("dddd, MMM dd yyyy")
+                                </div>
+                                <div>
+                                    <b>Day 3:</b> @item.DayThree.ToString("dddd, MMM dd yyyy")
+                                </div>
+                                <div>
+                                    <b>Day 4:</b> @item.DayFour.ToString("dddd, MMM dd yyyy")
+                                </div>
                             </td>
                             <td>
-                                @item.DayThree.ToString("ddd, MMM dd yyyy h:mm tt") - @item.DayOne.AddHours(2).ToString("h:mm tt")
+                                <div>
+                                    @item.DayOne.ToString("h:mm tt") - @item.DayOne.AddHours(2).ToString("h:mm tt")
+                                </div>
+                                <div>
+                                    @item.DayTwo.ToString("h:mm tt") - @item.DayTwo.AddHours(2).ToString("h:mm tt")
+                                </div>
+                                <div>
+                                    @item.DayThree.ToString("h:mm tt") - @item.DayThree.AddHours(2).ToString("h:mm tt")
+                                </div>
+                                <div>
+                                    @item.DayFour.ToString("h:mm tt") - @item.DayFour.AddHours(2).ToString("h:mm tt")
+                                </div>
                             </td>
                             <td>
-                                @item.DayFour.ToString("ddd, MMM dd yyyy h:mm tt") - @item.DayOne.AddHours(2).ToString("h:mm tt")
+                                @item.Status
                             </td>
-                            @*<td>
-                                    @Html.DisplayFor(modelItem => item.ApprovedAt)
-                                </td>*@
                             <td>
-                                @Html.DisplayFor(modelItem => item.Status)
+                                @item.ApprovedAt
                             </td>
-                            @*<td>
-                                    @Html.DisplayFor(modelItem => item.Student.UserId)
-                                </td>*@
                             <td>
                                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
@@ -71,70 +87,3 @@
     </div>
 </div>
 
-
-<div class="card shadow mb-4">
-    <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Your Pending Change Request</h6>
-    </div>
-
-    <div class="card-body">
-        <a asp-action="Create" class="btn btn-primary mb-3">Create</a>
-        <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                <thead>
-                    <tr>
-                        <th>
-                            Day 1
-                        </th>
-                        <th>
-                            Day 2
-                        </th>
-                        <th>
-                            Day 3
-                        </th>
-                        <th>
-                            Day 4
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Status)
-                        </th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td>
-                                @item.DayOne.ToString("ddd, MMM dd yyyy h:mm tt") - @item.DayOne.AddHours(2).ToString("h:mm tt")
-                            </td>
-                            <td>
-                                @item.DayTwo.ToString("ddd, MMM dd yyyy h:mm tt") - @item.DayOne.AddHours(2).ToString("h:mm tt")
-                            </td>
-                            <td>
-                                @item.DayThree.ToString("ddd, MMM dd yyyy h:mm tt") - @item.DayOne.AddHours(2).ToString("h:mm tt")
-                            </td>
-                            <td>
-                                @item.DayFour.ToString("ddd, MMM dd yyyy h:mm tt") - @item.DayOne.AddHours(2).ToString("h:mm tt")
-                            </td>
-                            @*<td>
-                                    @Html.DisplayFor(modelItem => item.ApprovedAt)
-                                </td>*@
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Status)
-                            </td>
-                            @*<td>
-                                    @Html.DisplayFor(modelItem => item.Student.UserId)
-                                </td>*@
-                            <td>
-                                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>

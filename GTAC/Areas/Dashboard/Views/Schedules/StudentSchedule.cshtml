@@ -1,0 +1,86 @@
+﻿@model GTAC.Models.Schedule
+
+@{
+    ViewData["Title"] = "StudentSchedule";
+}
+
+<div class="row">
+    <div class="col-lg-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Your Schedule</h6>
+            </div>
+            <div class="card-body">
+                <div>
+                    <dl class="row">
+
+
+                        <dt class="col-sm-2">
+                            Day 1
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Model.DayOne.ToString("dddd, MMM dd yyyy") <br />
+                            <small>@Model.DayOne.ToString("h:mm tt") - @Model.DayOne.AddHours(2).ToString("h:mm tt")</small>
+                        </dd>
+                        <dt class="col-sm-2">
+                            Day 2
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Model.DayTwo.ToString("dddd, MMM dd yyyy") <br />
+                            <small>@Model.DayTwo.ToString("h:mm tt") - @Model.DayTwo.AddHours(2).ToString("h:mm tt")</small>
+                        </dd>
+                        <dt class="col-sm-2">
+                            Day 3
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Model.DayThree.ToString("dddd, MMM dd yyyy") <br />
+                            <small> @Model.DayThree.ToString("h:mm tt") - @Model.DayThree.AddHours(2).ToString("h:mm tt")</small>
+                        </dd>
+                        <dt class="col-sm-2">
+                            Day 4
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Model.DayFour.ToString("dddd, MMM dd yyyy") <br />
+                            <small> @Model.DayFour.ToString("h:mm tt") - @Model.DayFour.AddHours(2).ToString("h:mm tt")</small>
+                        </dd>
+                        <dt class="col-sm-2">
+                            Student
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Model.Student.User.Firstname  @Model.Student.User.Lastname
+                        </dd>
+                        <dt class="col-sm-2">
+                            Status
+                        </dt>
+                        <dd class="col-sm-10">
+                            @if (Model.Status == Status.PendingRequest)
+                            {
+                                <span>Approved</span>
+                            }
+                            else
+                            {
+                                <span>@Model.Status</span>
+                            }
+                        </dd>
+                    </dl>
+                </div>
+                <div>
+                    @if (Model.Status == Status.Approved)
+                    {
+                        <a asp-action="Edit" class="btn btn-primary" asp-route-id="@Model.Id">Request For Change</a>
+                    }
+                    else if (Model.Status == Status.PendingRequest)
+                    {
+
+                    }
+                    else
+                    {
+                        <a asp-action="Edit" class="btn btn-primary" asp-route-id="@Model.Id">Edit</a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    @await Component.InvokeAsync(typeof(GTAC.ViewComponents.UserScheduleChangeRequestViewModel))
+</div>
+

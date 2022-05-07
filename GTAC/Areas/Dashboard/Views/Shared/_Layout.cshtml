@@ -54,6 +54,17 @@
                     <span>Schedule</span>
                 </a>
             </li>
+            @if (User.IsInRole("Admin"))
+            {
+                <!-- Nav Item - Requests -->
+                <li class="nav-item @ViewData["NavRequests"]">
+                    <a class="nav-link" asp-area="Dashboard" asp-controller="RequestReschedules" asp-action="Index">
+                        <i class="fas fa-fw fa-tachometer-alt"></i>
+                        <span>Requests</span>
+                    </a>
+                </li>
+            }
+
             <!-- Nav Item - Modules -->
             <li class="nav-item @ViewData["NavModules"]">
                 <a class="nav-link" href="index.html">
@@ -194,18 +205,31 @@
                         <i class="fa fa-bars"></i>
                     </button>
 
-                    <!-- Topbar Search -->
-                    <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                        <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                                   aria-label="Search" aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">
-                                    <i class="fas fa-search fa-sm"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+                    <div>
+                        Hi,
+                        @{
+                            if (!User.IsInRole("Admin"))
+                            {
+                                var role = User.Claims.Where(x => x.Type.Contains("role")).FirstOrDefault();
+                                if (role == null)
+                                {
+                                    <span>Student</span>
+                                }
+                                else
+                                {
+                                    <span>@role.Value</span>
+                                }
+                                <span>
+                                    @User.FindFirst("UserFullname").Value!
+                                </span>
+                            }
+                            else
+                            {
+                                <span>Admin</span>
+                            }
+                        }
+
+                    </div>
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -286,15 +310,15 @@
                         </li>
 
                         <!-- Nav Item - Messages -->
-                        <li class="nav-item dropdown no-arrow mx-1">
-                            <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
-                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-envelope fa-fw"></i>
-                                <!-- Counter - Messages -->
-                                <span class="badge badge-danger badge-counter">7</span>
-                            </a>
-                            <!-- Dropdown - Messages -->
-                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                        <!--<li class="nav-item dropdown no-arrow mx-1">
+                        <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-envelope fa-fw"></i>-->
+                        <!-- Counter - Messages -->
+                        <!--<span class="badge badge-danger badge-counter">7</span>
+                        </a>-->
+                        <!-- Dropdown - Messages -->
+                        <!--<div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                  aria-labelledby="messagesDropdown">
                                 <h6 class="dropdown-header">
                                     Message Center
@@ -357,7 +381,7 @@
                                 </a>
                                 <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
                             </div>
-                        </li>
+                        </li>-->
 
                         <div class="topbar-divider d-none d-sm-block"></div>
 

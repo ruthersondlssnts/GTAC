@@ -1,0 +1,77 @@
+﻿@model GTAC.Models.RequestReschedule
+
+@{
+    ViewData["Title"] = "Default";
+}
+
+
+@if (Model != null)
+{
+    string day1 = Model.DayOne != Model.Schedule.DayOne ? "text-danger" : "";
+    string day2 = Model.DayTwo != Model.Schedule.DayTwo ? "text-danger" : "";
+    string day3 = Model.DayThree != Model.Schedule.DayThree ? "text-danger" : "";
+    string day4 = Model.DayFour != Model.Schedule.DayFour ? "text-danger" : "";
+
+    <div class="col-lg-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Your Change Request Details</h6>
+            </div>
+            <div class="card-body">
+                <div>
+                    <dl class="row">
+                        <dt class="col-sm-2 @day1">
+                            Day 1
+                        </dt>
+                        <dd class="col-sm-10 @day1">
+                            @Model.DayOne.ToString("dddd, MMM dd yyyy") <br />
+                            <small>@Model.DayOne.ToString("h:mm tt") - @Model.DayOne.AddHours(2).ToString("h:mm tt")</small>
+                        </dd>
+                        <dt class="col-sm-2 @day2">
+                            Day 2
+                        </dt>
+                        <dd class="col-sm-10 @day2">
+                            @Model.DayTwo.ToString("dddd, MMM dd yyyy") <br />
+                            <small>@Model.DayTwo.ToString("h:mm tt") - @Model.DayTwo.AddHours(2).ToString("h:mm tt")</small>
+                        </dd>
+                        <dt class="col-sm-2 @day3">
+                            Day 3
+                        </dt>
+                        <dd class="col-sm-10 @day3">
+                            @Model.DayThree.ToString("dddd, MMM dd yyyy") <br />
+                            <small> @Model.DayThree.ToString("h:mm tt") - @Model.DayThree.AddHours(2).ToString("h:mm tt")</small>
+                        </dd>
+                        <dt class="col-sm-2 @day4">
+                            Day 4
+                        </dt>
+                        <dd class="col-sm-10 @day4">
+                            @Model.DayFour.ToString("dddd, MMM dd yyyy") <br />
+                            <small> @Model.DayFour.ToString("h:mm tt") - @Model.DayFour.AddHours(2).ToString("h:mm tt")</small>
+                        </dd>
+                        <dt class="col-sm-2">
+                            Student
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Model.Schedule.Student.User.Firstname  @Model.Schedule.Student.User.Lastname
+                        </dd>
+                        <dt class="col-sm-2">
+                            Status
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Model.Status
+                        </dd>
+                    </dl>
+                    @if (Model.Status == Status.Pending)
+                    {
+                        <form asp-action="Delete" asp-area="Dashboard" asp-controller="RequestReschedules">
+                            <input type="hidden" asp-for="Id" />
+                            <input type="submit" value="Cancel" class="btn btn-danger" />
+                        </form>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
