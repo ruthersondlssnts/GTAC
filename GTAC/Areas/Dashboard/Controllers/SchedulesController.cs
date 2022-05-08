@@ -231,11 +231,12 @@ namespace GTAC.Areas.Dashboard.Controllers
                     if (schedule.Status == Status.Approved)
                     {
                         schedule.ApprovedAt = DateTime.Now;
-                        //var student = _context.Students.Where(x => x.Id == schedule.StudentId).FirstOrDefault();
-                        //if (student.EnrolledAt == null)
-                        //{
-                        //    student.
-                        //}
+                        var student = _context.Students.Where(x => x.Id == schedule.StudentId).FirstOrDefault();
+                        if (student.EnrolledAt == null)
+                        {
+                            student.EnrolledAt = DateTime.Now;
+                            _context.Update(student);
+                        }
                     }
                     _context.Update(schedule);
                     await _context.SaveChangesAsync();

@@ -154,8 +154,12 @@ namespace GTAC.Areas.Dashboard.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
+
             var student = await _context.Students.FindAsync(id);
+            var user = await _context.Users.FindAsync(student.User.Id);
             _context.Students.Remove(student);
+            _context.Users.Remove(user);
+            _context.Schedules.RemoveRange(_context.Schedules.Where(s=>s.StudentId == id));
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

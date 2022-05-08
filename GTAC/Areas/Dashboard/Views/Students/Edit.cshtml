@@ -1,7 +1,7 @@
 ﻿@model GTAC.Models.Student
-
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Students";
+    ViewData["NavStudents"] = "active";
 }
 <div class="row">
     <div class="col-lg-4">
@@ -13,30 +13,21 @@
                 <form asp-action="Edit">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="UserId" />
+                    <input type="hidden" asp-for="InstructorId" />
                     <div class="form-group">
-                        <label asp-for="EnrolledAt" class="control-label"></label>
+                        <label class="control-label">Enrolled At</label>
                         <input asp-for="EnrolledAt" class="form-control" />
                         <span asp-validation-for="EnrolledAt" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="GraduatedAt" class="control-label"></label>
+                        <label class="control-label">Graduated At</label>
                         <input asp-for="GraduatedAt" class="form-control" />
                         <span asp-validation-for="GraduatedAt" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="UserId" class="control-label"></label>
-                        <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId"></select>
-                        <span asp-validation-for="UserId" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="InstructorId" class="control-label"></label>
-                        <select asp-for="InstructorId" class="form-control" asp-items="ViewBag.InstructorId"></select>
-                        <span asp-validation-for="InstructorId" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
                         <input type="submit" value="Save" class="btn btn-primary" /> |
                         <a asp-action="Index">Back to List</a>
-
                     </div>
                 </form>
             </div>

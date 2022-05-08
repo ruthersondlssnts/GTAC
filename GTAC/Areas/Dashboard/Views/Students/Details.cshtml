@@ -1,8 +1,9 @@
 ﻿@model GTAC.Models.Student
-
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Students";
+    ViewData["NavStudents"] = "active";
 }
+
 <div class="row">
     <div class="col-lg-4">
         <div class="card shadow mb-4">
@@ -12,28 +13,53 @@
             <div class="card-body">
                 <dl class="row">
                     <dt class="col-lg-4">
-                        Enrolled At
+                        Student
                     </dt>
                     <dd class="col-lg-8">
-                        @Html.DisplayFor(model => model.EnrolledAt)
-                    </dd>
-                    <dt class="col-lg-4">
-                        Graduated At
-                    </dt>
-                    <dd class="col-lg-8">
-                        @Html.DisplayFor(model => model.GraduatedAt)
+                        @Model.User.Firstname @Model.User.Lastname
                     </dd>
                     <dt class="col-lg-4">
                         Instructor
                     </dt>
                     <dd class="col-lg-8">
-                        @Html.DisplayFor(model => model.Instructor.Id)
+                        @Model.Instructor.Firstname @Model.Instructor.Lastname
                     </dd>
                     <dt class="col-lg-4">
-                        User
+                        Enrolled At
                     </dt>
                     <dd class="col-lg-8">
-                        @Html.DisplayFor(model => model.User.Id)
+                        @Model.EnrolledAt
+                    </dd>
+                    <dt class="col-lg-4">
+                        Graduated At
+                    </dt>
+                    <dd class="col-lg-8">
+                        @Model.GraduatedAt
+                    </dd>
+
+                    <dt class="col-lg-4">
+                        Email
+                    </dt>
+                    <dd class="col-lg-8">
+                        @Model.User.Email
+                    </dd>
+                    <dt class="col-lg-4">
+                        Phone
+                    </dt>
+                    <dd class="col-lg-8">
+                        @Model.User.PhoneNumber
+                    </dd>
+                    <dt class="col-lg-4">
+                        Birthday
+                    </dt>
+                    <dd class="col-lg-8">
+                        @Model.User.Birthday
+                    </dd>
+                    <dt class="col-lg-4">
+                        Address
+                    </dt>
+                    <dd class="col-lg-8">
+                        @Model.User.Address
                     </dd>
                 </dl>
                 <div>
