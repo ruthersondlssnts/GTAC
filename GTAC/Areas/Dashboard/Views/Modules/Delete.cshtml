@@ -3,10 +3,7 @@
     ViewData["Title"] = "Modules";
     ViewData["NavModules"] = "active";
 }
-<!-- Page Heading -->
-<div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Modules</h1>
-</div>
+
 <div class="row">
     <div class="col-lg-5">
         <div class="card shadow mb-4">
@@ -15,16 +12,16 @@
             </div>
             <div class="card-body">
                 <dl class="row">
-                    <dt class="col-sm-2">
+                    <dt class="col-lg-3">
                         Title
                     </dt>
-                    <dd class="col-sm-10">
+                    <dd class="col-lg-9">
                         @Model.Title
                     </dd>
-                    <dt class="col-sm-2">
+                    <dt class="col-lg-3">
                         Uploader
                     </dt>
-                    <dd class="col-sm-10">
+                    <dd class="col-lg-9">
                         @Model.Uploader.Firstname  @Model.Uploader.Lastname
                     </dd>
                 </dl>

@@ -4,10 +4,7 @@
     ViewData["Title"] = "Schedule";
     ViewData["NavSchedules"] = "active";
 }
-<!-- Page Heading -->
-<div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Schedules</h1>
-</div>
+
 <div class="row">
     <div class="col-lg-4">
         <div class="card shadow mb-4">
@@ -17,46 +14,44 @@
             <div class="card-body">
                 <div>
                     <dl class="row">
-
-
-                        <dt class="col-sm-2">
+                        <dt class="col-lg-3">
                             Day 1
                         </dt>
-                        <dd class="col-sm-10">
+                        <dd class="col-lg-9">
                             @Model.DayOne.ToString("dddd, MMM dd yyyy") <br />
                             <small>@Model.DayOne.ToString("h:mm tt") - @Model.DayOne.AddHours(2).ToString("h:mm tt")</small>
                         </dd>
-                        <dt class="col-sm-2">
+                        <dt class="col-lg-3">
                             Day 2
                         </dt>
-                        <dd class="col-sm-10">
+                        <dd class="col-lg-9">
                             @Model.DayTwo.ToString("dddd, MMM dd yyyy") <br />
                             <small>@Model.DayTwo.ToString("h:mm tt") - @Model.DayTwo.AddHours(2).ToString("h:mm tt")</small>
                         </dd>
-                        <dt class="col-sm-2">
+                        <dt class="col-lg-3">
                             Day 3
                         </dt>
-                        <dd class="col-sm-10">
+                        <dd class="col-lg-9">
                             @Model.DayThree.ToString("dddd, MMM dd yyyy") <br />
                             <small> @Model.DayThree.ToString("h:mm tt") - @Model.DayThree.AddHours(2).ToString("h:mm tt")</small>
                         </dd>
-                        <dt class="col-sm-2">
+                        <dt class="col-lg-3">
                             Day 4
                         </dt>
-                        <dd class="col-sm-10">
+                        <dd class="col-lg-9">
                             @Model.DayFour.ToString("dddd, MMM dd yyyy") <br />
                             <small> @Model.DayFour.ToString("h:mm tt") - @Model.DayFour.AddHours(2).ToString("h:mm tt")</small>
                         </dd>
-                        <dt class="col-sm-2">
+                        <dt class="col-lg-3">
                             Student
                         </dt>
-                        <dd class="col-sm-10">
+                        <dd class="col-lg-9">
                             @Model.Student.User.Firstname  @Model.Student.User.Lastname
                         </dd>
-                        <dt class="col-sm-2">
+                        <dt class="col-lg-3">
                             Status
                         </dt>
-                        <dd class="col-sm-10">
+                        <dd class="col-lg-9">
                             @if (Model.Status == Status.PendingRequest)
                             {
                                 <span>Approved</span>

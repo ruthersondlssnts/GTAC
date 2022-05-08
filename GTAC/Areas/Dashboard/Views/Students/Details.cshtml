@@ -1,0 +1,47 @@
+﻿@model GTAC.Models.Student
+
+@{
+    ViewData["Title"] = "Details";
+}
+<div class="row">
+    <div class="col-lg-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Student Details</h6>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-lg-4">
+                        Enrolled At
+                    </dt>
+                    <dd class="col-lg-8">
+                        @Html.DisplayFor(model => model.EnrolledAt)
+                    </dd>
+                    <dt class="col-lg-4">
+                        Graduated At
+                    </dt>
+                    <dd class="col-lg-8">
+                        @Html.DisplayFor(model => model.GraduatedAt)
+                    </dd>
+                    <dt class="col-lg-4">
+                        Instructor
+                    </dt>
+                    <dd class="col-lg-8">
+                        @Html.DisplayFor(model => model.Instructor.Id)
+                    </dd>
+                    <dt class="col-lg-4">
+                        User
+                    </dt>
+                    <dd class="col-lg-8">
+                        @Html.DisplayFor(model => model.User.Id)
+                    </dd>
+                </dl>
+                <div>
+                    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+                    <a asp-action="Index">Back to List</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

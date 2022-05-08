@@ -20,44 +20,44 @@
             <div class="card-body">
                 <div>
                     <dl class="row">
-                        <dt class="col-sm-2 @day1">
+                        <dt class="col-lg-3 @day1">
                             Day 1
                         </dt>
-                        <dd class="col-sm-10 @day1">
+                        <dd class="col-lg-9 @day1">
                             @Model.DayOne.ToString("dddd, MMM dd yyyy") <br />
                             <small>@Model.DayOne.ToString("h:mm tt") - @Model.DayOne.AddHours(2).ToString("h:mm tt")</small>
                         </dd>
-                        <dt class="col-sm-2 @day2">
+                        <dt class="col-lg-3 @day2">
                             Day 2
                         </dt>
-                        <dd class="col-sm-10 @day2">
+                        <dd class="col-lg-9 @day2">
                             @Model.DayTwo.ToString("dddd, MMM dd yyyy") <br />
                             <small>@Model.DayTwo.ToString("h:mm tt") - @Model.DayTwo.AddHours(2).ToString("h:mm tt")</small>
                         </dd>
-                        <dt class="col-sm-2 @day3">
+                        <dt class="col-lg-3 @day3">
                             Day 3
                         </dt>
-                        <dd class="col-sm-10 @day3">
+                        <dd class="col-lg-9 @day3">
                             @Model.DayThree.ToString("dddd, MMM dd yyyy") <br />
                             <small> @Model.DayThree.ToString("h:mm tt") - @Model.DayThree.AddHours(2).ToString("h:mm tt")</small>
                         </dd>
-                        <dt class="col-sm-2 @day4">
+                        <dt class="col-lg-3 @day4">
                             Day 4
                         </dt>
-                        <dd class="col-sm-10 @day4">
+                        <dd class="col-lg-9 @day4">
                             @Model.DayFour.ToString("dddd, MMM dd yyyy") <br />
                             <small> @Model.DayFour.ToString("h:mm tt") - @Model.DayFour.AddHours(2).ToString("h:mm tt")</small>
                         </dd>
-                        <dt class="col-sm-2">
+                        <dt class="col-lg-3">
                             Student
                         </dt>
-                        <dd class="col-sm-10">
+                        <dd class="col-lg-9">
                             @Model.Schedule.Student.User.Firstname  @Model.Schedule.Student.User.Lastname
                         </dd>
-                        <dt class="col-sm-2">
+                        <dt class="col-lg-3">
                             Status
                         </dt>
-                        <dd class="col-sm-10">
+                        <dd class="col-lg-9">
                             @Model.Status
                         </dd>
                     </dl>
