@@ -27,9 +27,22 @@ namespace GTAC.Areas.Dashboard.Controllers
         // GET: Dashboard/RequestReschedules
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.RequestReschedule.Include(r => r.Schedule);
+            var applicationDbContext = _context.RequestReschedule
+                .Include(r => r.Schedule)
+                .ThenInclude(s => s.Student)
+                .ThenInclude(s => s.User)
+                .OrderByDescending(r => r.CreatedAt);
             return View(await applicationDbContext.ToListAsync());
         }
+
+        // GET: Dashboard/RequestReschedules
+        public async Task<IActionResult> TotalPendingRequests()
+        {
+            var applicationDbContext = await _context.RequestReschedule.CountAsync(r => r.Status == Status.Pending);
+
+            return Json(new { totalRequests = applicationDbContext });
+        }
+
 
         // GET: Dashboard/RequestReschedules/Details/5
         public async Task<IActionResult> Details(Guid? id)
@@ -41,6 +54,8 @@ namespace GTAC.Areas.Dashboard.Controllers
 
             var requestReschedule = await _context.RequestReschedule
                 .Include(r => r.Schedule)
+                .ThenInclude(s => s.Student)
+                .ThenInclude(s => s.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (requestReschedule == null)
             {
@@ -72,7 +87,6 @@ namespace GTAC.Areas.Dashboard.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ScheduleId"] = new SelectList(_context.Schedules, "Id", "Id", requestReschedule.ScheduleId);
             return View(requestReschedule);
         }
 
@@ -89,7 +103,6 @@ namespace GTAC.Areas.Dashboard.Controllers
             {
                 return NotFound();
             }
-            ViewData["ScheduleId"] = new SelectList(_context.Schedules, "Id", "Id", requestReschedule.ScheduleId);
             return View(requestReschedule);
         }
 
@@ -137,7 +150,6 @@ namespace GTAC.Areas.Dashboard.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ScheduleId"] = new SelectList(_context.Schedules, "Id", "Id", requestReschedule.ScheduleId);
             return View(requestReschedule);
         }
 
@@ -151,6 +163,8 @@ namespace GTAC.Areas.Dashboard.Controllers
 
             var requestReschedule = await _context.RequestReschedule
                 .Include(r => r.Schedule)
+                .ThenInclude(s => s.Student)
+                .ThenInclude(s => s.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (requestReschedule == null)
             {

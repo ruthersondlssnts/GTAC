@@ -19,6 +19,11 @@
     <!-- Custom styles for this template-->
     <link href="~/assets-dashboard/css/sb-admin-2.min.css" rel="stylesheet">
     <link href="~/lib/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+    <link href="~/assets-dashboard/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.13.216/pdf.min.js"
+            integrity="sha512-IM60GPudO4jk+ZQm3UlJgKHhXQi5pNDM6mP+pLKL968YgkHMc7He3aGJOVHEZ9rJ4vAaEtJ8W6SKa7Qq4inzBA=="
+            crossorigin="anonymous" referrerpolicy="no-referrer">
+    </script>
 </head>
 
 <body id="page-top">
@@ -51,7 +56,14 @@
             <li class="nav-item @ViewData["NavSchedules"]">
                 <a class="nav-link" asp-area="Dashboard" asp-controller="Schedules" asp-action="Index">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Schedule</span>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <span>Schedules</span>
+                    }
+                    else
+                    {
+                        <span>Schedule</span>
+                    }
                 </a>
             </li>
             @if (User.IsInRole("Admin"))
@@ -60,14 +72,14 @@
                 <li class="nav-item @ViewData["NavRequests"]">
                     <a class="nav-link" asp-area="Dashboard" asp-controller="RequestReschedules" asp-action="Index">
                         <i class="fas fa-fw fa-tachometer-alt"></i>
-                        <span>Requests</span>
+                        <span>Change Requests</span>
                     </a>
                 </li>
             }
 
             <!-- Nav Item - Modules -->
             <li class="nav-item @ViewData["NavModules"]">
-                <a class="nav-link" href="index.html">
+                <a class="nav-link" asp-area="Dashboard" asp-controller="Modules" asp-action="Index">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Modules</span>
                 </a>
@@ -423,7 +435,6 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">@ViewData["Header"]</h1>
                     @RenderBody()
                 </div>
                 <!-- /.container-fluid -->
@@ -466,8 +477,6 @@
             </div>
         </div>
     </div>
-
-    <link href="~/assets-dashboard/css/sb-admin-2.css" rel="stylesheet" />
     <script src="~/assets-dashboard/vendor/jquery/jquery.min.js"></script>
     <script src="~/assets-dashboard/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
@@ -485,6 +494,10 @@
     <script src="~/assets-dashboard/js/demo/chart-pie-demo.js"></script>
     <script src="~/lib/moment.js/moment.min.js"></script>
     <script src="~/lib/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+    <!-- Page level plugins -->
+    <script src="~/assets-dashboard/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/assets-dashboard/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
     @RenderSection("Scripts", required: false)
 </body>
 

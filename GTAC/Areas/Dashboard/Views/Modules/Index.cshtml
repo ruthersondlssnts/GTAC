@@ -1,0 +1,74 @@
+﻿@model IEnumerable<GTAC.Models.Module>
+@{
+    ViewData["Title"] = "Modules";
+    ViewData["NavModules"] = "active";
+}
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Modules</h1>
+</div>
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Module List </h6>
+    </div>
+
+    <div class="card-body">
+        @if (User.IsInRole("Instructor"))
+        {
+            <a asp-action="Create" class="btn btn-primary mb-3">Create</a>
+        }
+
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>
+                            Title
+                        </th>
+                        @if (User.IsInRole("Instructor"))
+                        {
+                            <th>
+                                Uploader
+                            </th>
+                        }
+
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @item.Title
+                            </td>
+                            @if (User.IsInRole("Instructor"))
+                            {
+                                <td>
+                                    @item.Uploader.Firstname  @item.Uploader.Lastname
+                                </td>
+                                <td>
+                                    <a asp-action="ViewPDF" target="_blank" asp-route-fileName="@item.Path">View</a> |
+                                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>  |
+                                </td>
+                            }
+                            else
+                            {
+                                <td>
+                                    <a asp-action="ViewPDF" target="_blank" asp-route-fileName="@item.Path">View</a>
+                                </td>
+                            }
+
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+}

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -9,14 +10,18 @@ namespace GTAC.Models
         [Key]
         public Guid Id { get; set; }
         [Required]
+        [DisplayName("Day 1")]
         public DateTime DayOne { get; set; }
         [Required]
+        [DisplayName("Day 2")]
         public DateTime DayTwo { get; set; }
 
         [Required]
+        [DisplayName("Day 3")]
         public DateTime DayThree { get; set; }
 
         [Required]
+        [DisplayName("Day 4")]
         public DateTime DayFour { get; set; }
 
         [Required]

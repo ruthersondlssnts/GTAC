@@ -1,0 +1,43 @@
+﻿@model GTAC.Models.Module
+
+@{
+    ViewData["Title"] = "Modules";
+    ViewData["NavModules"] = "active";
+}
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Modules</h1>
+</div>
+<div class="row">
+    <div class="col-lg-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Create Module</h6>
+            </div>
+            <div class="card-body">
+                <form asp-action="Create" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Title" class="control-label"></label>
+                        <input asp-for="Title" class="form-control" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Module File</label>
+                        <input asp-for="ModuleUpload" class="form-control" accept="application/pdf" />
+                        <span asp-validation-for="ModuleUpload" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                        |
+                        <a asp-action="Index">Back to List</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,71 +1,140 @@
 ﻿@model IEnumerable<GTAC.Models.RequestReschedule>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Request Reschedule";
+    ViewData["NavRequests"] = "active";
+}
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Change Requests</h1>
+</div>
+<!-- Content Row -->
+<div class="row">
+    <!-- Pending Requests Card Example -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                            Pending Requests
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800 total-request">0</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-comments fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Change Request List</h6>
+    </div>
+
+    <div class="card-body">
+
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>
+                            Student
+                        </th>
+                        <th>
+                            Schedule
+                        </th>
+                        <th>
+                            Time
+                        </th>
+                        <th>
+                            Status
+                        </th>
+                        <th>
+                            Approved At
+                        </th>
+                        <th>
+                            Created At
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @item.Schedule.Student.User.Firstname @item.Schedule.Student.User.Lastname
+                            </td>
+                            <td>
+                                <div>
+                                    <b>Day 1:</b> @item.DayOne.ToString("dddd, MMM dd yyyy")
+                                </div>
+                                <div>
+                                    <b>Day 2:</b> @item.DayTwo.ToString("dddd, MMM dd yyyy")
+                                </div>
+                                <div>
+                                    <b>Day 3:</b> @item.DayThree.ToString("dddd, MMM dd yyyy")
+                                </div>
+                                <div>
+                                    <b>Day 4:</b> @item.DayFour.ToString("dddd, MMM dd yyyy")
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    @item.DayOne.ToString("h:mm tt") - @item.DayOne.AddHours(2).ToString("h:mm tt")
+                                </div>
+                                <div>
+                                    @item.DayTwo.ToString("h:mm tt") - @item.DayTwo.AddHours(2).ToString("h:mm tt")
+                                </div>
+                                <div>
+                                    @item.DayThree.ToString("h:mm tt") - @item.DayThree.AddHours(2).ToString("h:mm tt")
+                                </div>
+                                <div>
+                                    @item.DayFour.ToString("h:mm tt") - @item.DayFour.AddHours(2).ToString("h:mm tt")
+                                </div>
+                            </td>
+                            <td>
+                                @item.Status
+                            </td>
+                            <td>
+                                @item.ApprovedAt
+                            </td>
+                            <td>
+                                @item.CreatedAt
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        $(function () {
+            $('#dataTable').DataTable();
+        });
+
+        $.ajax({
+            url: "/Dashboard/RequestReschedules/TotalPendingRequests",
+            type: "get",
+            success: function (res) {
+                $('.total-request').text(res.totalRequests);
+            },
+            error: function (err) {
+                console.log(err)
+            }
+        });
+    </script>
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.DayOne)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DayTwo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DayThree)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DayFour)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ApprovedAt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Schedule)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.DayOne)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DayTwo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DayThree)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DayFour)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ApprovedAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Schedule.Id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>

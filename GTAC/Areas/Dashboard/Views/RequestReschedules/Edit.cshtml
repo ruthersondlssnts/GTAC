@@ -1,64 +1,64 @@
 ﻿@model GTAC.Models.RequestReschedule
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Request Reschedule";
+    ViewData["NavRequests"] = "active";
 }
-
-<h1>Edit</h1>
-
-<h4>RequestReschedule</h4>
-<hr />
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Change Requests</h1>
+</div>
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <input type="hidden" asp-for="CreatedAt" />
-            <div class="form-group">
-                <label asp-for="DayOne" class="control-label"></label>
-                <input asp-for="DayOne" class="form-control" />
-                <span asp-validation-for="DayOne" class="text-danger"></span>
+    <div class="col-lg-5">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Edit Change Request</h6>
             </div>
-            <div class="form-group">
-                <label asp-for="DayTwo" class="control-label"></label>
-                <input asp-for="DayTwo" class="form-control" />
-                <span asp-validation-for="DayTwo" class="text-danger"></span>
+            <div class="card-body">
+                <form asp-action="Edit">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="CreatedAt" />
+                    <input type="hidden" asp-for="ApprovedAt" />
+                    <input type="hidden" asp-for="ScheduleId" />
+                    <div class="form-group">
+                        <label class="control-label">Day 1</label>
+                        <input asp-for="DayOne" class="form-control" />
+                        <span asp-validation-for="DayOne" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Day 2</label>
+                        <input asp-for="DayTwo" class="form-control" />
+                        <span asp-validation-for="DayTwo" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Day 3</label>
+                        <input asp-for="DayThree" class="form-control" />
+                        <span asp-validation-for="DayThree" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Day 4</label>
+                        <input asp-for="DayFour" class="form-control" />
+                        <span asp-validation-for="DayFour" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label"></label>
+                        <select asp-for="Status" class="form-control" asp-items="@Html.GetEnumSelectList<Status>()"></select>
+                        <span asp-validation-for="Status" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Save" class="btn btn-primary" /> |
+                        <a asp-action="Index">Back to List</a>
+
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label asp-for="DayThree" class="control-label"></label>
-                <input asp-for="DayThree" class="form-control" />
-                <span asp-validation-for="DayThree" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DayFour" class="control-label"></label>
-                <input asp-for="DayFour" class="form-control" />
-                <span asp-validation-for="DayFour" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ScheduleId" class="control-label"></label>
-                <select asp-for="ScheduleId" class="form-control" asp-items="ViewBag.ScheduleId"></select>
-                <span asp-validation-for="ScheduleId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ApprovedAt" class="control-label"></label>
-                <input asp-for="ApprovedAt" class="form-control" />
-                <span asp-validation-for="ApprovedAt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Status" class="control-label"></label>
-                <select asp-for="Status" class="form-control" asp-items="@Html.GetEnumSelectList<Status>()"></select>
-                <span asp-validation-for="Status" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
+
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

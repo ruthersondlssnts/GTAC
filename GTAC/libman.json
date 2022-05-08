@@ -10,5 +10,5 @@
       "library": "moment.js@2.29.3",
       "destination": "wwwroot/lib/moment.js/"
     }
-  ]
+]
 }

@@ -1,0 +1,84 @@
+﻿@model GTAC.Models.ViewModels.InstructorScheduleViewModel
+
+@{
+    ViewData["Title"] = "Schedule";
+    ViewData["NavSchedules"] = "active";
+}
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Schedules</h1>
+</div>
+<div class="row">
+    <div class="col-lg-5">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Your Schedule For Today Instructor</h6>
+            </div>
+            <div class="card-body">
+                <div>
+                    <dl class="row">
+                        <dt class="col-sm-5">
+                            7:30am to 9:30am
+                        </dt>
+                        <dd class="col-sm-7">
+                            @if (Model.SevenAMStudent != null)
+                            {
+                                <span>
+                                    @Model.DaySevenAMStudent of @Model.SevenAMStudent.User.Firstname @Model.SevenAMStudent.User.Lastname
+                                </span>
+                            }
+                            else
+                            {
+                                <span>No Student</span>
+                            }
+                        </dd>
+                        <dt class="col-sm-5">
+                            10:00am to 12:00nn
+                        </dt>
+                        <dd class="col-sm-7">
+                            @if (Model.TenAMStudent != null)
+                            {
+                                <span> @Model.DayTenAMStudent of @Model.TenAMStudent.User.Firstname @Model.TenAMStudent.User.Lastname</span>
+                            }
+                            else
+                            {
+                                <span>No Student</span>
+                            }
+                        </dd>
+                        <dt class="col-sm-5">
+                            1:00pm to 3:00pm
+                        </dt>
+                        <dd class="col-sm-7">
+                            @if (Model.OnePMStudent != null)
+                            {
+                                <span>
+                                    @Model.DayOnePMStudent of @Model.OnePMStudent.User.Firstname @Model.OnePMStudent.User.Lastname
+                                </span>
+                            }
+                            else
+                            {
+                                <span>No Student</span>
+                            }
+                        </dd>
+                        <dt class="col-sm-5">
+                            3:00pm to 5:00pm
+                        </dt>
+                        <dd class="col-sm-7">
+                            @if (Model.ThreePMStudent != null)
+                            {
+                                <span>
+                                    @Model.DayThreePMStudent of @Model.ThreePMStudent.User.Firstname @Model.ThreePMStudent.User.Lastname
+                                </span>
+                            }
+                            else
+                            {
+                                <span>No Student</span>
+                            }
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

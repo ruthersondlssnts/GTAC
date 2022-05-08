@@ -1,9 +1,14 @@
 ﻿@model GTAC.Models.Schedule
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Schedule";
     string formAction = Model.Status == Status.Pending || User.IsInRole("Admin") ? "Edit" : "AddChangeRequest";
+    ViewData["NavSchedules"] = "active";
 }
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Schedules</h1>
+</div>
 <style>
     .day.disabled {
         background: #d7bfbf !important;

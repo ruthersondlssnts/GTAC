@@ -6,6 +6,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\lib\modern\**" />
+    <Compile Remove="wwwroot\lib\pspdfkit-lib\**" />
+    <Content Remove="wwwroot\lib\modern\**" />
+    <Content Remove="wwwroot\lib\pspdfkit-lib\**" />
+    <EmbeddedResource Remove="wwwroot\lib\modern\**" />
+    <EmbeddedResource Remove="wwwroot\lib\pspdfkit-lib\**" />
+    <None Remove="wwwroot\lib\modern\**" />
+    <None Remove="wwwroot\lib\pspdfkit-lib\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Data\Migrations\20220503060056_edit student.cs" />
     <Compile Remove="Data\Migrations\20220503060056_edit student.Designer.cs" />
     <Compile Remove="Data\Migrations\20220503063940_RemoveContact.cs" />
@@ -22,6 +33,10 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\modules\" />
   </ItemGroup>
 
 </Project>

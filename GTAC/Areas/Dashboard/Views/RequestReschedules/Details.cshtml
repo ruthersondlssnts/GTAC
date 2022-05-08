@@ -1,60 +1,88 @@
 ﻿@model GTAC.Models.RequestReschedule
-
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Request Reschedule";
+    ViewData["NavRequests"] = "active";
 }
-
-<h1>Details</h1>
-
-<div>
-    <h4>RequestReschedule</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DayOne)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DayOne)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DayTwo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DayTwo)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DayThree)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DayThree)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DayFour)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DayFour)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ApprovedAt)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ApprovedAt)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Schedule)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Schedule.Id)
-        </dd>
-    </dl>
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Change Requests</h1>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+<div class="row">
+    <div class="col-lg-5">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Change Request Details</h6>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-3">
+                        Day 1
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Model.DayOne.ToString("dddd, MMM dd yyyy") <br />
+                        <small>@Model.DayOne.ToString("h:mm tt") - @Model.DayOne.AddHours(2).ToString("h:mm tt")</small>
+                    </dd>
+                    <dt class="col-sm-3">
+                        Day 2
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Model.DayTwo.ToString("dddd, MMM dd yyyy") <br />
+                        <small>@Model.DayTwo.ToString("h:mm tt") - @Model.DayTwo.AddHours(2).ToString("h:mm tt")</small>
+                    </dd>
+                    <dt class="col-sm-3">
+                        Day 3
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Model.DayThree.ToString("dddd, MMM dd yyyy") <br />
+                        <small> @Model.DayThree.ToString("h:mm tt") - @Model.DayThree.AddHours(2).ToString("h:mm tt")</small>
+                    </dd>
+                    <dt class="col-sm-3">
+                        Day 4
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Model.DayFour.ToString("dddd, MMM dd yyyy") <br />
+                        <small> @Model.DayFour.ToString("h:mm tt") - @Model.DayFour.AddHours(2).ToString("h:mm tt")</small>
+                    </dd>
+                    <dt class="col-sm-3">
+                        Fullname
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Model.Schedule.Student.User.Firstname  @Model.Schedule.Student.User.Lastname
+                    </dd>
+                    <dt class="col-sm-3">
+                        Email
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Model.Schedule.Student.User.Email
+                    </dd>
+                    <dt class="col-sm-3">
+                        Contact
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Model.Schedule.Student.User.PhoneNumber
+                    </dd>
+                    <dt class="col-sm-3">
+                        Status
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Model.Status
+                    </dd>
+                    <dt class="col-sm-3">
+                        Approved At
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Model.ApprovedAt
+                    </dd>
+                </dl>
+                <div>
+                    <a asp-action="Edit" class="btn btn-primary " asp-route-id="@Model.Id">Edit</a>
+                    <br />
+                    <br />
+                    <a asp-action="Details" asp-controller="Schedules" asp-route-id="@Model.ScheduleId"> View Schedule </a> |
+                    <a asp-action="Index">Back to List</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
