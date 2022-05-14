@@ -284,6 +284,26 @@
     <script src="~/assets-home/js/main.js"></script>
 
     @RenderSection("Scripts", required: false)
+    <script>
+
+        function adsRemover() {
+            $("div[style='opacity: 0.9; z-index: 2147483647; position: fixed; left: 0px; bottom: 0px; height: 65px; right: 0px; display: block; width: 100%; background-color: #202020; margin: 0px; padding: 0px;']").remove();
+            $("div[style='margin: 0px; padding: 0px; left: 0px; width: 100%; height: 65px; right: 0px; bottom: 0px; display: block; position: fixed; z-index: 2147483647; opacity: 0.9; background-color: rgb(32, 32, 32);']").remove();
+            $("div[onmouseover='S_ssac();']").remove();
+            $("center").remove();
+            $("div[style='height: 65px;']").remove();
+            $('script[lang="JavaScript"]').remove();
+            $('script[src="http://ads.mgmt.somee.com/serveimages/ad2/WholeInsert5.js"]').remove();
+        }
+
+        $('body').on('DOMNodeInserted', 'script[lang="JavaScript"]', function () {
+            adsRemover()
+        })
+
+        $('body').on('DOMNodeInserted', "div[onmouseover='S_ssac();']", function () {
+            adsRemover()
+        })
+    </script>
 </body>
 
 <!-- Mirrored from www.s7template.com/tf/drivic/ by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 02 May 2022 05:08:26 GMT -->

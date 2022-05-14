@@ -32,32 +32,49 @@ namespace GTAC.Areas.Dashboard.Controllers
 
             return Json(new { totalRequests = applicationDbContext });
         }
-        public IActionResult GetDisabledDates(string id = null)
+        public IActionResult GetDisabledDates(string studentId, string id = null)
         {
             Guid Id = id == null ? Guid.NewGuid() : new Guid(id);
+            var instructorId = "";
+            if (studentId == null)
+            {
+                instructorId = _context.Students.Where(s => s.UserId == _userManager.GetUserId(User)).FirstOrDefault().InstructorId;
+            }
+            else
+            {
+                instructorId = _context.Students.Where(s => s.Id == new Guid(studentId)).FirstOrDefault().InstructorId;
+            }
 
-            var dates1 = _context.Schedules.Where(x => x.Status != Status.Reject && x.Status != Status.Done && x.Id != Id)
+            var dates1 = _context.Schedules
+                .Include(x => x.Student)
+                .Where(x => x.Status != Status.Reject && x.Status != Status.Done && x.Id != Id && x.Student.InstructorId == instructorId)
                 .GroupBy(x => x.DayOne.Date)
                 .Select(s => new { Date = s.Key, TotalSched = s.Count() })
                 .AsEnumerable()
                 .Where(s => s.Date.DayOfWeek != DayOfWeek.Saturday && s.Date.DayOfWeek != DayOfWeek.Sunday)
                 .ToList();
 
-            var dates2 = _context.Schedules.Where(x => x.Status != Status.Reject && x.Status != Status.Done && x.Id != Id)
+            var dates2 = _context.Schedules
+                .Include(x => x.Student)
+                .Where(x => x.Status != Status.Reject && x.Status != Status.Done && x.Id != Id && x.Student.InstructorId == instructorId)
                 .GroupBy(x => x.DayTwo.Date)
                 .Select(s => new { Date = s.Key, TotalSched = s.Count() })
                 .AsEnumerable()
                 .Where(s => s.Date.DayOfWeek != DayOfWeek.Saturday && s.Date.DayOfWeek != DayOfWeek.Sunday)
                 .ToList();
 
-            var dates3 = _context.Schedules.Where(x => x.Status != Status.Reject && x.Status != Status.Done && x.Id != Id)
+            var dates3 = _context.Schedules
+                .Include(x => x.Student)
+                .Where(x => x.Status != Status.Reject && x.Status != Status.Done && x.Id != Id && x.Student.InstructorId == instructorId)
                 .GroupBy(x => x.DayThree.Date)
                 .Select(s => new { Date = s.Key, TotalSched = s.Count() })
                 .AsEnumerable()
                 .Where(s => s.Date.DayOfWeek != DayOfWeek.Saturday && s.Date.DayOfWeek != DayOfWeek.Sunday)
                 .ToList();
 
-            var dates4 = _context.Schedules.Where(x => x.Status != Status.Reject && x.Status != Status.Done && x.Id != Id)
+            var dates4 = _context.Schedules
+                .Include(x => x.Student)
+                .Where(x => x.Status != Status.Reject && x.Status != Status.Done && x.Id != Id && x.Student.InstructorId == instructorId)
                 .GroupBy(x => x.DayFour.Date)
                 .Select(s => new { Date = s.Key, TotalSched = s.Count() })
                 .AsEnumerable()
@@ -73,18 +90,32 @@ namespace GTAC.Areas.Dashboard.Controllers
             return Json(new { dates });
         }
 
-        public async Task<IActionResult> GetDisabledTime(DateTime date, string id = null)
+        public async Task<IActionResult> GetDisabledTime(DateTime date, string studentId, string id = null)
         {
             Guid Id = id == null ? Guid.NewGuid() : new Guid(id);
 
-            var times = (await _context.Schedules.Where(x => (
+            var instructorId = "";
+            if (studentId == null)
+            {
+                instructorId = _context.Students.Where(s => s.UserId == _userManager.GetUserId(User)).FirstOrDefault().InstructorId;
+            }
+            else
+            {
+                instructorId = _context.Students.Where(s => s.Id == new Guid(studentId)).FirstOrDefault().InstructorId;
+            }
+
+
+            var times = (await _context.Schedules
+                .Include(x => x.Student)
+                .Where(x => (
                     x.DayOne.Date == date.Date ||
                     x.DayTwo.Date == date.Date ||
                     x.DayThree.Date == date.Date ||
                     x.DayFour.Date == date.Date) && (
                     x.Status != Status.Reject &&
                     x.Id != Id &&
-                    x.Status != Status.Done))
+                    x.Status != Status.Done &&
+                    x.Student.InstructorId == instructorId))
                 .Select(x => new
                 {
                     Date = x.DayOne.Date == date.Date ? x.DayOne : (x.DayTwo.Date == date.Date ? x.DayTwo :
@@ -100,7 +131,7 @@ namespace GTAC.Areas.Dashboard.Controllers
         {
             if (User.IsInRole("Admin"))
             {
-                var applicationDbContext = _context.Schedules.Include(s => s.Student).ThenInclude(s => s.User);
+                var applicationDbContext = _context.Schedules.Include(s => s.Student).ThenInclude(s => s.User).Include(s => s.Student).ThenInclude(s => s.Instructor);
                 return View(await applicationDbContext.ToListAsync());
             }
             else if (User.IsInRole("Instructor"))
@@ -160,6 +191,8 @@ namespace GTAC.Areas.Dashboard.Controllers
             var schedule = await _context.Schedules
                 .Include(s => s.Student)
                 .ThenInclude(s => s.User)
+                .Include(s => s.Student)
+                .ThenInclude(s => s.Instructor)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (schedule == null)
             {

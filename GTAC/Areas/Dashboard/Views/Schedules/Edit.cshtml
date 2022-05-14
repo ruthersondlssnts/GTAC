@@ -190,7 +190,7 @@
         $.ajax({
             url: "/Dashboard/Schedules/GetDisabledDates",
             type: "get",
-            data: {id:"@Model.Id"},
+            data: {id:"@Model.Id", studentId: "@Model.StudentId"},
             success: function (res) {
                 disabledDates = res.dates
 
@@ -310,7 +310,7 @@
             return $.ajax({
                 url: "/Dashboard/Schedules/GetDisabledTime",
                 type: "get",
-                data: { date: moment(date).format('L'), id: '@Model.Id' },
+                data: { date: moment(date).format('L'), id: '@Model.Id', studentId: '@Model.StudentId' },
                 success: function (res) {
                     let times = res.times;
                     $(el).find('option').prop('disabled', false);

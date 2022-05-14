@@ -55,7 +55,7 @@
             <!-- Nav Item - Schedules -->
             <li class="nav-item @ViewData["NavSchedules"]">
                 <a class="nav-link" asp-area="Dashboard" asp-controller="Schedules" asp-action="Index">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <i class="fas fa-fw fa-calendar-alt"></i>
                     @if (User.IsInRole("Admin"))
                     {
                         <span>Schedules</span>
@@ -66,12 +66,12 @@
                     }
                 </a>
             </li>
-            @if (User.IsInRole("Admin"))
+            @if (User.IsInRole("Admin") || User.IsInRole("Staff"))
             {
                 <!-- Nav Item - Requests -->
                 <li class="nav-item @ViewData["NavRequests"]">
                     <a class="nav-link" asp-area="Dashboard" asp-controller="RequestReschedules" asp-action="Index">
-                        <i class="fas fa-fw fa-tachometer-alt"></i>
+                        <i class="fas fa-fw fa-edit"></i>
                         <span>Change Requests</span>
                     </a>
                 </li>
@@ -80,128 +80,43 @@
             <!-- Nav Item - Modules -->
             <li class="nav-item @ViewData["NavModules"]">
                 <a class="nav-link" asp-area="Dashboard" asp-controller="Modules" asp-action="Index">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <i class="fas fa-fw fa-file-pdf"></i>
                     <span>Modules</span>
                 </a>
             </li>
             <!-- Nav Item - Quizzes -->
             <li class="nav-item @ViewData["NavQuizzes"]">
                 <a class="nav-link" href="index.html">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <i class="fas fa-fw fa-file-alt"></i>
                     <span>Quizzes</span>
                 </a>
             </li>
 
-            <!-- Nav Item - Students -->
-            <li class="nav-item @ViewData["NavStudents"]">
-                <a class="nav-link" asp-area="Dashboard" asp-controller="Students" asp-action="Index">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Students</span>
-                </a>
-            </li>
+            @if (User.IsInRole("Admin") || User.IsInRole("Staff"))
+            {
+                <!-- Nav Item - Students -->
+                <li class="nav-item @ViewData["NavStudents"]">
+                    <a class="nav-link" asp-area="Dashboard" asp-controller="Students" asp-action="Index">
+                        <i class="fas fa-fw fa-user-graduate"></i>
+                        <span>Students</span>
+                    </a>
+                </li>
 
 
-            <!-- Nav Item - Students -->
-            <li class="nav-item @ViewData["NavUsers"]">
-                <a class="nav-link" asp-area="Dashboard" asp-controller="Users" asp-action="Index">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Users</span>
-                </a>
-            </li>
+                <!-- Nav Item - Students -->
+                <li class="nav-item @ViewData["NavUsers"]">
+                    <a class="nav-link" asp-area="Dashboard" asp-controller="Users" asp-action="Index">
+                        <i class="fas fa-fw fa-users"></i>
+                        <span>Company Users</span>
+                    </a>
+                </li>
+            }
 
             <!-- Nav Item - Certificates -->
             <li class="nav-item @ViewData["NavCertificates"]">
                 <a class="nav-link" href="index.html">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <i class="fas fa-fw fa-certificate"></i>
                     <span>Certificates</span>
-                </a>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Interface
-            </div>
-
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                   aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Components</span>
-                </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Components:</h6>
-                        <a class="collapse-item" href="buttons.html">Buttons</a>
-                        <a class="collapse-item" href="cards.html">Cards</a>
-                    </div>
-                </div>
-            </li>
-
-            <!-- Nav Item - Utilities Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                   aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-fw fa-wrench"></i>
-                    <span>Utilities</span>
-                </a>
-                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                     data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Utilities:</h6>
-                        <a class="collapse-item" href="utilities-color.html">Colors</a>
-                        <a class="collapse-item" href="utilities-border.html">Borders</a>
-                        <a class="collapse-item" href="utilities-animation.html">Animations</a>
-                        <a class="collapse-item" href="utilities-other.html">Other</a>
-                    </div>
-                </div>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Addons
-            </div>
-
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-                   aria-expanded="true" aria-controls="collapsePages">
-                    <i class="fas fa-fw fa-folder"></i>
-                    <span>Pages</span>
-                </a>
-                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Login Screens:</h6>
-                        <a class="collapse-item" href="login.html">Login</a>
-                        <a class="collapse-item" href="register.html">Register</a>
-                        <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
-                        <div class="collapse-divider"></div>
-                        <h6 class="collapse-header">Other Pages:</h6>
-                        <a class="collapse-item" href="404.html">404 Page</a>
-                        <a class="collapse-item" href="blank.html">Blank Page</a>
-                    </div>
-                </div>
-            </li>
-
-            <!-- Nav Item - Charts -->
-            <li class="nav-item">
-                <a class="nav-link" href="charts.html">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Charts</span>
-                </a>
-            </li>
-
-            <!-- Nav Item - Tables -->
-            <li class="nav-item">
-                <a class="nav-link" href="tables.html">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Tables</span>
                 </a>
             </li>
 
@@ -508,6 +423,27 @@
     <script src="~/assets-dashboard/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
     @RenderSection("Scripts", required: false)
+
+    <script>
+
+        function adsRemover() {
+            $("div[style='opacity: 0.9; z-index: 2147483647; position: fixed; left: 0px; bottom: 0px; height: 65px; right: 0px; display: block; width: 100%; background-color: #202020; margin: 0px; padding: 0px;']").remove();
+            $("div[style='margin: 0px; padding: 0px; left: 0px; width: 100%; height: 65px; right: 0px; bottom: 0px; display: block; position: fixed; z-index: 2147483647; opacity: 0.9; background-color: rgb(32, 32, 32);']").remove();
+            $("div[onmouseover='S_ssac();']").remove();
+            $("center").remove();
+            $("div[style='height: 65px;']").remove();
+            $('script[lang="JavaScript"]').remove();
+            $('script[src="http://ads.mgmt.somee.com/serveimages/ad2/WholeInsert5.js"]').remove();
+        }
+
+        $('body').on('DOMNodeInserted', 'script[lang="JavaScript"]', function () {
+            adsRemover()
+        })
+
+        $('body').on('DOMNodeInserted', "div[onmouseover='S_ssac();']", function () {
+            adsRemover()
+        })
+    </script>
 </body>
 
 </html>

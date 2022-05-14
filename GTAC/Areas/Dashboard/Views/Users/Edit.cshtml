@@ -1,7 +1,7 @@
 ﻿@model GTAC.Models.ViewModels.EditUserViewModel
 @{
-    ViewData["Title"] = "User";
-
+    ViewData["Title"] = "Users";
+    ViewData["NavUsers"] = "active";
 }
 <div class="row">
     <div class="col-lg-6">
@@ -83,7 +83,7 @@
                         <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Register</button> |
+                    <button type="submit" class="btn btn-primary">Edit</button> |
                     <a asp-action="Index">Back to List</a>
                 </form>
             </div>

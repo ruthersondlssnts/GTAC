@@ -42,6 +42,12 @@
                         <small> @Model.DayFour.ToString("h:mm tt") - @Model.DayFour.AddHours(2).ToString("h:mm tt")</small>
                     </dd>
                     <dt class="col-lg-3">
+                        Instructor
+                    </dt>
+                    <dd class="col-lg-9">
+                        @Model.Student.Instructor.Firstname  @Model.Student.Instructor.Lastname
+                    </dd>
+                    <dt class="col-lg-3">
                         Fullname
                     </dt>
                     <dd class="col-lg-9">
