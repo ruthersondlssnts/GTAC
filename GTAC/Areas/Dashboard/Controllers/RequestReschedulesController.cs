@@ -25,9 +25,10 @@ namespace GTAC.Areas.Dashboard.Controllers
         }
 
         // GET: Dashboard/RequestReschedules
+
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.RequestReschedule
+            var applicationDbContext = _context.RequestReschedules
                 .Include(r => r.Schedule)
                 .ThenInclude(s => s.Student)
                 .ThenInclude(s => s.User)
@@ -38,7 +39,7 @@ namespace GTAC.Areas.Dashboard.Controllers
         // GET: Dashboard/RequestReschedules
         public async Task<IActionResult> TotalPendingRequests()
         {
-            var applicationDbContext = await _context.RequestReschedule.CountAsync(r => r.Status == Status.Pending);
+            var applicationDbContext = await _context.RequestReschedules.CountAsync(r => r.Status == Status.Pending);
 
             return Json(new { totalRequests = applicationDbContext });
         }
@@ -52,7 +53,7 @@ namespace GTAC.Areas.Dashboard.Controllers
                 return NotFound();
             }
 
-            var requestReschedule = await _context.RequestReschedule
+            var requestReschedule = await _context.RequestReschedules
                 .Include(r => r.Schedule)
                 .ThenInclude(s => s.Student)
                 .ThenInclude(s => s.User)
@@ -98,7 +99,7 @@ namespace GTAC.Areas.Dashboard.Controllers
                 return NotFound();
             }
 
-            var requestReschedule = await _context.RequestReschedule.FindAsync(id);
+            var requestReschedule = await _context.RequestReschedules.FindAsync(id);
             if (requestReschedule == null)
             {
                 return NotFound();
@@ -161,7 +162,7 @@ namespace GTAC.Areas.Dashboard.Controllers
                 return NotFound();
             }
 
-            var requestReschedule = await _context.RequestReschedule
+            var requestReschedule = await _context.RequestReschedules
                 .Include(r => r.Schedule)
                 .ThenInclude(s => s.Student)
                 .ThenInclude(s => s.User)
@@ -179,8 +180,8 @@ namespace GTAC.Areas.Dashboard.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var requestReschedule = await _context.RequestReschedule.FindAsync(id);
-            _context.RequestReschedule.Remove(requestReschedule);
+            var requestReschedule = await _context.RequestReschedules.FindAsync(id);
+            _context.RequestReschedules.Remove(requestReschedule);
             var sched = await _context.Schedules.FindAsync(requestReschedule.ScheduleId);
             sched.Status = Status.Approved;
             await _context.SaveChangesAsync();
@@ -193,7 +194,7 @@ namespace GTAC.Areas.Dashboard.Controllers
 
         private bool RequestRescheduleExists(Guid id)
         {
-            return _context.RequestReschedule.Any(e => e.Id == id);
+            return _context.RequestReschedules.Any(e => e.Id == id);
         }
     }
 }

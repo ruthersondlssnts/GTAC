@@ -1,0 +1,43 @@
+﻿@model GTAC.Models.Quiz
+@{
+    ViewData["Title"] = "Quizzes";
+    ViewData["NavQuizzes"] = "active";
+}
+<div class="row">
+    <div class="col-lg-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Quiz Details</h6>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-lg-3">
+                        Name
+                    </dt>
+                    <dd class="col-lg-9">
+                        @Model.Name
+                    </dd>
+                    <dt class="col-lg-3">
+                        Link
+                    </dt>
+                    <dd class="col-lg-9">
+                        <a href="@Model.Link" target="_blank">@Model.Link</a>
+                    </dd>
+                    <dt class="col-lg-3">
+                        Author
+                    </dt>
+                    <dd class="col-lg-9">
+                        @Model.Author.Firstname  @Model.Author.Lastname
+                    </dd>
+                </dl>
+                <div>
+                    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+                    <a asp-action="Index">Back to List</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<partial name="_QuizStudentsListPartial" model="ViewBag.Students" />

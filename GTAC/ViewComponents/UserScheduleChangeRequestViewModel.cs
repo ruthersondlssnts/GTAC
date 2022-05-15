@@ -26,7 +26,7 @@ namespace GTAC.ViewComponents
         public IViewComponentResult Invoke()
         {
             var id = _userManager.GetUserId((System.Security.Claims.ClaimsPrincipal)User);
-            var studentsRequestChange = _context.RequestReschedule
+            var studentsRequestChange = _context.RequestReschedules
                 .Include(x => x.Schedule)
                 .ThenInclude(x => x.Student)
                 .ThenInclude(x => x.User)

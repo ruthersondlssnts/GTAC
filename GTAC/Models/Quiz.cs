@@ -8,8 +8,11 @@ namespace GTAC.Models
     {
         [Key]
         public Guid Id { get; set; }
+        [Required]
+        public string Name { get; set; }
+        [Required]
         public string Link { get; set; }
-        public Guid AuthorId { get; set; }
+        public string AuthorId { get; set; }
         [ForeignKey("AuthorId")]
         public virtual User Author { get; set; }
     }

@@ -16,7 +16,9 @@ namespace GTAC.Data
 
         public DbSet<Schedule> Schedules { get; set; }
         public DbSet<Student> Students { get; set; }
-        public DbSet<RequestReschedule> RequestReschedule { get; set; }
+        public DbSet<RequestReschedule> RequestReschedules { get; set; }
         public DbSet<Module> Modules { get; set; }
+        public DbSet<Quiz> Quizzes { get; set; }
+        public DbSet<Quiz_Student> Quiz_Students { get; set; }
     }
 }
