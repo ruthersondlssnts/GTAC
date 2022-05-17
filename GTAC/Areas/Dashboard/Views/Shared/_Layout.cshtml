@@ -114,7 +114,7 @@
 
             <!-- Nav Item - Certificates -->
             <li class="nav-item @ViewData["NavCertificates"]">
-                <a class="nav-link" href="index.html">
+                <a class="nav-link" asp-area="Dashboard" asp-controller="Certificates" asp-action="Index">
                     <i class="fas fa-fw fa-certificate"></i>
                     <span>Certificates</span>
                 </a>
@@ -140,32 +140,6 @@
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                         <i class="fa fa-bars"></i>
                     </button>
-
-                    <div>
-                        Hi,
-                        @{
-                            if (!User.IsInRole("Admin"))
-                            {
-                                var role = User.Claims.Where(x => x.Type.Contains("role")).FirstOrDefault();
-                                if (role == null)
-                                {
-                                    <span>Student</span>
-                                }
-                                else
-                                {
-                                    <span>@role.Value</span>
-                                }
-                                <span>
-                                    @User.FindFirst("UserFullname").Value!
-                                </span>
-                            }
-                            else
-                            {
-                                <span>Admin</span>
-                            }
-                        }
-
-                    </div>
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -325,7 +299,30 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">
+                                    @{
+                                        if (!User.IsInRole("Admin"))
+                                        {
+                                            var role = User.Claims.Where(x => x.Type.Contains("role")).FirstOrDefault();
+                                            if (role == null)
+                                            {
+                                                <span>Student</span>
+                                            }
+                                            else
+                                            {
+                                                <span>@role.Value</span>
+                                            }
+                                            <span>
+                                                @User.FindFirst("UserFullname").Value
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span>Admin</span>
+                                        }
+                                    }
+                                </span>
                                 <img class="img-profile rounded-circle"
                                      src="assets-dashboard/img/undraw_profile.svg">
                             </a>

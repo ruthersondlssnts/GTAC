@@ -1,0 +1,130 @@
+﻿@model GTAC.Models.Certificate
+@{
+    ViewData["Title"] = "Certificates";
+    ViewData["NavCertificates"] = "active";
+}
+@if (ViewBag.isGraduated == true && ViewBag.isStudent == true ? (Model != null && Model.Status == Status.Approved) : true)
+{
+    <script src='https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js'></script>
+    <style>
+        .container-iframe {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+        }
+
+        .responsive-iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card shadow mb-4 border-left-primary">
+                <div class="card-body mb-4">
+                    <div class="row">
+                        <div class="col-sm-12 text-center mb-4">
+                            <h1 class="d-none d-md-block">CONGRATULATIONS!</h1>
+                            <h5 class="d-md-none">CONGRATULATIONS!</h5>
+                            <h5>Your certificate is ready!  Kindly download it below.</h5>
+                        </div>
+                    </div>
+                    <div style="margin: 0 10%">
+                        <div class="container-iframe">
+                            <iframe id='pdf' class="responsive-iframe" title='Certificate'></iframe>
+                        </div>
+                    </div>
+                    @if (User.IsInRole("Admin") || User.IsInRole("Instructor"))
+                    {
+                        <div class="row mt-5">
+                            <div class="col-lg-4 ">
+                                <dl class="row">
+                                    <dt class="col-lg-4">
+                                        Author
+                                    </dt>
+                                    <dd class="col-lg-8">
+                                        @Model.Author.Firstname  @Model.Author.Lastname
+                                    </dd>
+                                    <dt class="col-lg-4">
+                                        Approver
+                                    </dt>
+                                    <dd class="col-lg-8">
+                                        @Model.Approver?.Firstname  @Model.Approver?.Lastname
+                                    </dd>
+                                    <dt class="col-lg-4">
+                                        Approve Date
+                                    </dt>
+                                    <dd class="col-lg-8">
+                                        @Model.ApprovedDate
+                                    </dd>
+                                    <dt class="col-lg-4">
+                                        Status
+                                    </dt>
+                                    <dd class="col-lg-8">
+                                        @Model.Status
+                                    </dd>
+                                </dl>
+                                <div>
+                                    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+                                    <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @section Scripts {
+        <script type='text/javascript'>
+        const { jsPDF } = window.jspdf;
+
+        const doc = new jsPDF({ orientation: 'l' });
+
+        doc.addImage('/images/@Model.Path', 'JPEG', 0, 0, 297, 210);
+
+        doc.setFontSize(40);
+
+        var lines = doc.splitTextToSize('@User.FindFirst("UserFullname").Value', 250);
+
+        if (lines.length == 1) {
+            doc.text(lines, 152, 120, { align: 'center', baseline: 'middle', maxWidth: '250' });
+        } else {
+            doc.setFontSize(23);
+            doc.text(lines, 152, 112, { align: 'center', baseline: 'middle', maxWidth: '250', lineHeightFactor: 1 });
+        }
+
+        var string = doc.output('datauristring');
+
+        $('#pdf').attr('src', string +"#view=FitH");
+        </script>
+    }
+
+}
+else
+{
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <div class="card bg-primary text-white ">
+                <div class="card-body">
+                    Please wait for your course completion to download your certificate
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+

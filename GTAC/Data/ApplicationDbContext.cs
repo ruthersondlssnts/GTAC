@@ -20,5 +20,6 @@ namespace GTAC.Data
         public DbSet<Module> Modules { get; set; }
         public DbSet<Quiz> Quizzes { get; set; }
         public DbSet<Quiz_Student> Quiz_Students { get; set; }
+        public DbSet<Certificate> Certificates { get; set; }
     }
 }

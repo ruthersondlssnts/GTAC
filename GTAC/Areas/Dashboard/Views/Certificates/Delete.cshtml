@@ -1,0 +1,51 @@
+﻿@model GTAC.Models.Certificate
+@{
+    ViewData["Title"] = "Certificates";
+    ViewData["NavCertificates"] = "active";
+}
+<div class="row">
+    <div class="col-lg-5">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Are you sure you want to delete the certificate?</h6>
+            </div>
+            <div class="card-body">
+                <img id="preview" src="~/images/@Model.Path" style="height:200px; display:block" class="mx-auto" />
+
+                <dl class="row">
+                    <dt class="col-lg-3">
+                        Author
+                    </dt>
+                    <dd class="col-lg-9">
+                        @Model.Author.Firstname  @Model.Author.Lastname
+                    </dd>
+                    <dt class="col-lg-3">
+                        Approver
+                    </dt>
+                    <dd class="col-lg-9">
+                        @Model.Approver?.Firstname  @Model.Approver?.Lastname
+                    </dd>
+                    <dt class="col-lg-3">
+                        Approve Date
+                    </dt>
+                    <dd class="col-lg-9">
+                        @Model.ApprovedDate
+                    </dd>
+                    <dt class="col-lg-3">
+                        Status
+                    </dt>
+                    <dd class="col-lg-9">
+                        @Model.Status
+                    </dd>
+                </dl>
+
+                <form asp-action="Delete">
+                    <input type="hidden" asp-for="Id" />
+                    <input type="submit" value="Delete" class="btn btn-danger" /> |
+                    <a asp-action="Index">Back</a>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>

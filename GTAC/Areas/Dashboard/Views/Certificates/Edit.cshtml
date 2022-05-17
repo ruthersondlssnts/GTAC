@@ -1,0 +1,53 @@
+﻿@model GTAC.Models.Certificate
+
+@{
+    ViewData["Title"] = "Certificates";
+    ViewData["NavCertificates"] = "active";
+}
+<div class="row">
+    <div class="col-lg-5">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Edit Certificate</h6>
+            </div>
+            <div class="card-body">
+                <form asp-action="Edit" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="ApproverId" />
+                    <input type="hidden" asp-for="AuthorId" />
+                    <input type="hidden" asp-for="ApprovedDate" />
+                    <input type="hidden" asp-for="Path" />
+
+                    <img id="preview" src="~/images/@Model.Path" style="height:200px; display:block" class="mx-auto" />
+                    <div class="form-group">
+                        <label class="control-label">Certificate Image</label>
+                        <input onchange="photoChange()" asp-for="CertificateUpload" data-val="false" class="form-control" accept="image/png, image/jpeg" />
+                    </div>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <div class="form-group ">
+                            <label asp-for="Status" class="control-label"></label>
+                            <select asp-for="Status" class="form-control" asp-items="@Html.GetEnumSelectList<Status>()"></select>
+                            <span asp-validation-for="Status" class="text-danger"></span>
+                        </div>
+                    }
+                    <div class="form-group">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                        |
+                        <a asp-action="Index">Back</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        function photoChange() {
+            $('#preview').attr('src', URL.createObjectURL(event.target.files[0]));
+        }
+    </script>
+}

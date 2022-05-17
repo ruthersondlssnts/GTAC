@@ -34,7 +34,24 @@ namespace GTAC.Areas.Dashboard.Controllers
         // GET: Dashboard/Modules
         public async Task<IActionResult> Index()
         {
+            var user = await _userManager.GetUserAsync(User);
+            var roles = await _userManager.GetRolesAsync(user);
             var applicationDbContext = _context.Modules.Include(m => m.Uploader);
+
+            if (roles.Count == 0)
+            {
+                var isEnrolled = (await _context.Students.Where(s => s.UserId == user.Id).FirstOrDefaultAsync())?.EnrolledAt != null;
+
+                if (isEnrolled)
+                {
+                    return View(await applicationDbContext.ToListAsync());
+                }
+                else
+                {
+                    return View();
+                }
+            }
+
             return View(await applicationDbContext.ToListAsync());
         }
         public IActionResult ViewPDF(string filename = null)
