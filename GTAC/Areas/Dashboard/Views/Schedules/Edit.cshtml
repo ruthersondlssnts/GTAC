@@ -3,6 +3,10 @@
 @{
     ViewData["Title"] = "Schedule";
     string formAction = Model.Status == Status.Pending || User.IsInRole("Admin") ? "Edit" : "AddChangeRequest";
+    bool is1Disabled = Model.DayOne.Date < DateTime.Now.Date;
+    bool is2Disabled = Model.DayTwo.Date < DateTime.Now.Date;
+    bool is3Disabled = Model.DayThree.Date < DateTime.Now.Date;
+    bool is4Disabled = Model.DayFour.Date < DateTime.Now.Date;
     ViewData["NavSchedules"] = "active";
 }
 
@@ -51,7 +55,7 @@
                         <div class="form-group col-md-6">
                             <label class="control-label">Day 1</label>
                             <div class="input-group date" id="datepicker1" data-target-input="nearest">
-                                <input onkeypress="return false;" type="text" value="@Model.DayOne.ToString("MM/dd/yyyy")" class="form-control datetimepicker-input datetimepicker-input1" data-target="#datepicker1" />
+                                <input onkeypress="return false;" type="text" @(is1Disabled ? "disabled" : null) value="@Model.DayOne.ToString("MM/dd/yyyy")" class="form-control datetimepicker-input datetimepicker-input1" data-target="#datepicker1" />
                                 <div class="input-group-append" data-target="#datepicker1" data-toggle="datetimepicker">
                                     <div class="input-group-text" style="background:white"><i class="fa fa-calendar"></i></div>
                                 </div>
@@ -60,7 +64,7 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label class="control-label">Time Schedule</label>
-                            <select class="form-control" id="timepicker1">
+                            <select class="form-control" id="timepicker1" @(is1Disabled ? "disabled" : null)>
                                 <option value="" disabled>Please Select Time</option>
                                 <option value="7:30 AM">7:30am to 9:30am</option>
                                 <option value="10:00 AM">10:00am to 12:00nn</option>
@@ -73,7 +77,7 @@
                         <div class="form-group col-md-6">
                             <label class="control-label">Day 2</label>
                             <div class="input-group date" id="datepicker2" data-target-input="nearest">
-                                <input onkeypress="return false;" value="" type="text" class="form-control datetimepicker-input datetimepicker-input2" data-target="#datepicker2" />
+                                <input onkeypress="return false;" @(is2Disabled ? "disabled" : null) value="" type="text" class="form-control datetimepicker-input datetimepicker-input2" data-target="#datepicker2" />
                                 <div class="input-group-append" data-target="#datepicker2" data-toggle="datetimepicker">
                                     <div class="input-group-text" style="background:white"><i class="fa fa-calendar"></i></div>
                                 </div>
@@ -82,7 +86,7 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label class="control-label">Time Schedule</label>
-                            <select class="form-control" id="timepicker2">
+                            <select class="form-control" id="timepicker2" @(is2Disabled ? "disabled" : null)>
                                 <option value="" disabled>Please Select Time</option>
                                 <option value="7:30 AM">7:30am to 9:30am</option>
                                 <option value="10:00 AM">10:00am to 12:00nn</option>
@@ -95,7 +99,7 @@
                         <div class="form-group col-md-6">
                             <label class="control-label">Day 3</label>
                             <div class="input-group date" id="datepicker3" data-target-input="nearest">
-                                <input onkeypress="return false;" type="text" class="form-control datetimepicker-input datetimepicker-input3" data-target="#datepicker3" />
+                                <input onkeypress="return false;" @(is3Disabled ? "disabled" : null) type="text" class="form-control datetimepicker-input datetimepicker-input3" data-target="#datepicker3" />
                                 <div class="input-group-append" data-target="#datepicker3" data-toggle="datetimepicker">
                                     <div class="input-group-text" style="background:white"><i class="fa fa-calendar"></i></div>
                                 </div>
@@ -104,7 +108,7 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label class="control-label">Time Schedule</label>
-                            <select class="form-control" id="timepicker3">
+                            <select class="form-control" id="timepicker3" @(is3Disabled ? "disabled" : null)>
                                 <option value="" disabled>Please Select Time</option>
                                 <option value="7:30 AM">7:30am to 9:30am</option>
                                 <option value="10:00 AM">10:00am to 12:00nn</option>
@@ -117,7 +121,7 @@
                         <div class="form-group col-md-6">
                             <label class="control-label">Day 4</label>
                             <div class="input-group date" id="datepicker4" data-target-input="nearest">
-                                <input onkeypress="return false;" type="text" class="form-control datetimepicker-input datetimepicker-input4" data-target="#datepicker4" />
+                                <input onkeypress="return false;" @(is4Disabled ? "disabled" : null) type="text" class="form-control datetimepicker-input datetimepicker-input4" data-target="#datepicker4" />
                                 <div class="input-group-append" data-target="#datepicker4" data-toggle="datetimepicker">
                                     <div class="input-group-text" style="background:white"><i class="fa fa-calendar"></i></div>
                                 </div>
@@ -126,7 +130,7 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label class="control-label">Time Schedule</label>
-                            <select class="form-control" id="timepicker4">
+                            <select class="form-control" id="timepicker4" @(is4Disabled ? "disabled" : null)>
                                 <option value="" disabled>Please Select Time</option>
                                 <option value="7:30 AM">7:30am to 9:30am</option>
                                 <option value="10:00 AM">10:00am to 12:00nn</option>

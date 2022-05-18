@@ -24,7 +24,7 @@ else
         </div>
 
         <div class="card-body">
-            @if (User.IsInRole("Instructor"))
+            @if (User.IsInRole("Instructor") || User.IsInRole("Admin"))
             {
                 <a asp-action="Create" class="btn btn-primary mb-3">Create</a>
             }

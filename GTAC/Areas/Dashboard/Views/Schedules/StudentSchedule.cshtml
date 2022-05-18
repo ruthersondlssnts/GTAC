@@ -64,17 +64,20 @@
                     </dl>
                 </div>
                 <div>
-                    @if (Model.Status == Status.Approved)
+                    @if (Model.DayFour.Date > DateTime.Now.Date)
                     {
-                        <a asp-action="Edit" class="btn btn-primary" asp-route-id="@Model.Id">Request For Change</a>
-                    }
-                    else if (Model.Status == Status.PendingRequest)
-                    {
+                        if (Model.Status == Status.Approved)
+                        {
+                            <a asp-action="Edit" class="btn btn-primary" asp-route-id="@Model.Id">Request For Change</a>
+                        }
+                        else if (Model.Status == Status.PendingRequest)
+                        {
 
-                    }
-                    else
-                    {
-                        <a asp-action="Edit" class="btn btn-primary" asp-route-id="@Model.Id">Edit</a>
+                        }
+                        else
+                        {
+                            <a asp-action="Edit" class="btn btn-primary" asp-route-id="@Model.Id">Edit</a>
+                        }
                     }
                 </div>
             </div>
