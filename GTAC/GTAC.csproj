@@ -26,6 +26,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="wwwroot\Reports\StudentsReport.rdlc" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="wwwroot\Reports\StudentsReport.rdlc" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AspNetCore.Reporting" Version="2.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.12" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.24" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.24" />
@@ -35,10 +44,37 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
+    <PackageReference Include="System.CodeDom" Version="5.0.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="wwwroot\modules\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="ReportDataSet\dsStudents.cs">
+      <DependentUpon>dsStudents.xsd</DependentUpon>
+    </Compile>
+    <Compile Update="ReportDataSet\dsStudents.Designer.cs">
+      <DependentUpon>dsStudents.xsd</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="ReportDataSet\dsStudents.xsc">
+      <DependentUpon>dsStudents.xsd</DependentUpon>
+    </None>
+    <None Update="ReportDataSet\dsStudents.xsd">
+      <SubType>Designer</SubType>
+      <LastGenOutput>dsStudents.Designer.cs</LastGenOutput>
+      <Generator>MSDataSetGenerator</Generator>
+    </None>
+    <None Update="ReportDataSet\dsStudents.xss">
+      <DependentUpon>dsStudents.xsd</DependentUpon>
+    </None>
   </ItemGroup>
 
 </Project>

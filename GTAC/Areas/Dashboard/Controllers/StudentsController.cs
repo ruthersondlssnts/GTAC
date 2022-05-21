@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GTAC.Data;
 using GTAC.Models;
+using Microsoft.AspNetCore.Hosting;
+using AspNetCore.Reporting;
 
 namespace GTAC.Areas.Dashboard.Controllers
 {
@@ -14,10 +16,42 @@ namespace GTAC.Areas.Dashboard.Controllers
     public class StudentsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public StudentsController(ApplicationDbContext context)
+        public StudentsController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
+            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+        }
+        // GET: Dashboard/Students
+        public IActionResult Print()
+        {
+            var students = _context.Students
+                .Include(s => s.Instructor)
+                .Include(s => s.User)
+                .Where(s => s.GraduatedAt != null)
+                .Select(s => new
+                {
+                    Firstname = s.User.Firstname,
+                    Lastname = s.User.Lastname,
+                    Middlename = s.User.Middlename,
+                    Instructor = s.Instructor.Firstname + " " + s.Instructor.Lastname,
+                    EnrolledAt = s.EnrolledAt,
+                    GraduatedAt = s.GraduatedAt,
+                    Email = s.User.Email,
+                    Contact = s.User.PhoneNumber
+                })
+                .ToList();
+
+            string minType = "";
+            int extension = 1;
+            var path = $"{this._webHostEnvironment.WebRootPath}\\Reports\\StudentsReport.rdlc";
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
+            LocalReport localReport = new LocalReport(path);
+            localReport.AddDataSource("dsStudents", students);
+            var result = localReport.Execute(RenderType.Pdf, extension, parameters, minType);
+            return File(result.MainStream, "application/pdf");
         }
 
         // GET: Dashboard/Students
@@ -159,7 +193,7 @@ namespace GTAC.Areas.Dashboard.Controllers
             var user = await _context.Users.FindAsync(student.User.Id);
             _context.Students.Remove(student);
             _context.Users.Remove(user);
-            _context.Schedules.RemoveRange(_context.Schedules.Where(s=>s.StudentId == id));
+            _context.Schedules.RemoveRange(_context.Schedules.Where(s => s.StudentId == id));
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
