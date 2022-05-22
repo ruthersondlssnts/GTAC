@@ -40,27 +40,8 @@ namespace GTAC.Areas.Dashboard.Controllers
             }
             ViewBag.isStudent = roles.Count == 0;
             ViewBag.isGraduated = roles.Count == 0 ? (await _context.Students.Where(s => s.UserId == user.Id).FirstOrDefaultAsync())?.GraduatedAt != null : true;
+            ActivityLog.Create(user.Id, Area.Certificate, Models.Action.View, "Viewed Certificate", _context);
             return View("Details", applicationDbContext);
-        }
-
-        // GET: Dashboard/Certificates/Details/5
-        public async Task<IActionResult> Details(Guid? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var certificate = await _context.Certificates
-                .Include(c => c.Approver)
-                .Include(c => c.Author)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (certificate == null)
-            {
-                return NotFound();
-            }
-
-            return View(certificate);
         }
 
         // GET: Dashboard/Certificates/Create
@@ -93,6 +74,7 @@ namespace GTAC.Areas.Dashboard.Controllers
                 certificate.AuthorId = _userManager.GetUserId(User);
                 certificate.Status = Status.Pending;
                 _context.Add(certificate);
+                ActivityLog.Create(_userManager.GetUserId(User), Area.Certificate, Models.Action.Create, "Created a Certificate for approval", _context);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -144,13 +126,22 @@ namespace GTAC.Areas.Dashboard.Controllers
                         oldcertificate.Status = Status.Pending;
                         oldcertificate.ApproverId = null;
                         oldcertificate.ApprovedDate = null;
+                        ActivityLog.Create(_userManager.GetUserId(User), Area.Certificate, Models.Action.Edit, "Edited a Certificate for approval", _context);
                     }
                     else if (oldcertificate.Status != Status.Approved && certificate.Status == Status.Approved)
                     {
                         oldcertificate.ApprovedDate = DateTime.Now;
                         oldcertificate.ApproverId = _userManager.GetUserId(User);
                         oldcertificate.Status = Status.Approved;
+                        ActivityLog.Create(_userManager.GetUserId(User), Area.Certificate, Models.Action.Edit, "Edited a Certificate to approve", _context);
                     }
+                    else
+                    {
+                        oldcertificate.ApproverId = _userManager.GetUserId(User);
+                        oldcertificate.Status = certificate.Status;
+                        ActivityLog.Create(_userManager.GetUserId(User), Area.Certificate, Models.Action.Edit, "Edited a Certificate to status " + certificate.Status.ToString(), _context);
+                    }
+
                     _context.Update(oldcertificate);
                     await _context.SaveChangesAsync();
                 }
@@ -198,6 +189,7 @@ namespace GTAC.Areas.Dashboard.Controllers
             var certificate = await _context.Certificates.FindAsync(id);
             _context.Certificates.Remove(certificate);
             await _context.SaveChangesAsync();
+            ActivityLog.Create(_userManager.GetUserId(User), Area.Certificate, Models.Action.Delete, "Deleted a Certificate", _context);
             return RedirectToAction(nameof(Index));
         }
 

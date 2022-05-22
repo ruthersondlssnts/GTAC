@@ -28,6 +28,8 @@ namespace GTAC.Areas.Dashboard.Controllers
 
         public async Task<IActionResult> Index()
         {
+            ActivityLog.Create(_userManager.GetUserId(User), Area.RequestReschedule, Models.Action.View, "Viewed Requests for Reschedules", _context);
+
             var applicationDbContext = _context.RequestReschedules
                 .Include(r => r.Schedule)
                 .ThenInclude(s => s.Student)
@@ -58,36 +60,19 @@ namespace GTAC.Areas.Dashboard.Controllers
                 .ThenInclude(s => s.Student)
                 .ThenInclude(s => s.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
+            ActivityLog.Create(_userManager.GetUserId(User),
+                Area.RequestReschedule, Models.Action.View,
+                "Viewed a Request for Reschedule of "
+                + requestReschedule.Schedule.Student.User.Firstname + " "
+                + requestReschedule.Schedule.Student.User.Firstname,
+                _context);
+
             if (requestReschedule == null)
             {
                 return NotFound();
             }
 
-            return View(requestReschedule);
-        }
-
-        // GET: Dashboard/RequestReschedules/Create
-        public IActionResult Create()
-        {
-            ViewData["ScheduleId"] = new SelectList(_context.Schedules, "Id", "Id");
-            return View();
-        }
-
-        // POST: Dashboard/RequestReschedules/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,DayOne,DayTwo,DayThree,DayFour,ScheduleId,ApprovedAt,Status")] RequestReschedule requestReschedule)
-        {
-            if (ModelState.IsValid)
-            {
-                requestReschedule.Id = Guid.NewGuid();
-                requestReschedule.CreatedAt = DateTime.Now;
-                _context.Add(requestReschedule);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
             return View(requestReschedule);
         }
 
@@ -136,6 +121,8 @@ namespace GTAC.Areas.Dashboard.Controllers
                     }
                     schedule.Status = Status.Approved;
                     _context.Update(requestReschedule);
+                    ActivityLog.Create(_userManager.GetUserId(User), Area.RequestReschedule, Models.Action.Edit, "Edited Request for Reschedule status to " + requestReschedule.Status, _context);
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -185,6 +172,7 @@ namespace GTAC.Areas.Dashboard.Controllers
             var sched = await _context.Schedules.FindAsync(requestReschedule.ScheduleId);
             sched.Status = Status.Approved;
             await _context.SaveChangesAsync();
+            ActivityLog.Create(_userManager.GetUserId(User), Area.RequestReschedule, Models.Action.Delete, "Deleted Request for Reschedule", _context);
             if (User.IsInRole("Admin"))
             {
                 return RedirectToAction(nameof(Index));

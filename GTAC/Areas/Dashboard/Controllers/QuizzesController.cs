@@ -33,11 +33,13 @@ namespace GTAC.Areas.Dashboard.Controllers
             {
                 var quizStudent = new Quiz_Student { Id = new Guid(), QuizId = Id, StudentId = studentId };
                 _context.Add(quizStudent);
+                ActivityLog.Create(_userManager.GetUserId(User), Area.Quiz, Models.Action.Edit, "Edited a Quiz status to Done", _context);
                 await _context.SaveChangesAsync();
             }
             else
             {
                 var quiz_stud = await _context.Quiz_Students.Where(q => q.QuizId == Id && q.StudentId == studentId).FirstOrDefaultAsync();
+                ActivityLog.Create(_userManager.GetUserId(User), Area.Quiz, Models.Action.Edit, "Edited a Quiz status to Unsubmitted", _context);
                 _context.Quiz_Students.Remove(quiz_stud);
                 await _context.SaveChangesAsync();
             }
@@ -49,6 +51,8 @@ namespace GTAC.Areas.Dashboard.Controllers
         {
             var user = await _userManager.GetUserAsync(User);
             var roles = await _userManager.GetRolesAsync(user);
+            ActivityLog.Create(_userManager.GetUserId(User), Area.Quiz, Models.Action.View, "View Quizzes", _context);
+
             if (roles.Count == 0)
             {
                 var isEnrolled = (await _context.Students.Where(s => s.UserId == user.Id).FirstOrDefaultAsync())?.EnrolledAt != null;
@@ -87,6 +91,8 @@ namespace GTAC.Areas.Dashboard.Controllers
                 return NotFound();
             }
 
+            ActivityLog.Create(_userManager.GetUserId(User), Area.Quiz, Models.Action.View, "Viewed a Quiz and finished students", _context);
+
             ViewBag.Students = await _context.Quiz_Students
                 .Include(qs => qs.Student)
                 .ThenInclude(s => s.User)
@@ -115,6 +121,7 @@ namespace GTAC.Areas.Dashboard.Controllers
                 quiz.Id = Guid.NewGuid();
                 quiz.AuthorId = _userManager.GetUserId(User);
                 _context.Add(quiz);
+                ActivityLog.Create(_userManager.GetUserId(User), Area.Quiz, Models.Action.Create, "Created a Quiz " + quiz.Name, _context);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -154,6 +161,7 @@ namespace GTAC.Areas.Dashboard.Controllers
                 try
                 {
                     _context.Update(quiz);
+                    ActivityLog.Create(_userManager.GetUserId(User), Area.Quiz, Models.Action.Edit, "Edited a Quiz " + quiz.Name, _context);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -198,6 +206,7 @@ namespace GTAC.Areas.Dashboard.Controllers
         {
             var quiz = await _context.Quizzes.FindAsync(id);
             _context.Quizzes.Remove(quiz);
+            ActivityLog.Create(_userManager.GetUserId(User), Area.Quiz, Models.Action.Delete, "Delete a Quiz " + quiz.Name, _context);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

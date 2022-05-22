@@ -9,6 +9,7 @@ using GTAC.Data;
 using GTAC.Models;
 using Microsoft.AspNetCore.Hosting;
 using AspNetCore.Reporting;
+using Microsoft.AspNetCore.Identity;
 
 namespace GTAC.Areas.Dashboard.Controllers
 {
@@ -17,16 +18,20 @@ namespace GTAC.Areas.Dashboard.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly UserManager<User> _userManager;
 
-        public StudentsController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
+        public StudentsController(ApplicationDbContext context, UserManager<User> userManager, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            _userManager = userManager;
             _webHostEnvironment = webHostEnvironment;
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
         }
         // GET: Dashboard/Students
         public IActionResult Print()
         {
+            ActivityLog.Create(_userManager.GetUserId(User), Area.Student, Models.Action.View, "Viewed graduated students report", _context);
+
             var students = _context.Students
                 .Include(s => s.Instructor)
                 .Include(s => s.User)
@@ -57,6 +62,8 @@ namespace GTAC.Areas.Dashboard.Controllers
         // GET: Dashboard/Students
         public async Task<IActionResult> Index()
         {
+            ActivityLog.Create(_userManager.GetUserId(User), Area.Student, Models.Action.View, "Viewed Students", _context);
+
             var applicationDbContext = _context.Students.Include(s => s.Instructor).Include(s => s.User);
             return View(await applicationDbContext.ToListAsync());
         }
@@ -73,38 +80,14 @@ namespace GTAC.Areas.Dashboard.Controllers
                 .Include(s => s.Instructor)
                 .Include(s => s.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
+            ActivityLog.Create(_userManager.GetUserId(User), Area.Student, Models.Action.View, "Viewed a student", _context);
+
             if (student == null)
             {
                 return NotFound();
             }
 
-            return View(student);
-        }
-
-        // GET: Dashboard/Students/Create
-        public IActionResult Create()
-        {
-            ViewData["InstructorId"] = new SelectList(_context.Users, "Id", "Id");
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
-            return View();
-        }
-
-        // POST: Dashboard/Students/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,EnrolledAt,GraduatedAt,UserId,InstructorId")] Student student)
-        {
-            if (ModelState.IsValid)
-            {
-                student.Id = Guid.NewGuid();
-                _context.Add(student);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["InstructorId"] = new SelectList(_context.Users, "Id", "Id", student.InstructorId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", student.UserId);
             return View(student);
         }
 
@@ -121,8 +104,6 @@ namespace GTAC.Areas.Dashboard.Controllers
             {
                 return NotFound();
             }
-            ViewData["InstructorId"] = new SelectList(_context.Users, "Id", "Id", student.InstructorId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", student.UserId);
             return View(student);
         }
 
@@ -142,6 +123,8 @@ namespace GTAC.Areas.Dashboard.Controllers
             {
                 try
                 {
+                    ActivityLog.Create(_userManager.GetUserId(User), Area.Student, Models.Action.Edit, "Edited a student", _context);
+
                     _context.Update(student);
                     await _context.SaveChangesAsync();
                 }
@@ -158,8 +141,7 @@ namespace GTAC.Areas.Dashboard.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["InstructorId"] = new SelectList(_context.Users, "Id", "Id", student.InstructorId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", student.UserId);
+
             return View(student);
         }
 
@@ -192,6 +174,8 @@ namespace GTAC.Areas.Dashboard.Controllers
             var student = await _context.Students.FindAsync(id);
             var user = await _context.Users.FindAsync(student.User.Id);
             _context.Students.Remove(student);
+            ActivityLog.Create(_userManager.GetUserId(User), Area.Student, Models.Action.Delete, "Deleted a student", _context);
+
             _context.Users.Remove(user);
             _context.Schedules.RemoveRange(_context.Schedules.Where(s => s.StudentId == id));
             await _context.SaveChangesAsync();

@@ -59,7 +59,7 @@ else
                                         @item.Uploader.Firstname  @item.Uploader.Lastname
                                     </td>
                                     <td>
-                                        <a asp-action="ViewPDF" target="_blank" asp-route-fileName="@item.Path">View</a> |
+                                        <a asp-action="ViewPDF" target="_blank" asp-route-fileName="@item.Path" asp-route-title="@item.Title">View</a> |
                                         <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                                         <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>  |
                                     </td>
@@ -67,7 +67,7 @@ else
                                 else
                                 {
                                     <td>
-                                        <a asp-action="ViewPDF" target="_blank" asp-route-fileName="@item.Path">View</a>
+                                        <a asp-action="ViewPDF" target="_blank" asp-route-fileName="@item.Path" asp-route-title="@item.Title">View</a>
                                     </td>
                                 }
 

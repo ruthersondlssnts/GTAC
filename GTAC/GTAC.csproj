@@ -23,6 +23,10 @@
     <Compile Remove="Data\Migrations\20220503063940_RemoveContact.Designer.cs" />
     <Compile Remove="Data\Migrations\20220515100942_EditCertificate.cs" />
     <Compile Remove="Data\Migrations\20220515100942_EditCertificate.Designer.cs" />
+    <Compile Remove="Data\Migrations\20220521092458_EditActivityLog.cs" />
+    <Compile Remove="Data\Migrations\20220521092458_EditActivityLog.Designer.cs" />
+    <Compile Remove="Data\Migrations\20220521092710_CreateActivityLog.cs" />
+    <Compile Remove="Data\Migrations\20220521092710_CreateActivityLog.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

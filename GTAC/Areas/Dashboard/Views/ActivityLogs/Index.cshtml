@@ -1,0 +1,101 @@
+﻿@model IEnumerable<GTAC.Models.ActivityLog>
+
+@{
+    ViewData["Title"] = "Activity Logs";
+    ViewData["NavActivityLogs"] = "active";
+}
+
+<div class="card shadow mb-4">
+
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Activity Logs</h6>
+
+    </div>
+
+    <div class="card-body">
+        <form asp-action="Index" asp-area="Dashboard" asp-route-dateParam="@ViewBag.date" asp-route-areaParam="@ViewBag.area" asp-route-actionParam="@ViewBag.action" method="get">
+            <div class="form-row justify-content-center">
+                <div class="form-group col-md-2">
+                    <label class="control-label">Date</label>
+                    <div class="input-group date" id="datepicker1" data-target-input="nearest">
+                        <input onkeypress="return false;" type="text" name="dateParam" class="form-control datetimepicker-input datetimepicker-input1" data-target="#datepicker1" />
+                        <div class="input-group-append" data-target="#datepicker1" data-toggle="datetimepicker">
+                            <div class="input-group-text" style="background:white"><i class="fa fa-calendar"></i></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-md-2">
+                    <label class="control-label">Area</label>
+                    <select class="form-control " name="areaParam" id="area" asp-items="Html.GetEnumSelectList<Area>()">
+                        <option value="">All Area</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-2">
+                    <label class="control-label">Action</label>
+                    <select class="form-control" id="action" name="actionParam" asp-items="Html.GetEnumSelectList<GTAC.Models.Action>()">
+                        <option value="">All Action</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-2" style="position: relative;margin-top: 42px;">
+                    <input type="submit" value="View" class="btn btn-primary" style="position: absolute;bottom: 0;">
+                </div>
+            </div>
+        </form>
+        <hr />
+        <div class="table-responsive">
+            <table class="table table-sm table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>
+                            Account
+                        </th>
+                        <th>
+                            Time
+                        </th>
+                        <th>
+                            Area
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @item.User.Firstname @item.User.Lastname
+                            </td>
+                            <td>
+                                @item.CreatedAt.ToString("hh:mm tt")
+                            </td>
+                            <td>
+                                @item.Area
+                            </td>
+                            <td>
+                                @item.Description
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(function () {
+            $('#datepicker1').datetimepicker({
+                format: 'L',
+                useCurrent: true,
+                date:  new Date('@ViewBag.date')
+            });
+            $('#action').val('@ViewBag.action')
+            $('#area').val('@ViewBag.area')
+            $('#dataTable').DataTable();
+        });
+    </script>
+}
+

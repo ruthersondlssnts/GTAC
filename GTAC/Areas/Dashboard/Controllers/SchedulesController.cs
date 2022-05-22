@@ -131,6 +131,7 @@ namespace GTAC.Areas.Dashboard.Controllers
         {
             if (User.IsInRole("Admin"))
             {
+                ActivityLog.Create(_userManager.GetUserId(User), Area.Schedule, Models.Action.View, "Viewed Schedules", _context);
                 var applicationDbContext = _context.Schedules.Include(s => s.Student).ThenInclude(s => s.User).Include(s => s.Student).ThenInclude(s => s.Instructor);
                 return View(await applicationDbContext.ToListAsync());
             }
@@ -160,6 +161,7 @@ namespace GTAC.Areas.Dashboard.Controllers
                 instructorSchedule.DayOnePMStudent = schedulesToday.Where(s => s.Date.Hour == 13).FirstOrDefault()?.Day;
                 instructorSchedule.ThreePMStudent = schedulesToday.Where(s => s.Date.Hour == 15).FirstOrDefault()?.Student;
                 instructorSchedule.DayThreePMStudent = schedulesToday.Where(s => s.Date.Hour == 15).FirstOrDefault()?.Day;
+                ActivityLog.Create(_userManager.GetUserId(User), Area.Schedule, Models.Action.View, "Viewed schedule", _context);
 
                 return View("InstructorSchedule", instructorSchedule);
             }
@@ -176,6 +178,7 @@ namespace GTAC.Areas.Dashboard.Controllers
                     return View("Create");
                 }
 
+                ActivityLog.Create(_userManager.GetUserId(User), Area.Schedule, Models.Action.View, "Viewed schedule", _context);
                 return View("StudentSchedule", studentSchedule);
             }
         }
@@ -194,6 +197,8 @@ namespace GTAC.Areas.Dashboard.Controllers
                 .Include(s => s.Student)
                 .ThenInclude(s => s.Instructor)
                 .FirstOrDefaultAsync(m => m.Id == id);
+            ActivityLog.Create(_userManager.GetUserId(User), Area.Schedule, Models.Action.View, "Viewed schedule", _context);
+
             if (schedule == null)
             {
                 return NotFound();
@@ -222,6 +227,7 @@ namespace GTAC.Areas.Dashboard.Controllers
                 schedule.Status = Status.Pending;
                 schedule.StudentId = _context.Students.Where(s => s.UserId == _userManager.GetUserId(User)).FirstOrDefault().Id;
                 _context.Add(schedule);
+                ActivityLog.Create(_userManager.GetUserId(User), Area.Schedule, Models.Action.Create, "Created schedule for approval", _context);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -268,9 +274,17 @@ namespace GTAC.Areas.Dashboard.Controllers
                         if (student.EnrolledAt == null)
                         {
                             student.EnrolledAt = DateTime.Now;
+                            ActivityLog.Create(_userManager.GetUserId(User), Area.Student, Models.Action.Edit, "Edited student to Enrolled", _context);
                             _context.Update(student);
                         }
+                        ActivityLog.Create(_userManager.GetUserId(User), Area.Schedule, Models.Action.Edit, "Edited schedule to " + schedule.Status, _context);
+
                     }
+                    else
+                    {
+                        ActivityLog.Create(_userManager.GetUserId(User), Area.Schedule, Models.Action.Edit, "Edited Schedule", _context);
+                    }
+
                     _context.Update(schedule);
                     await _context.SaveChangesAsync();
                 }
@@ -310,6 +324,7 @@ namespace GTAC.Areas.Dashboard.Controllers
                     var prevsched = await _context.Schedules.FindAsync(schedule.Id);
                     prevsched.Status = Status.PendingRequest;
                     _context.Add(requestReschedule);
+                    ActivityLog.Create(_userManager.GetUserId(User), Area.RequestReschedule, Models.Action.Create, "Created Request Reschedule", _context);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -356,6 +371,7 @@ namespace GTAC.Areas.Dashboard.Controllers
             var schedule = await _context.Schedules.FindAsync(id);
             _context.Schedules.Remove(schedule);
             await _context.SaveChangesAsync();
+            ActivityLog.Create(_userManager.GetUserId(User), Area.Schedule, Models.Action.Delete, "Deleted Schedule", _context);
             return RedirectToAction(nameof(Index));
         }
 

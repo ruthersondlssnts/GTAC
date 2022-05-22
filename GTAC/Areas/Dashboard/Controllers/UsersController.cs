@@ -33,6 +33,8 @@ namespace GTAC.Areas.Dashboard.Controllers
                          join role in _context.Roles on user_role.RoleId equals role.Id
                          select new UserViewModel { User = user, Role = role.Name }).ToList();
 
+            ActivityLog.Create(_userManager.GetUserId(User), Area.CompanyUser, Models.Action.View, "Viewed company users", _context);
+
             return View(users);
         }
         // GET: Dashboard/Students/Details/5
@@ -55,6 +57,8 @@ namespace GTAC.Areas.Dashboard.Controllers
             {
                 return NotFound();
             }
+
+            ActivityLog.Create(_userManager.GetUserId(User), Area.CompanyUser, Models.Action.View, "Viewed a company user " + user.Firstname + " " + user.Lastname, _context);
 
             return View(userViewModel);
         }
@@ -90,6 +94,7 @@ namespace GTAC.Areas.Dashboard.Controllers
 
                 if (result.Succeeded)
                 {
+                    ActivityLog.Create(_userManager.GetUserId(User), Area.CompanyUser, Models.Action.Create, "Created a company user", _context);
                     result = await _userManager.AddToRoleAsync(appUser, user.Role);
                     return RedirectToAction(nameof(Index));
                 }
@@ -154,6 +159,7 @@ namespace GTAC.Areas.Dashboard.Controllers
                 if (result.Succeeded)
                 {
                     var userRole = (await _userManager.GetRolesAsync(user)).FirstOrDefault();
+                    ActivityLog.Create(_userManager.GetUserId(User), Area.CompanyUser, Models.Action.Edit, "Edited a company user " + user.Firstname + " " + user.Lastname, _context);
 
                     if (userRole == uvm.Role)
                     {
@@ -211,6 +217,7 @@ namespace GTAC.Areas.Dashboard.Controllers
             try
             {
                 var user = await _userManager.FindByIdAsync(id);
+                ActivityLog.Create(_userManager.GetUserId(User), Area.CompanyUser, Models.Action.Delete, "Deleted a company user " + user.Firstname + " " + user.Lastname, _context);
                 IdentityResult result = await _userManager.DeleteAsync(user);
                 return RedirectToAction(nameof(Index));
             }

@@ -37,6 +37,7 @@ namespace GTAC.Areas.Dashboard.Controllers
             var user = await _userManager.GetUserAsync(User);
             var roles = await _userManager.GetRolesAsync(user);
             var applicationDbContext = _context.Modules.Include(m => m.Uploader);
+            ActivityLog.Create(user.Id, Area.Module, Models.Action.View, "Viewed Modules", _context);
 
             if (roles.Count == 0)
             {
@@ -54,28 +55,12 @@ namespace GTAC.Areas.Dashboard.Controllers
 
             return View(await applicationDbContext.ToListAsync());
         }
-        public IActionResult ViewPDF(string filename = null)
+
+        public IActionResult ViewPDF(string filename = null, string title = null)
         {
+            ActivityLog.Create(_userManager.GetUserId(User), Area.Module, Models.Action.View, "Viewed Module " + title + " PDF", _context);
             ViewData["PDFView"] = filename;
             return View();
-        }
-        // GET: Dashboard/Modules/Details/5
-        public async Task<IActionResult> Details(Guid? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var module = await _context.Modules
-                .Include(m => m.Uploader)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (module == null)
-            {
-                return NotFound();
-            }
-
-            return View(module);
         }
 
         // GET: Dashboard/Modules/Create
@@ -108,6 +93,8 @@ namespace GTAC.Areas.Dashboard.Controllers
                 module.Id = Guid.NewGuid();
                 _context.Add(module);
                 await _context.SaveChangesAsync();
+                ActivityLog.Create(_userManager.GetUserId(User), Area.Module, Models.Action.Create, "Created a Module " + module.Title, _context);
+
                 return RedirectToAction(nameof(Index));
             }
             return View(module);
@@ -174,6 +161,7 @@ namespace GTAC.Areas.Dashboard.Controllers
                         fs.Close();
                         m.Path = filename;
                     }
+                    ActivityLog.Create(_userManager.GetUserId(User), Area.Module, Models.Action.Edit, "Edited a Module " + module.Title, _context);
 
                     _context.Update(m);
                     await _context.SaveChangesAsync();
@@ -222,6 +210,7 @@ namespace GTAC.Areas.Dashboard.Controllers
         {
             var module = await _context.Modules.FindAsync(id);
             _context.Modules.Remove(module);
+            ActivityLog.Create(_userManager.GetUserId(User), Area.Module, Models.Action.Edit, "Deleted a Module " + module.Title, _context);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

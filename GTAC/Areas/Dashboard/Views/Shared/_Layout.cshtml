@@ -20,6 +20,8 @@
     <link href="~/assets-dashboard/css/sb-admin-2.min.css" rel="stylesheet">
     <link href="~/lib/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
     <link href="~/assets-dashboard/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/responsive/2.3.0/css/responsive.bootstrap4.min.css" rel="stylesheet">
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.13.216/pdf.min.js"
             integrity="sha512-IM60GPudO4jk+ZQm3UlJgKHhXQi5pNDM6mP+pLKL968YgkHMc7He3aGJOVHEZ9rJ4vAaEtJ8W6SKa7Qq4inzBA=="
             crossorigin="anonymous" referrerpolicy="no-referrer">
@@ -110,6 +112,7 @@
                         <span>Company Users</span>
                     </a>
                 </li>
+
             }
 
             <!-- Nav Item - Certificates -->
@@ -119,6 +122,17 @@
                     <span>Certificates</span>
                 </a>
             </li>
+
+            @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+            {
+                <!-- Nav Item - Requests -->
+                <li class="nav-item @ViewData["NavActivityLogs"]">
+                    <a class="nav-link" asp-area="Dashboard" asp-controller="ActivityLogs" asp-action="Index">
+                        <i class="fas fa-fw fa-list"></i>
+                        <span>Activity Logs</span>
+                    </a>
+                </li>
+            }
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -418,6 +432,8 @@
     <!-- Page level plugins -->
     <script src="~/assets-dashboard/vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="~/assets-dashboard/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.3.0/js/responsive.bootstrap4.min.js"></script>
 
     @RenderSection("Scripts", required: false)
 
