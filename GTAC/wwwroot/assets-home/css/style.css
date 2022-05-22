@@ -45,12 +45,12 @@ Version: 1.0.0
 -----------------*/
 @import url("https://fonts.googleapis.com/css?family=Work+Sans:400,400i,500,600,700i&amp;display=swap");
 :root {
-  --main-color: #3D72FC;
-  --heading-color: #0A1851;
-  --paragraph-color: #424A61;
-  --body-font: "Work Sans", sans-serif;
-  --body-font-size: 16px;
-  --line-height30: 1.7;
+    --main-color: #ebb435;
+    --heading-color: #0A1851;
+    --paragraph-color: #424A61;
+    --body-font: "Work Sans", sans-serif;
+    --body-font-size: 16px;
+    --line-height30: 1.7;
 }
 
 html {

@@ -26,16 +26,6 @@
         </div>
     </div>
     <!-- preloader area end -->
-    <!-- search popup start-->
-    <div class="td-search-popup" id="td-search-popup">
-        <form action="https://www.s7template.com/tf/drivic/index.html" class="search-form">
-            <div class="form-group">
-                <input type="text" class="form-control" placeholder="Search.....">
-            </div>
-            <button type="submit" class="submit-btn"><i class="fa fa-search"></i></button>
-        </form>
-    </div>
-    <!-- search popup end-->
     <div class="body-overlay" id="body-overlay"></div>
 
     <!--sidebar menu start-->
@@ -104,11 +94,9 @@
                     </button>
                 </div>
                 <div class="logo">
-                    <a href="index-2.html"><img src="~/assets-home/img/logo.png" alt="img"></a>
+                    <a asp-controller="Home" asp-action="Index"><img src="~/assets-home/img/logo.png" alt="img"></a>
                 </div>
-                <div class="nav-right-part nav-right-part-mobile">
-                    <a class="search-bar-btn" href="#"><i class="fa fa-search"></i></a>
-                </div>
+
                 <div class="collapse navbar-collapse" id="edumint_main_menu">
                     <ul class="navbar-nav menu-open text-right">
                         <li><a href="contact.html">Course</a></li>
