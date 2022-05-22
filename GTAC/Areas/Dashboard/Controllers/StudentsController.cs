@@ -10,10 +10,12 @@ using GTAC.Models;
 using Microsoft.AspNetCore.Hosting;
 using AspNetCore.Reporting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GTAC.Areas.Dashboard.Controllers
 {
     [Area("Dashboard")]
+    [Authorize]
     public class StudentsController : Controller
     {
         private readonly ApplicationDbContext _context;

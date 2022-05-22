@@ -10,10 +10,12 @@ using GTAC.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GTAC.Areas.Dashboard.Controllers
 {
     [Area("Dashboard")]
+    [Authorize]
     public class CertificatesController : Controller
     {
         private readonly ApplicationDbContext _context;

@@ -9,10 +9,12 @@ using GTAC.Data;
 using GTAC.Models;
 using Microsoft.AspNetCore.Identity;
 using GTAC.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GTAC.Areas.Dashboard.Controllers
 {
     [Area("Dashboard")]
+    [Authorize]
     public class SchedulesController : Controller
     {
         private readonly ApplicationDbContext _context;

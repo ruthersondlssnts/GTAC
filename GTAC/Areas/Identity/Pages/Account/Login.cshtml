@@ -2,7 +2,7 @@
 @model LoginModel
 
 @{
-    ViewData["Title"] = "Log in";
+    ViewData["Title"] = "Login";
 }
 
 
@@ -11,10 +11,10 @@
     <div class="container">
         <div class="breadcrumb-inner">
             <div class="section-title mb-0 text-center">
-                <h2 class="page-title">Sign In</h2>
+                <h2 class="page-title">Login</h2>
                 <ul class="page-list">
-                    <li><a href="index-2.html">Home</a></li>
-                    <li>Sign In</li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li>Login</li>
                 </ul>
             </div>
         </div>
@@ -50,12 +50,12 @@
                         </div>
 
                         <div class="col-12 mb-4">
-                            <button type="submit" class="btn btn-base w-100">Sign In</button>
+                            <button type="submit" class="btn btn-base w-100">Login</button>
                         </div>
 
                         <div class="col-12">
                             @*<a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>*@
-                            Dont have an account? <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl"><strong>Signup</strong></a>
+                            Dont have an account? <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl"><strong>Register</strong></a>
                         </div>
                     </div>
                 </form>
@@ -65,12 +65,6 @@
 </div>
 <!-- signin-page-end -->
 
-<div class="row">
-    <div class="col-md-4">
-        <section>
-        </section>
-    </div>
-</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

@@ -1,6 +1,7 @@
 ﻿using GTAC.Data;
 using GTAC.Models;
 using GTAC.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +15,7 @@ using System.Threading.Tasks;
 namespace GTAC.Areas.Dashboard.Controllers
 {
     [Area("Dashboard")]
+    [Authorize]
     public class UsersController : Controller
     {
         private readonly UserManager<User> _userManager;
