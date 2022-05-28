@@ -791,10 +791,11 @@ ul {
     ## Breadcumb 
 ------------------------------------------*/
 .breadcrumb-area {
-  padding: 245px 0 112px;
-  position: relative;
-  background-repeat: no-repeat;
-  background-position: center bottom;
+    padding: 177px 0 49px;
+    position: relative;
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    background-size: contain;
 }
 .breadcrumb-area:after {
   content: "";
