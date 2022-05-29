@@ -175,11 +175,11 @@ namespace GTAC.Areas.Dashboard.Controllers
 
             var student = await _context.Students.Include(s => s.User).FirstOrDefaultAsync(s => s.Id == id);
             var user = await _context.Users.FindAsync(student.User.Id);
-            _context.Students.Remove(student);
-            ActivityLog.Create(_userManager.GetUserId(User), Area.Student, Models.Action.Delete, "Deleted a student", _context);
-            _context.ActivityLogs.RemoveRange(_context.ActivityLogs.Where(al => al.UserId == user.Id));
-            _context.Users.Remove(user);
             _context.Schedules.RemoveRange(_context.Schedules.Where(s => s.StudentId == id));
+            _context.ActivityLogs.RemoveRange(_context.ActivityLogs.Where(al => al.UserId == user.Id));
+            _context.Students.Remove(student);
+            _context.Users.Remove(user);
+            ActivityLog.Create(_userManager.GetUserId(User), Area.Student, Models.Action.Delete, "Deleted a student", _context);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

@@ -27,6 +27,8 @@
     <Compile Remove="Data\Migrations\20220521092458_EditActivityLog.Designer.cs" />
     <Compile Remove="Data\Migrations\20220521092710_CreateActivityLog.cs" />
     <Compile Remove="Data\Migrations\20220521092710_CreateActivityLog.Designer.cs" />
+    <Compile Remove="Data\Migrations\20220529061046_AddAccountActivatin.cs" />
+    <Compile Remove="Data\Migrations\20220529061046_AddAccountActivatin.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

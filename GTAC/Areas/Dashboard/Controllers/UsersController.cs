@@ -27,6 +27,16 @@ namespace GTAC.Areas.Dashboard.Controllers
             _userManager = userManager;
             _roleManager = roleManager;
         }
+
+        public async Task<IActionResult> UpdateAccountStatus(string id, bool status)
+        {
+            var applicationDbContext = await _context.Schedules.CountAsync(r => r.Status == Status.Pending);
+            var user = await _userManager.FindByIdAsync(id);
+            user.IsActivated = status;
+            IdentityResult result = await _userManager.UpdateAsync(user);
+            return Ok();
+        }
+
         // GET: UsersController
         public ActionResult Index()
         {
@@ -89,7 +99,8 @@ namespace GTAC.Areas.Dashboard.Controllers
                     Suffix = user.Suffix,
                     Address = user.Address,
                     Birthday = Convert.ToDateTime(user.Birthday),
-                    PhoneNumber = user.PhoneNumber
+                    PhoneNumber = user.PhoneNumber,
+                    IsActivated = true
                 };
 
                 IdentityResult result = await _userManager.CreateAsync(appUser, user.Password);
@@ -216,17 +227,19 @@ namespace GTAC.Areas.Dashboard.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            try
-            {
-                var user = await _userManager.FindByIdAsync(id);
-                ActivityLog.Create(_userManager.GetUserId(User), Area.CompanyUser, Models.Action.Delete, "Deleted a company user " + user.Firstname + " " + user.Lastname, _context);
-                IdentityResult result = await _userManager.DeleteAsync(user);
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            var user = await _userManager.FindByIdAsync(id);
+            var certs = await _context.Certificates.Where(c => c.AuthorId == user.Id).ToListAsync();
+            var mods = await _context.Modules.Where(c => c.UploaderId == user.Id).ToListAsync();
+            var quizs = await _context.Certificates.Where(c => c.AuthorId == user.Id).ToListAsync();
+            var actlogs = await _context.ActivityLogs.Where(c => c.UserId == user.Id).ToListAsync();
+            _context.ActivityLogs.RemoveRange(actlogs);
+            certs.ForEach(m => m.AuthorId = null);
+            mods.ForEach(m => m.UploaderId = null);
+            quizs.ForEach(m => m.AuthorId = null);
+            await _context.SaveChangesAsync();
+            ActivityLog.Create(_userManager.GetUserId(User), Area.CompanyUser, Models.Action.Delete, "Deleted a company user " + user.Firstname + " " + user.Lastname, _context);
+            IdentityResult result = await _userManager.DeleteAsync(user);
+            return RedirectToAction(nameof(Index));
         }
 
     }

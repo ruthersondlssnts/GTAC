@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using GTAC.Data;
 
 namespace GTAC.Areas.Identity.Pages.Account
 {
@@ -21,14 +22,16 @@ namespace GTAC.Areas.Identity.Pages.Account
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly ApplicationDbContext _context;
 
         public LoginModel(SignInManager<User> signInManager,
             ILogger<LoginModel> logger,
-            UserManager<User> userManager)
+            UserManager<User> userManager, ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _context = context;
         }
 
         [BindProperty]
@@ -83,8 +86,18 @@ namespace GTAC.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User logged in.");
-                    return LocalRedirect(returnUrl);
+                    var user = await _signInManager.UserManager.FindByEmailAsync(Input.Email);
+                    if (user.IsActivated != null && user.IsActivated == false)
+                    {
+                        await _signInManager.SignOutAsync();
+                        ModelState.AddModelError(string.Empty, "Account deactivated.");
+                        return Page();
+                    }
+                    else
+                    {
+                        _logger.LogInformation("User logged in.");
+                        return LocalRedirect(returnUrl);
+                    }
                 }
                 if (result.RequiresTwoFactor)
                 {

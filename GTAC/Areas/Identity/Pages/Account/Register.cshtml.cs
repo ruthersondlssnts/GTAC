@@ -130,7 +130,8 @@ namespace GTAC.Areas.Identity.Pages.Account
                     Suffix = Input.Suffix,
                     Address = Input.Address,
                     Birthday = Convert.ToDateTime(Input.Birthday),
-                    PhoneNumber = Input.PhoneNumber
+                    PhoneNumber = Input.PhoneNumber,
+                    IsActivated = true
                 };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)

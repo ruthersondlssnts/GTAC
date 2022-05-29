@@ -29,7 +29,9 @@
                         <th>
                             Graduated
                         </th>
-
+                        <th>
+                            Account
+                        </th>
                         <th>
                             Instructor
                         </th>
@@ -64,10 +66,14 @@
                                     <span>No</span>
                                 }
                             </td>
-
-
                             <td>
-                                @item.Instructor.Firstname @item.Instructor.Lastname
+                                <label class="switch" style="margin-bottom:0">
+                                    <input type="checkbox" class="primary" @(item.User.IsActivated == null ? "checked" : item.User.IsActivated == true ? "checked" : "" ) onclick='handleChkClick(this,"@item.UserId")'>
+                                    <span class="slider round"></span>
+                                </label>
+                            </td>
+                            <td>
+                                @item?.Instructor?.Firstname @item?.Instructor?.Lastname
                             </td>
                             <td>
                                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
@@ -89,6 +95,20 @@
         $(function () {
             $('#dataTable').DataTable();
         });
+
+        function handleChkClick(cb, id) {
+            $.ajax({
+                url: "/Dashboard/Users/UpdateAccountStatus",
+                data: { id, status: cb.checked },
+                type: "get",
+                success: function (res) {
+                },
+                error: function (err) {
+                    console.log(err)
+                }
+            });
+
+        }
     </script>
 }
 
