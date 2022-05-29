@@ -74,7 +74,7 @@ namespace GTAC.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl = returnUrl ?? Url.Content("~/Dashboard/Home");
+            returnUrl = returnUrl ?? Url.Content("~/Dashboard/Schedules");
 
             if (ModelState.IsValid)
             {

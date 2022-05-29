@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 namespace GTAC.Areas.Dashboard.Controllers
 {
     [Area("Dashboard")]
-    [Authorize]
+    [Authorize(Roles = "Admin,Manager")]
     public class UsersController : Controller
     {
         private readonly UserManager<User> _userManager;

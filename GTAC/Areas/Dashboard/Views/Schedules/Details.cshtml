@@ -45,25 +45,25 @@
                         Instructor
                     </dt>
                     <dd class="col-lg-8">
-                        @Model.Student.Instructor.Firstname  @Model.Student.Instructor.Lastname
+                        @Model.Student?.Instructor?.Firstname  @Model.Student?.Instructor?.Lastname
                     </dd>
                     <dt class="col-lg-4">
                         Fullname
                     </dt>
                     <dd class="col-lg-8">
-                        @Model.Student.User.Firstname  @Model.Student.User.Lastname
+                        @Model.Student?.User?.Firstname  @Model.Student?.User?.Lastname
                     </dd>
                     <dt class="col-lg-4">
                         Email
                     </dt>
                     <dd class="col-lg-8">
-                        @Model.Student.User.Email
+                        @Model.Student?.User?.Email
                     </dd>
                     <dt class="col-lg-4">
                         Contact
                     </dt>
                     <dd class="col-lg-8">
-                        @Model.Student.User.PhoneNumber
+                        @Model.Student?.User?.PhoneNumber
                     </dd>
                     <dt class="col-lg-4">
                         Status

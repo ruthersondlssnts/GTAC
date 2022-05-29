@@ -116,7 +116,7 @@ namespace GTAC.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl = returnUrl ?? Url.Content("~/Dashboard/Home");
+            returnUrl = returnUrl ?? Url.Content("~/Dashboard/Schedules");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
@@ -153,6 +153,8 @@ namespace GTAC.Areas.Identity.Pages.Account
 
                     student.InstructorId = Input.Instructor;
                     _context.Students.Add(student);
+                    ActivityLog.Create(user.Id, Area.Student, Models.Action.Create, "Created student " + user.Firstname + " " + user.Lastname, _context);
+
                     await _context.SaveChangesAsync();
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
@@ -169,7 +171,12 @@ namespace GTAC.Areas.Identity.Pages.Account
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
-
+            var instructors = (from user in _context.Users
+                               join user_role in _context.UserRoles on user.Id equals user_role.UserId
+                               join role in _context.Roles on user_role.RoleId equals role.Id
+                               where role.Name == "Instructor"
+                               select new { Id = user.Id, FullName = user.Firstname + " " + user.Lastname }).ToList();
+            ViewData["Instructors"] = new SelectList(instructors, "Id", "FullName");
             // If we got this far, something failed, redisplay form
             return Page();
         }

@@ -64,7 +64,6 @@ namespace GTAC.Areas.Dashboard.Controllers
         }
 
         // GET: Dashboard/Modules/Create
-        [Authorize(Roles = "Instructor")]
         public IActionResult Create()
         {
             return View();
@@ -72,7 +71,6 @@ namespace GTAC.Areas.Dashboard.Controllers
 
 
         [HttpPost]
-        [Authorize(Roles = "Instructor")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,ModuleUpload,Title")] Module module)
         {
@@ -82,7 +80,7 @@ namespace GTAC.Areas.Dashboard.Controllers
                 if (module.ModuleUpload != null)
                 {
                     string uploadsDir = Path.Combine(_webHostEnvironment.WebRootPath, "modules");
-                    filename = Guid.NewGuid().ToString() + "_" + module.Title + Path.GetExtension(module.ModuleUpload.FileName);
+                    filename = Guid.NewGuid().ToString() + Path.GetExtension(module.ModuleUpload.FileName);
                     string filePath = Path.Combine(uploadsDir, filename);
                     FileStream fs = new FileStream(filePath, FileMode.Create);
                     await module.ModuleUpload.CopyToAsync(fs);
@@ -101,7 +99,6 @@ namespace GTAC.Areas.Dashboard.Controllers
         }
 
         // GET: Dashboard/Modules/Edit/5
-        [Authorize(Roles = "Instructor")]
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -129,7 +126,6 @@ namespace GTAC.Areas.Dashboard.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [Authorize(Roles = "Instructor")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, [Bind("Id,Path,Title,UploaderId,ModuleUpload")] EditModuleViewModel module)
         {
@@ -154,7 +150,7 @@ namespace GTAC.Areas.Dashboard.Controllers
                     if (module.ModuleUpload != null)
                     {
                         string uploadsDir = Path.Combine(_webHostEnvironment.WebRootPath, "modules");
-                        filename = Guid.NewGuid().ToString() + "_" + module.Title + Path.GetExtension(module.ModuleUpload.FileName);
+                        filename = module.Path;
                         string filePath = Path.Combine(uploadsDir, filename);
                         FileStream fs = new FileStream(filePath, FileMode.Create);
                         await module.ModuleUpload.CopyToAsync(fs);
@@ -183,7 +179,6 @@ namespace GTAC.Areas.Dashboard.Controllers
         }
 
         // GET: Dashboard/Modules/Delete/5
-        [Authorize(Roles = "Instructor")]
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -205,12 +200,17 @@ namespace GTAC.Areas.Dashboard.Controllers
         // POST: Dashboard/Modules/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Instructor")]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var module = await _context.Modules.FindAsync(id);
+            string uploadsDir = Path.Combine(_webHostEnvironment.WebRootPath, "modules");
+            string filePath = Path.Combine(uploadsDir, module.Path);
+            if ((System.IO.File.Exists(filePath)))
+            {
+                System.IO.File.Delete(filePath);
+            }
             _context.Modules.Remove(module);
-            ActivityLog.Create(_userManager.GetUserId(User), Area.Module, Models.Action.Edit, "Deleted a Module " + module.Title, _context);
+            ActivityLog.Create(_userManager.GetUserId(User), Area.Module, Models.Action.Delete, "Deleted a Module " + module.Title, _context);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

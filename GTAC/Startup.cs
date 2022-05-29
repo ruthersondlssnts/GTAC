@@ -38,6 +38,8 @@ namespace GTAC
                 options.User.RequireUniqueEmail = true;
                 options.Password.RequireUppercase = false;
                 options.Password.RequiredUniqueChars = 0;
+                options.Password.RequireDigit = false;
+                options.Password.RequireNonAlphanumeric = false;
 
             })
             .AddDefaultUI()

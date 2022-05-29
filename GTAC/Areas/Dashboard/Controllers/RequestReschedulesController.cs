@@ -175,10 +175,6 @@ namespace GTAC.Areas.Dashboard.Controllers
             sched.Status = Status.Approved;
             await _context.SaveChangesAsync();
             ActivityLog.Create(_userManager.GetUserId(User), Area.RequestReschedule, Models.Action.Delete, "Deleted Request for Reschedule", _context);
-            if (User.IsInRole("Admin"))
-            {
-                return RedirectToAction(nameof(Index));
-            }
             return RedirectToAction("Index", "Schedules");
         }
 

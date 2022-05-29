@@ -45,8 +45,8 @@
                                 <option value="">Please Select Time</option>
                                 <option value="7:30 AM">7:30am to 9:30am</option>
                                 <option value="10:00 AM">10:00am to 12:00nn</option>
-                                <option value="1:00 AM">1:00pm to 3:00pm</option>
-                                <option value="3:00 AM">3:00pm to 5:00pm</option>
+                                <option value="1:00 PM">1:00pm to 3:00pm</option>
+                                <option value="3:00 PM">3:00pm to 5:00pm</option>
                             </select>
                         </div>
                     </div>
@@ -67,8 +67,8 @@
                                 <option value="">Please Select Time</option>
                                 <option value="7:30 AM">7:30am to 9:30am</option>
                                 <option value="10:00 AM">10:00am to 12:00nn</option>
-                                <option value="1:00 AM">1:00pm to 3:00pm</option>
-                                <option value="3:00 AM">3:00pm to 5:00pm</option>
+                                <option value="1:00 PM">1:00pm to 3:00pm</option>
+                                <option value="3:00 PM">3:00pm to 5:00pm</option>
                             </select>
                         </div>
                     </div>
@@ -89,8 +89,8 @@
                                 <option value="">Please Select Time</option>
                                 <option value="7:30 AM">7:30am to 9:30am</option>
                                 <option value="10:00 AM">10:00am to 12:00nn</option>
-                                <option value="1:00 AM">1:00pm to 3:00pm</option>
-                                <option value="3:00 AM">3:00pm to 5:00pm</option>
+                                <option value="1:00 PM">1:00pm to 3:00pm</option>
+                                <option value="3:00 PM">3:00pm to 5:00pm</option>
                             </select>
                         </div>
                     </div>
@@ -111,8 +111,8 @@
                                 <option value="">Please Select Time</option>
                                 <option value="7:30 AM">7:30am to 9:30am</option>
                                 <option value="10:00 AM">10:00am to 12:00nn</option>
-                                <option value="1:00 AM">1:00pm to 3:00pm</option>
-                                <option value="3:00 AM">3:00pm to 5:00pm</option>
+                                <option value="1:00 PM">1:00pm to 3:00pm</option>
+                                <option value="3:00 PM">3:00pm to 5:00pm</option>
                             </select>
                         </div>
                     </div>
@@ -240,8 +240,6 @@
 
 
         function getDisabledTimes(date, el) {
-            console.log(el, moment(date).format('L'))
-
             return $.ajax({
                 url: "/Dashboard/Schedules/GetDisabledTime",
                 type: "get",

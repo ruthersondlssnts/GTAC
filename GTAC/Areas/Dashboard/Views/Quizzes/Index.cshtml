@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Quizzes";
     ViewData["NavQuizzes"] = "active";
+    bool isVal = User.IsInRole("Instructor") || User.IsInRole("Admin") || User.IsInRole("Staff") || User.IsInRole("Manager");
 }
 
 @if (Model == null)
@@ -25,7 +26,7 @@ else
         </div>
 
         <div class="card-body">
-            @if (User.IsInRole("Instructor") || User.IsInRole("Admin"))
+            @if (isVal)
             {
                 <a asp-action="Create" class="btn btn-primary mb-3">Create</a>
             }
@@ -40,7 +41,7 @@ else
                             <th>
                                 Link
                             </th>
-                            @if (User.IsInRole("Instructor") || User.IsInRole("Admin"))
+                            @if (isVal)
                             {
                                 <th>Author</th>
                             }
@@ -57,10 +58,10 @@ else
                                 <td>
                                     <a target="_blank" class="btn btn-link" href="@item.Link">Take exam here</a>
                                 </td>
-                                @if (User.IsInRole("Instructor") || User.IsInRole("Admin"))
+                                @if (isVal)
                                 {
                                     <td>
-                                        @item.Author.Firstname @item.Author.Lastname
+                                        @item?.Author?.Firstname @item?.Author?.Lastname
                                     </td>
                                     <td>
                                         <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

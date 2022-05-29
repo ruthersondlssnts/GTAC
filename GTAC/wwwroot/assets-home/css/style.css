@@ -795,7 +795,7 @@ ul {
     position: relative;
     background-repeat: no-repeat;
     background-position: center bottom;
-    background-size: contain;
+    background-size: cover;
 }
 .breadcrumb-area:after {
   content: "";

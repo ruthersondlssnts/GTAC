@@ -3,7 +3,7 @@
     ViewData["Title"] = "Certificates";
     ViewData["NavCertificates"] = "active";
 }
-@if (ViewBag.isGraduated == true && ViewBag.isStudent == true ? (Model != null && Model.Status == Status.Approved) : true)
+@if (ViewBag.isValid)
 {
     <script src='https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js'></script>
     <style>
@@ -42,7 +42,7 @@
                             <iframe id='pdf' class="responsive-iframe" title='Certificate'></iframe>
                         </div>
                     </div>
-                    @if (User.IsInRole("Admin") || User.IsInRole("Instructor"))
+                    @if (User.IsInRole("Admin") || User.IsInRole("Instructor") || User.IsInRole("Manager") || User.IsInRole("Staff"))
                     {
                         <div class="row mt-5">
                             <div class="col-lg-4 ">
@@ -51,7 +51,7 @@
                                         Author
                                     </dt>
                                     <dd class="col-lg-8">
-                                        @Model.Author.Firstname  @Model.Author.Lastname
+                                        @Model.Author?.Firstname  @Model.Author?.Lastname
                                     </dd>
                                     <dt class="col-lg-4">
                                         Approver

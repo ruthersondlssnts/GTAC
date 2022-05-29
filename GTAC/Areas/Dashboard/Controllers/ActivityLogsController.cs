@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace GTAC.Areas.Dashboard.Controllers
 {
     [Area("Dashboard")]
-    [Authorize]
+    [Authorize(Roles = "Admin,Manager")]
     public class ActivityLogsController : Controller
     {
         private readonly ApplicationDbContext _context;

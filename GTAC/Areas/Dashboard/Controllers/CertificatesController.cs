@@ -40,8 +40,29 @@ namespace GTAC.Areas.Dashboard.Controllers
             {
                 return View(nameof(Create));
             }
-            ViewBag.isStudent = roles.Count == 0;
-            ViewBag.isGraduated = roles.Count == 0 ? (await _context.Students.Where(s => s.UserId == user.Id).FirstOrDefaultAsync())?.GraduatedAt != null : true;
+            if (applicationDbContext == null)
+            {
+                ViewBag.isValid = false;
+                return View("Details", applicationDbContext);
+            }
+
+            if (roles.Count > 0)
+            {
+                ViewBag.isValid = true;
+            }
+            else
+            {
+                var student = await _context.Students.Where(s => s.UserId == user.Id).FirstOrDefaultAsync();
+                if (student.EnrolledAt != null && student.GraduatedAt != null && applicationDbContext.Status == Status.Approved)
+                {
+                    ViewBag.isValid = true;
+                }
+                else
+                {
+                    ViewBag.isValid = false;
+                }
+            }
+
             ActivityLog.Create(user.Id, Area.Certificate, Models.Action.View, "Viewed Certificate", _context);
             return View("Details", applicationDbContext);
         }
@@ -139,7 +160,10 @@ namespace GTAC.Areas.Dashboard.Controllers
                     }
                     else
                     {
-                        oldcertificate.ApproverId = _userManager.GetUserId(User);
+                        if (oldcertificate.Status != certificate.Status)
+                        {
+                            oldcertificate.ApproverId = _userManager.GetUserId(User);
+                        }
                         oldcertificate.Status = certificate.Status;
                         ActivityLog.Create(_userManager.GetUserId(User), Area.Certificate, Models.Action.Edit, "Edited a Certificate to status " + certificate.Status.ToString(), _context);
                     }
@@ -189,6 +213,12 @@ namespace GTAC.Areas.Dashboard.Controllers
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var certificate = await _context.Certificates.FindAsync(id);
+            string uploadsDir = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+            string filePath = Path.Combine(uploadsDir, certificate.Path);
+            if ((System.IO.File.Exists(filePath)))
+            {
+                System.IO.File.Delete(filePath);
+            }
             _context.Certificates.Remove(certificate);
             await _context.SaveChangesAsync();
             ActivityLog.Create(_userManager.GetUserId(User), Area.Certificate, Models.Action.Delete, "Deleted a Certificate", _context);

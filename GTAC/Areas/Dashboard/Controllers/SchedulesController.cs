@@ -118,20 +118,35 @@ namespace GTAC.Areas.Dashboard.Controllers
                     x.Id != Id &&
                     x.Status != Status.Done &&
                     x.Student.InstructorId == instructorId))
-                .Select(x => new
-                {
-                    Date = x.DayOne.Date == date.Date ? x.DayOne : (x.DayTwo.Date == date.Date ? x.DayTwo :
-                        (x.DayThree.Date == date.Date ? x.DayThree : x.DayFour))
-                })
-                .ToListAsync()).Select(x => x.Date.ToString("h:mm tt")).ToList();
+                .ToListAsync());
 
-            return Json(new { times });
+            var times_disabled = new List<string>();
+            foreach (var time in times)
+            {
+                if (time.DayOne.Date == date.Date)
+                {
+                    times_disabled.Add(time.DayOne.ToString("h:mm tt"));
+                }
+                if (time.DayTwo.Date == date.Date)
+                {
+                    times_disabled.Add(time.DayTwo.ToString("h:mm tt"));
+                }
+                if (time.DayThree.Date == date.Date)
+                {
+                    times_disabled.Add(time.DayThree.ToString("h:mm tt"));
+                }
+                if (time.DayFour.Date == date.Date)
+                {
+                    times_disabled.Add(time.DayFour.ToString("h:mm tt"));
+                }
+            }
+            return Json(new { times = times_disabled });
         }
 
         // GET: Dashboard/Schedules
         public async Task<IActionResult> Index()
         {
-            if (User.IsInRole("Admin"))
+            if (User.IsInRole("Admin") || User.IsInRole("Staff") || User.IsInRole("Manager"))
             {
                 ActivityLog.Create(_userManager.GetUserId(User), Area.Schedule, Models.Action.View, "Viewed Schedules", _context);
                 var applicationDbContext = _context.Schedules.Include(s => s.Student).ThenInclude(s => s.User).Include(s => s.Student).ThenInclude(s => s.Instructor);
@@ -268,7 +283,6 @@ namespace GTAC.Areas.Dashboard.Controllers
             {
                 try
                 {
-
                     if (schedule.Status == Status.Approved)
                     {
                         schedule.ApprovedAt = DateTime.Now;
@@ -284,6 +298,7 @@ namespace GTAC.Areas.Dashboard.Controllers
                     }
                     else
                     {
+                        schedule.Status = Status.Pending;
                         ActivityLog.Create(_userManager.GetUserId(User), Area.Schedule, Models.Action.Edit, "Edited Schedule", _context);
                     }
 
