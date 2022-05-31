@@ -6,7 +6,7 @@
 }
 
 <div class="row">
-    <div class="col-lg-4">
+    <div class="col-lg-5">
         <div class="card shadow mb-4">
             <div class="card-header py-3">
                 <h6 class="m-0 font-weight-bold text-primary">Your Schedule</h6>
@@ -14,44 +14,89 @@
             <div class="card-body">
                 <div>
                     <dl class="row">
-                        <dt class="col-lg-3">
-                            Day 1
+                        <dt class="col-lg-4">
+                            Day 1 <br />
+                            <small> Maneuvering</small>
                         </dt>
-                        <dd class="col-lg-9">
+                        <dd class="col-lg-5">
                             @Model.DayOne.ToString("dddd, MMM dd yyyy") <br />
                             <small>@Model.DayOne.ToString("h:mm tt") - @Model.DayOne.AddHours(2).ToString("h:mm tt")</small>
                         </dd>
                         <dt class="col-lg-3">
-                            Day 2
+                            @if (Model.isDayOnePassed == true)
+                            {
+                                <span class="text-success">Pass</span>
+                            }
+                            else if (Model.isDayOnePassed == false)
+                            {
+                                <span class="text-danger">Fail</span>
+                            }
                         </dt>
-                        <dd class="col-lg-9">
+                        <dt class="col-lg-4">
+                            Day 2 <br />
+                            <small>Horizontan and Vertical Parking</small>
+                        </dt>
+
+                        <dd class="col-lg-5">
                             @Model.DayTwo.ToString("dddd, MMM dd yyyy") <br />
                             <small>@Model.DayTwo.ToString("h:mm tt") - @Model.DayTwo.AddHours(2).ToString("h:mm tt")</small>
                         </dd>
                         <dt class="col-lg-3">
-                            Day 3
+                            @if (Model.isDayTwoPassed == true)
+                            {
+                                <span class="text-success">Pass</span>
+                            }
+                            else if (Model.isDayTwoPassed == false)
+                            {
+                                <span class="text-danger">Fail</span>
+                            }
                         </dt>
-                        <dd class="col-lg-9">
+                        <dt class="col-lg-4">
+                            Day 3 <br />
+                            <small>Uphill/Downhill</small>
+                        </dt>
+                        <dd class="col-lg-5">
                             @Model.DayThree.ToString("dddd, MMM dd yyyy") <br />
                             <small> @Model.DayThree.ToString("h:mm tt") - @Model.DayThree.AddHours(2).ToString("h:mm tt")</small>
                         </dd>
                         <dt class="col-lg-3">
-                            Day 4
+                            @if (Model.isDayThreePassed == true)
+                            {
+                                <span class="text-success">Pass</span>
+                            }
+                            else if (Model.isDayThreePassed == false)
+                            {
+                                <span class="text-danger">Fail</span>
+                            }
                         </dt>
-                        <dd class="col-lg-9">
+                        <dt class="col-lg-4">
+                            Day 4 <br />
+                            <small>City/Driving</small>
+                        </dt>
+                        <dd class="col-lg-5">
                             @Model.DayFour.ToString("dddd, MMM dd yyyy") <br />
                             <small> @Model.DayFour.ToString("h:mm tt") - @Model.DayFour.AddHours(2).ToString("h:mm tt")</small>
                         </dd>
                         <dt class="col-lg-3">
+                            @if (Model.isDayFourPassed == true)
+                            {
+                                <span class="text-success">Pass</span>
+                            }
+                            else if (Model.isDayFourPassed == false)
+                            {
+                                <span class="text-danger">Fail</span>
+                            }
+                        </dt>
+                        <dt class="col-lg-4">
                             Student
                         </dt>
-                        <dd class="col-lg-9">
+                        <dd class="col-lg-5">
                             @Model.Student.User.Firstname  @Model.Student.User.Lastname
                         </dd>
-                        <dt class="col-lg-3">
+                        <dt class="col-lg-4">
                             Status
                         </dt>
-                        <dd class="col-lg-9">
+                        <dd class="col-lg-5">
                             @if (Model.Status == Status.PendingRequest)
                             {
                                 <span>Approved</span>

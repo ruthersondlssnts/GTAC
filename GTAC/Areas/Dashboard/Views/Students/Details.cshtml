@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "Students";
     ViewData["NavStudents"] = "active";
+    var Sched = ViewBag.StudSched;
 }
 
 <div class="row">
@@ -70,4 +71,103 @@
             </div>
         </div>
     </div>
+    @if (Sched != null)
+    {
+        <div class="col-lg-5">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Student Schedule</h6>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-lg-4">
+                            Day 1  <br />
+                            <small> Maneuvering</small>
+                        </dt>
+                        <dd class="col-lg-5">
+                            @Sched.DayOne.ToString("dddd, MMM dd yyyy") <br />
+                            <small>@Sched.DayOne.ToString("h:mm tt") - @Sched.DayOne.AddHours(2).ToString("h:mm tt")</small>
+                        </dd>
+                        <dd class="col-lg-3">
+                            <select class="form-control select-assess1" onchange="handleSelectChange(this,'@Sched.Id', 1)">
+                                <option value="">Select Assessment </option>
+                                <option value="false">Fail</option>
+                                <option value="true">Pass</option>
+                            </select>
+                        </dd>
+                        <dt class="col-lg-4">
+                            Day 2 <br />
+                            <small>Horizontan and Vertical Parking</small>
+                        </dt>
+                        <dd class="col-lg-5">
+                            @Sched.DayTwo.ToString("dddd, MMM dd yyyy") <br />
+                            <small>@Sched.DayTwo.ToString("h:mm tt") - @Sched.DayTwo.AddHours(2).ToString("h:mm tt")</small>
+                        </dd>
+                        <dd class="col-lg-3">
+                            <select class="form-control select-assess2" onchange="handleSelectChange(this,'@Sched.Id', 2)">
+                                <option value="">Select Assessment </option>
+                                <option value="false">Fail</option>
+                                <option value="true">Pass</option>
+                            </select>
+                        </dd>
+                        <dt class="col-lg-4">
+                            Day 3 <br />
+                            <small>Uphill/Downhill</small>
+                        </dt>
+                        <dd class="col-lg-5">
+                            @Sched.DayThree.ToString("dddd, MMM dd yyyy") <br />
+                            <small> @Sched.DayThree.ToString("h:mm tt") - @Sched.DayThree.AddHours(2).ToString("h:mm tt")</small>
+                        </dd>
+                        <dd class="col-lg-3">
+                            <select class="form-control select-assess3" onchange="handleSelectChange(this,'@Sched.Id', 3)">
+                                <option value="">Select Assessment </option>
+                                <option value="false">Fail</option>
+                                <option value="true">Pass</option>
+                            </select>
+                        </dd>
+                        <dt class="col-lg-4">
+                            Day 4 <br />
+                            <small>City/Driving</small>
+                        </dt>
+                        <dd class="col-lg-5">
+                            @Sched.DayFour.ToString("dddd, MMM dd yyyy") <br />
+                            <small> @Sched.DayFour.ToString("h:mm tt") - @Sched.DayFour.AddHours(2).ToString("h:mm tt")</small>
+                        </dd>
+                        <dd class="col-lg-3">
+                            <select class="form-control select-assess4" onchange="handleSelectChange(this,'@Sched.Id', 4)">
+                                <option value="">Select Assessment </option>
+                                <option value="false">Fail</option>
+                                <option value="true">Pass</option>
+                            </select>
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    }
+
 </div>
+
+@section Scripts {
+    <script>
+
+        $(".select-assess1").val('@Sched.isDayOnePassed'.toLowerCase());
+        $(".select-assess2").val('@Sched.isDayTwoPassed'.toLowerCase());
+        $(".select-assess3").val('@Sched.isDayThreePassed'.toLowerCase());
+        $(".select-assess4").val('@Sched.isDayFourPassed'.toLowerCase());
+
+        function handleSelectChange(opt, id, day) {
+            $.ajax({
+                url: "/Dashboard/Schedules/UpdateAssessment",
+                data: { id, day, status: opt.value },
+                type: "get",
+                success: function (res) {
+                },
+                error: function (err) {
+                    console.log(err)
+                }
+            });
+        }
+    </script>
+}
+

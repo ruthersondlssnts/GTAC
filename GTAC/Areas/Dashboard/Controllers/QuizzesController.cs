@@ -63,10 +63,7 @@ namespace GTAC.Areas.Dashboard.Controllers
                 {
                     var studentId = _context.Students.Where(s => s.UserId == user.Id).FirstOrDefault().Id;
                     var quizzes = (from quiz in _context.Quizzes
-                                   join student_quiz in _context.Quiz_Students on quiz.Id equals student_quiz.QuizId into qGroup
-                                   from student_quiz in qGroup.DefaultIfEmpty()
-                                   where student_quiz.StudentId == studentId || student_quiz == null
-                                   select new StudentQuizzesViewModel { Id = quiz.Id, Name = quiz.Name, Link = quiz.Link, isDone = student_quiz == null ? false : true }).ToList();
+                                   select new StudentQuizzesViewModel { Id = quiz.Id, Name = quiz.Name, Link = quiz.Link, isDone = _context.Quiz_Students.Any(q => q.QuizId == quiz.Id && q.StudentId == studentId) ? true : false }).ToList();
                     return View(quizzes);
                 }
                 return View();

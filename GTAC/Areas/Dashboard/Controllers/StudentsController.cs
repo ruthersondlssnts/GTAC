@@ -90,6 +90,7 @@ namespace GTAC.Areas.Dashboard.Controllers
                 return NotFound();
             }
 
+            ViewBag.StudSched = await _context.Schedules.Where(s => s.StudentId == id).FirstOrDefaultAsync();
             return View(student);
         }
 

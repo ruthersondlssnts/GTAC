@@ -21,7 +21,12 @@
                 <h6 class="m-0 font-weight-bold text-primary">Set your Schedule</h6>
             </div>
             <div class="card-body">
-                <form asp-action="Create" id="create_form">
+                <div class="d-flex justify-content-center" id="loader">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+                <form asp-action="Create" id="create_form" style="display:none">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <input type="text" asp-for="DayOne" style="opacity:0; position:absolute" />
                     <input type="text" asp-for="DayTwo" style="opacity:0; position:absolute" />
@@ -41,7 +46,7 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label class="control-label">Time Schedule</label>
-                            <select class="form-control" id="timepicker1" disabled>
+                            <select disabled class="form-control" id="timepicker1">
                                 <option value="">Please Select Time</option>
                                 <option value="7:30 AM">7:30am to 9:30am</option>
                                 <option value="10:00 AM">10:00am to 12:00nn</option>
@@ -54,7 +59,7 @@
                         <div class="form-group col-md-6">
                             <label class="control-label">Day 2</label>
                             <div class="input-group date" id="datepicker2" data-target-input="nearest">
-                                <input onkeypress="return false;" type="text" class="form-control datetimepicker-input datetimepicker-input2" data-target="#datepicker2" />
+                                <input disabled onkeypress="return false;" type="text" class="form-control datetimepicker-input datetimepicker-input2" data-target="#datepicker2" />
                                 <div class="input-group-append" data-target="#datepicker2" data-toggle="datetimepicker">
                                     <div class="input-group-text" style="background:white"><i class="fa fa-calendar"></i></div>
                                 </div>
@@ -63,7 +68,7 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label class="control-label">Time Schedule</label>
-                            <select class="form-control" id="timepicker2" disabled>
+                            <select class="form-control" disabled id="timepicker2">
                                 <option value="">Please Select Time</option>
                                 <option value="7:30 AM">7:30am to 9:30am</option>
                                 <option value="10:00 AM">10:00am to 12:00nn</option>
@@ -76,7 +81,7 @@
                         <div class="form-group col-md-6">
                             <label class="control-label">Day 3</label>
                             <div class="input-group date" id="datepicker3" data-target-input="nearest">
-                                <input onkeypress="return false;" type="text" class="form-control datetimepicker-input datetimepicker-input3" data-target="#datepicker3" />
+                                <input disabled onkeypress="return false;" type="text" class="form-control datetimepicker-input datetimepicker-input3" data-target="#datepicker3" />
                                 <div class="input-group-append" data-target="#datepicker3" data-toggle="datetimepicker">
                                     <div class="input-group-text" style="background:white"><i class="fa fa-calendar"></i></div>
                                 </div>
@@ -85,7 +90,7 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label class="control-label">Time Schedule</label>
-                            <select class="form-control" id="timepicker3" disabled>
+                            <select class="form-control" disabled id="timepicker3">
                                 <option value="">Please Select Time</option>
                                 <option value="7:30 AM">7:30am to 9:30am</option>
                                 <option value="10:00 AM">10:00am to 12:00nn</option>
@@ -98,7 +103,7 @@
                         <div class="form-group col-md-6">
                             <label class="control-label">Day 4</label>
                             <div class="input-group date" id="datepicker4" data-target-input="nearest">
-                                <input onkeypress="return false;" type="text" class="form-control datetimepicker-input datetimepicker-input4" data-target="#datepicker4" />
+                                <input disabled onkeypress="return false;" type="text" class="form-control datetimepicker-input datetimepicker-input4" data-target="#datepicker4" />
                                 <div class="input-group-append" data-target="#datepicker4" data-toggle="datetimepicker">
                                     <div class="input-group-text" style="background:white"><i class="fa fa-calendar"></i></div>
                                 </div>
@@ -107,7 +112,7 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label class="control-label">Time Schedule</label>
-                            <select class="form-control" id="timepicker4" disabled>
+                            <select class="form-control" disabled id="timepicker4">
                                 <option value="">Please Select Time</option>
                                 <option value="7:30 AM">7:30am to 9:30am</option>
                                 <option value="10:00 AM">10:00am to 12:00nn</option>
@@ -132,126 +137,176 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script>
 
-        var disabledDates = [];
+        var datesOccupied = [];
+
         $.ajax({
             url: "/Dashboard/Schedules/GetDisabledDates",
             type: "get",
             success: function (res) {
-                disabledDates = res.dates
-
-                $('#datepicker1').datetimepicker({
-                    format: 'L',
-                    useCurrent: false,
-                    minDate: new Date(),
-                    disabledDates: res.dates,
-                    daysOfWeekDisabled: [0, 6]
-                });
-                $('#datepicker2').datetimepicker({
+                datesOccupied = res.dates
+                let options = {
                     useCurrent: false,
                     format: 'L',
-                    minDate: new Date(),
-                    disabledDates: res.dates,
+                    minDate: new Date().setHours(0, 0, 0, 0),
+                    disabledDates: datesOccupied.filter(d => d.total > 3).map(d => d.date),
                     daysOfWeekDisabled: [0, 6]
-                });
-
-                $('#datepicker3').datetimepicker({
-                    useCurrent: false,
-                    format: 'L',
-                    minDate: new Date(),
-                    disabledDates: res.dates,
-                    daysOfWeekDisabled: [0, 6]
-                });
-
-                $('#datepicker4').datetimepicker({
-                    useCurrent: false,
-                    format: 'L',
-                    minDate: new Date(),
-                    disabledDates: res.dates,
-                    daysOfWeekDisabled: [0, 6]
-                });
-
+                }
+                $('#datepicker1').datetimepicker(options);
+                $('#datepicker2').datetimepicker(options);
+                $('#datepicker3').datetimepicker(options);
+                $('#datepicker4').datetimepicker(options);
+                $("#create_form").show()
+                $("#loader").addClass("d-none").removeClass("d-flex")
             },
             error: function (err) {
                 console.log(err)
             }
         });
 
+        function addToDates(val_date) {
+            let isAny = false;
+            for (var i = 0; i < datesOccupied.length; i++) {
+                if (datesOccupied[i].date === val_date) {
+                    datesOccupied[i].total++;
+                    isAny = true;
+                    break;
+                }
+            }
+            if (!isAny) {
+                let new_date = {};
+                new_date.date = val_date;
+                new_date.total = 1;
+                datesOccupied.push(new_date)
+            }
+        }
 
-
-
-        function getNextValidDate(date) {
-            let nextDate = null;
-            for (var i = 1; true; i++) {
-                nextDate = moment(date).add(i, 'days').format('L');
-                let day = moment(date).add(i, 'days').day();
-                if (day != '6' && day != '0' && disabledDates.findIndex(x => moment(x).format('L') == nextDate) == -1) {
-                    return nextDate;
+        function subtractToDates(val_date) {
+            for (var i = 0; i < datesOccupied.length; i++) {
+                if (datesOccupied[i].date === val_date) {
+                    datesOccupied[i].total--;
+                    isAny = true;
+                    break;
                 }
             }
         }
 
-        $("#datepicker1").on("change.datetimepicker", function (e) {
-            let nextValidDate = getNextValidDate(e.date);
-            $('#datepicker2').datetimepicker('minDate', nextValidDate);
-            $('#datepicker2').datetimepicker('date', nextValidDate);
+        function initializeDatePicker(i, minDate) {
+            //reinitialize datepicker
+            $('.datetimepicker-input' + i).prop('disabled', false);
+            $('#datepicker' + i).datetimepicker('minDate', minDate)
+            $('#datepicker' + i).datetimepicker('disabledDates', datesOccupied.filter(d => d.total > 3).map(d => d.date))
+        }
 
-            getDisabledTimes(e.date, "#timepicker1")
-
-            if ($("#timepicker1").val()) {
-                let date_converted = moment(e.date).format('L');
-                $('#DayOne').attr('value', date_converted + " " + $("#timepicker1").val()).blur();
+        function disableNextDateTimePickers(num) {
+            for (var i = num + 1; i <= 4; i++) {
+                $('#datepicker' + i).datetimepicker('clear');
+                $('.datetimepicker-input' + i).prop('disabled', true);
+                $("#timepicker" + i).prop('disabled', true); //reset disabled select
+                $("#timepicker" + i).val('');
             }
+        }
+
+        $("#datepicker1").on("change.datetimepicker", function (e) {
+            if (e.date && e.hasOwnProperty('oldDate')) {
+                $("#timepicker1").val('');
+                let date_converted = moment(e.date).format('L');
+
+                $("#timepicker1").find("option").prop('disabled', false); //reset disabled select
+                getDisabledTimes(date_converted, "#timepicker1")
+
+                addToDates(date_converted);
+            }
+
+            if (e.oldDate) { //if previous date exist subtract to dates
+                subtractToDates(moment(e.oldDate).format('L'))
+            }
+            disableNextDateTimePickers(1)
         });
         $("#datepicker2").on("change.datetimepicker", function (e) {
-            let nextValidDate = getNextValidDate(e.date);
-            $('#datepicker3').datetimepicker('minDate', nextValidDate);
-            $('#datepicker3').datetimepicker('date', nextValidDate);
-
-            getDisabledTimes(e.date, "#timepicker2")
-
-            if ($("#timepicker2").val()) {
+            if (e.date && e.hasOwnProperty('oldDate')) {
+                $("#timepicker2").val('');
                 let date_converted = moment(e.date).format('L');
-                $('#DayTwo').attr('value', date_converted + " " + $("#timepicker2").val()).blur();
-            }
-        });
 
+                $("#timepicker2").find("option").prop('disabled', false); //reset disabled select
+                if (date_converted == $('.datetimepicker-input1').val()) { //check if has the same value
+                    let selector = `option[value='${$("#timepicker1").val()}']`;
+                    $("#timepicker2").find(selector).prop('disabled', true);
+                }
+
+                getDisabledTimes(date_converted, "#timepicker2")
+
+                addToDates(date_converted)
+            }
+
+            if (e.oldDate) { //if previous date exist subtract to dates
+                subtractToDates(moment(e.oldDate).format('L'))
+            }
+            disableNextDateTimePickers(2)
+        });
         $("#datepicker3").on("change.datetimepicker", function (e) {
-            let nextValidDate = getNextValidDate(e.date);
-            $('#datepicker4').datetimepicker('minDate', nextValidDate);
-            $('#datepicker4').datetimepicker('date', nextValidDate);
-
-            getDisabledTimes(e.date, "#timepicker3")
-
-            if ($("#timepicker3").val()) {
+            if (e.date && e.hasOwnProperty('oldDate')) {
+                $("#timepicker3").val('');
                 let date_converted = moment(e.date).format('L');
-                $('#DayThree').attr('value', date_converted + " " + $("#timepicker3").val()).blur();
-            }
-        });
 
+                $("#timepicker3").find("option").prop('disabled', false); //reset disabled select
+
+                for (var i = 2; i >= 1; i--) { //check if has the same value before
+                    if ($('.datetimepicker-input' + i).val() == date_converted) {
+                        let time = $("#timepicker" + i).val()
+                        let selector = `option[value='${time}']`;
+                        $("#timepicker3").find(selector).prop('disabled', true);
+                    }
+                }
+
+                getDisabledTimes(date_converted, "#timepicker3")
+
+                addToDates(date_converted)
+            }
+
+            if (e.oldDate) { //if previous date exist subtract to dates
+                subtractToDates(moment(e.oldDate).format('L'))
+            }
+            disableNextDateTimePickers(3)
+        });
         $("#datepicker4").on("change.datetimepicker", function (e) {
-            let date_converted = moment(e.date).format('L');
+            if (e.date && e.hasOwnProperty('oldDate')) {
+                $("#timepicker4").val('');
+                let date_converted = moment(e.date).format('L');
 
-            getDisabledTimes(e.date, "#timepicker4")
+                $("#timepicker4").find("option").prop('disabled', false); //reset disabled select
 
-            if ($("#timepicker4").val()) {
-                $('#DayFour').attr('value', date_converted + " " + $("#timepicker4").val()).blur();
+                for (var i = 3; i >= 1; i--) { //check if has the same value before
+                    if ($('.datetimepicker-input' + i).val() == date_converted) {
+                        let time = $("#timepicker" + i).val()
+                        let selector = `option[value='${time}']`;
+                        $("#timepicker4").find(selector).prop('disabled', true);
+                    }
+                }
+
+                getDisabledTimes(date_converted, "#timepicker4")
+
+                addToDates(date_converted)
             }
-        });
 
+            if (e.oldDate) { //if previous date exist subtract to dates
+                subtractToDates(moment(e.oldDate).format('L'))
+            }
+            disableNextDateTimePickers(4)
+        });
 
         function getDisabledTimes(date, el) {
             return $.ajax({
                 url: "/Dashboard/Schedules/GetDisabledTime",
                 type: "get",
-                data: { date: moment(date).format('L') },
+                data: { date: date },
                 success: function (res) {
                     $(el).prop('disabled', false);
                     let times = res.times;
+
                     for (var i = 0; i < times.length; i++) {
                         let selector = `option[value='${times[i]}']`;
                         $(el).find(selector).prop('disabled', true);
                     }
-
                 },
                 error: function (err) {
                     console.log(err)
@@ -260,7 +315,12 @@
         }
 
         $("#timepicker1").on("change", function (e) {
-            if ($(".datetimepicker-input1").val() && $(this).val()) {
+            disableNextDateTimePickers(1) //disable next fields
+            if ($(this).val()) {
+                initializeDatePicker(2, $(".datetimepicker-input1").val()) //initialize next DatePicker
+            }
+
+            if ($(".datetimepicker-input1").val() && $(this).val()) { // Set hidden field for Day1
                 $('#DayOne').attr('value', $(".datetimepicker-input1").val() + " " + $(this).val()).blur();
             }
             else {
@@ -268,25 +328,40 @@
             }
         });
         $("#timepicker2").on("change", function (e) {
-            if ($(".datetimepicker-input2").val() && $(this).val()) {
+            disableNextDateTimePickers(2) //disable next fields
+            if ($(this).val()) {
+                initializeDatePicker(3, $(".datetimepicker-input2").val()) //initialize next DatePicker
+            }
+
+            if ($(".datetimepicker-input2").val() && $(this).val()) { // Set hidden field for Day2
                 $('#DayTwo').attr('value', $(".datetimepicker-input2").val() + " " + $(this).val()).blur();
-            } else {
+            }
+            else {
                 $('#DayTwo').attr('value', '').blur();
             }
         });
         $("#timepicker3").on("change", function (e) {
-            if ($(".datetimepicker-input3").val() && $(this).val()) {
+            disableNextDateTimePickers(3) //disable next fields
+            if ($(this).val()) {
+                initializeDatePicker(4, $(".datetimepicker-input3").val()) //initialize next DatePicker
+            }
+
+            if ($(".datetimepicker-input3").val() && $(this).val()) { // Set hidden field for Day3
                 $('#DayThree').attr('value', $(".datetimepicker-input3").val() + " " + $(this).val()).blur();
-            } else {
+            }
+            else {
                 $('#DayThree').attr('value', '').blur();
             }
         });
         $("#timepicker4").on("change", function (e) {
-            if ($(".datetimepicker-input4").val() && $(this).val()) {
+            if ($(".datetimepicker-input4").val() && $(this).val()) { // Set hidden field for Day4
                 $('#DayFour').attr('value', $(".datetimepicker-input4").val() + " " + $(this).val()).blur();
-            } else {
+            }
+            else {
                 $('#DayFour').attr('value', '').blur();
             }
         });
+
+
     </script>
 }

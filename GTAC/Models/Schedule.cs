@@ -26,6 +26,11 @@ namespace GTAC.Models
 
         [Required]
         public Guid StudentId { get; set; }
+        public bool? isDayOnePassed { get; set; }
+        public bool? isDayTwoPassed { get; set; }
+        public bool? isDayThreePassed { get; set; }
+        public bool? isDayFourPassed { get; set; }
+
         public DateTime? ApprovedAt { get; set; }
         [Required]
         public Status Status { get; set; }
