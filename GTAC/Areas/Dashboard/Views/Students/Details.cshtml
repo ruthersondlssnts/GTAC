@@ -97,7 +97,7 @@
                         </dd>
                         <dt class="col-lg-4">
                             Day 2 <br />
-                            <small>Horizontan and Vertical Parking</small>
+                            <small>Horizontal and Vertical Parking</small>
                         </dt>
                         <dd class="col-lg-5">
                             @Sched.DayTwo.ToString("dddd, MMM dd yyyy") <br />
@@ -149,7 +149,9 @@
 </div>
 
 @section Scripts {
-    <script>
+    @if (Sched != null)
+    {
+        <script>
 
         $(".select-assess1").val('@Sched.isDayOnePassed'.toLowerCase());
         $(".select-assess2").val('@Sched.isDayTwoPassed'.toLowerCase());
@@ -168,6 +170,8 @@
                 }
             });
         }
-    </script>
+        </script>
+    }
+
 }
 
