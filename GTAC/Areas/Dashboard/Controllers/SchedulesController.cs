@@ -209,15 +209,114 @@ namespace GTAC.Areas.Dashboard.Controllers
                    })
                    .ToListAsync();
 
+                var schedulesToday2 = await _context.Schedules
+                  .Include(s => s.Student)
+                  .ThenInclude(s => s.User)
+                  .Where(s => s.Student.InstructorId == _userManager.GetUserId(User))
+                  .Where(s => s.Status == Status.Approved)
+                  .Where(s => s.DayOne.Date == DateTime.Now.Date || s.DayTwo.Date == DateTime.Now.Date || s.DayThree.Date == DateTime.Now.Date || s.DayFour.Date == DateTime.Now.Date)
+                  .ToListAsync();
+
                 var instructorSchedule = new InstructorScheduleViewModel();
-                instructorSchedule.SevenAMStudent = schedulesToday.Where(s => s.Date.Hour == 7).FirstOrDefault()?.Student;
-                instructorSchedule.DaySevenAMStudent = schedulesToday.Where(s => s.Date.Hour == 7).FirstOrDefault()?.Day;
-                instructorSchedule.TenAMStudent = schedulesToday.Where(s => s.Date.Hour == 10).FirstOrDefault()?.Student;
-                instructorSchedule.DayTenAMStudent = schedulesToday.Where(s => s.Date.Hour == 10).FirstOrDefault()?.Day;
-                instructorSchedule.OnePMStudent = schedulesToday.Where(s => s.Date.Hour == 13).FirstOrDefault()?.Student;
-                instructorSchedule.DayOnePMStudent = schedulesToday.Where(s => s.Date.Hour == 13).FirstOrDefault()?.Day;
-                instructorSchedule.ThreePMStudent = schedulesToday.Where(s => s.Date.Hour == 15).FirstOrDefault()?.Student;
-                instructorSchedule.DayThreePMStudent = schedulesToday.Where(s => s.Date.Hour == 15).FirstOrDefault()?.Day;
+
+                foreach (var st in schedulesToday2)
+                {
+                    if (st.DayOne.Date == DateTime.Now.Date)
+                    {
+                        if (st.DayOne.Hour == 7)
+                        {
+                            instructorSchedule.SevenAMStudent = st.Student;
+                            instructorSchedule.DaySevenAMStudent = "Day 1";
+                        }
+                        else if (st.DayOne.Hour == 10)
+                        {
+                            instructorSchedule.TenAMStudent = st.Student;
+                            instructorSchedule.DayTenAMStudent = "Day 1";
+                        }
+                        else if (st.DayOne.Hour == 13)
+                        {
+                            instructorSchedule.OnePMStudent = st.Student;
+                            instructorSchedule.DayOnePMStudent = "Day 1";
+                        }
+                        else
+                        {
+                            instructorSchedule.ThreePMStudent = st.Student;
+                            instructorSchedule.DayThreePMStudent = "Day 1";
+                        }
+                    }
+
+                    if (st.DayTwo.Date == DateTime.Now.Date)
+                    {
+                        if (st.DayTwo.Hour == 7)
+                        {
+                            instructorSchedule.SevenAMStudent = st.Student;
+                            instructorSchedule.DaySevenAMStudent = "Day 2";
+                        }
+                        else if (st.DayTwo.Hour == 10)
+                        {
+                            instructorSchedule.TenAMStudent = st.Student;
+                            instructorSchedule.DayTenAMStudent = "Day 2";
+                        }
+                        else if (st.DayTwo.Hour == 13)
+                        {
+                            instructorSchedule.OnePMStudent = st.Student;
+                            instructorSchedule.DayOnePMStudent = "Day 2";
+                        }
+                        else
+                        {
+                            instructorSchedule.ThreePMStudent = st.Student;
+                            instructorSchedule.DayThreePMStudent = "Day 2";
+                        }
+                    }
+
+                    if (st.DayThree.Date == DateTime.Now.Date)
+                    {
+                        if (st.DayThree.Hour == 7)
+                        {
+                            instructorSchedule.SevenAMStudent = st.Student;
+                            instructorSchedule.DaySevenAMStudent = "Day 3";
+                        }
+                        else if (st.DayThree.Hour == 10)
+                        {
+                            instructorSchedule.TenAMStudent = st.Student;
+                            instructorSchedule.DayTenAMStudent = "Day 3";
+                        }
+                        else if (st.DayThree.Hour == 13)
+                        {
+                            instructorSchedule.OnePMStudent = st.Student;
+                            instructorSchedule.DayOnePMStudent = "Day 3";
+                        }
+                        else
+                        {
+                            instructorSchedule.ThreePMStudent = st.Student;
+                            instructorSchedule.DayThreePMStudent = "Day 3";
+                        }
+                    }
+
+                    if (st.DayFour.Date == DateTime.Now.Date)
+                    {
+                        if (st.DayFour.Hour == 7)
+                        {
+                            instructorSchedule.SevenAMStudent = st.Student;
+                            instructorSchedule.DaySevenAMStudent = "Day 4";
+                        }
+                        else if (st.DayFour.Hour == 10)
+                        {
+                            instructorSchedule.TenAMStudent = st.Student;
+                            instructorSchedule.DayTenAMStudent = "Day 4";
+                        }
+                        else if (st.DayFour.Hour == 13)
+                        {
+                            instructorSchedule.OnePMStudent = st.Student;
+                            instructorSchedule.DayOnePMStudent = "Day 4";
+                        }
+                        else
+                        {
+                            instructorSchedule.ThreePMStudent = st.Student;
+                            instructorSchedule.DayThreePMStudent = "Day 4";
+                        }
+                    }
+                }
                 ActivityLog.Create(_userManager.GetUserId(User), Area.Schedule, Models.Action.View, "Viewed schedule", _context);
 
                 return View("InstructorSchedule", instructorSchedule);
