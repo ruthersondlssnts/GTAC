@@ -184,6 +184,7 @@ namespace GTAC.Areas.Dashboard.Controllers
         }
 
         // GET: Dashboard/Schedules
+        //Dashboard/Schedules/
         public async Task<IActionResult> Index()
         {
             if (User.IsInRole("Admin") || User.IsInRole("Staff") || User.IsInRole("Manager"))
@@ -194,21 +195,6 @@ namespace GTAC.Areas.Dashboard.Controllers
             }
             else if (User.IsInRole("Instructor"))
             {
-                var schedulesToday = await _context.Schedules
-                   .Include(s => s.Student)
-                   .ThenInclude(s => s.User)
-                   .Where(s => s.Student.InstructorId == _userManager.GetUserId(User))
-                   .Where(s => s.Status == Status.Approved)
-                   .Where(s => s.DayOne.Date == DateTime.Now.Date || s.DayTwo.Date == DateTime.Now.Date || s.DayThree.Date == DateTime.Now.Date || s.DayFour.Date == DateTime.Now.Date)
-                   .Select(s => new
-                   {
-                       Date = s.DayOne.Date == DateTime.Now.Date ? s.DayOne : (s.DayTwo.Date == DateTime.Now.Date ? s.DayTwo : (s.DayThree.Date == DateTime.Now.Date ? s.DayThree : s.DayFour)),
-                       Day = s.DayOne.Date == DateTime.Now.Date ? "Day 1" : (s.DayTwo.Date == DateTime.Now.Date ? "Day 2" : (s.DayThree.Date == DateTime.Now.Date ? "Day 3" : "Day 4")),
-                       Student = s.Student,
-                       ScheduleId = s.Id
-                   })
-                   .ToListAsync();
-
                 var schedulesToday2 = await _context.Schedules
                   .Include(s => s.Student)
                   .ThenInclude(s => s.User)
@@ -321,7 +307,7 @@ namespace GTAC.Areas.Dashboard.Controllers
 
                 return View("InstructorSchedule", instructorSchedule);
             }
-            else
+            else //student
             {
                 var studentSchedule = await _context.Schedules
                     .Include(s => s.Student)

@@ -67,6 +67,7 @@ namespace GTAC.Areas.Dashboard.Controllers
             ActivityLog.Create(_userManager.GetUserId(User), Area.Student, Models.Action.View, "Viewed Students", _context);
 
             var applicationDbContext = _context.Students.Include(s => s.Instructor).Include(s => s.User);
+
             return View(await applicationDbContext.ToListAsync());
         }
 
