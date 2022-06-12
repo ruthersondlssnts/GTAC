@@ -9,7 +9,7 @@
     <style>
         .container-iframe {
             position: relative;
-            width: 100%;
+            width: 86%;
             overflow: hidden;
             padding-top: 56.25%; /* 16:9 Aspect Ratio */
         }
@@ -37,10 +37,12 @@
                             <h5>Your certificate is ready!  Kindly download it below.</h5>
                         </div>
                     </div>
-                    <div style="margin: 0 10%">
-                        <div class="container-iframe">
-                            <iframe id='pdf' class="responsive-iframe" title='Certificate'></iframe>
-                        </div>
+                    <div style="margin: 0 10%" oncontextmenu="return false">
+                        <main class="container-iframe mx-auto">
+                            <canvas class="pdf-viewer responsive-iframe">
+                            </canvas>
+                        </main>
+                        <button id="pdf_link" class="btn btn-primary">Download Pdf</button>
                     </div>
                     @if (User.IsInRole("Admin") || User.IsInRole("Instructor") || User.IsInRole("Manager") || User.IsInRole("Staff"))
                     {
@@ -89,26 +91,69 @@
 
     @section Scripts {
         <script type='text/javascript'>
-        const { jsPDF } = window.jspdf;
+            const { jsPDF } = window.jspdf;
 
-        const doc = new jsPDF({ orientation: 'l' });
+            const doc = new jsPDF({ orientation: 'l' });
 
-        doc.addImage('/images/@Model.Path', 'JPEG', 0, 0, 297, 210);
+            doc.addImage('/images/@Model.Path', 'JPEG', 0, 0, 297, 210);
 
-        doc.setFontSize(40);
+            doc.setFontSize(40);
 
-        var lines = doc.splitTextToSize('@User.FindFirst("UserFullname").Value', 250);
+            var lines = doc.splitTextToSize('@User.FindFirst("UserFullname").Value', 250);
 
-        if (lines.length == 1) {
-            doc.text(lines, 152, 120, { align: 'center', baseline: 'middle', maxWidth: '250' });
-        } else {
-            doc.setFontSize(23);
-            doc.text(lines, 152, 112, { align: 'center', baseline: 'middle', maxWidth: '250', lineHeightFactor: 1 });
-        }
+            if (lines.length == 1) {
+                doc.text(lines, 152, 120, { align: 'center', baseline: 'middle', maxWidth: '250' });
+            } else {
+                doc.setFontSize(23);
+                doc.text(lines, 152, 112, { align: 'center', baseline: 'middle', maxWidth: '250', lineHeightFactor: 1 });
+            }
 
-        var string = doc.output('datauristring');
+            var string = doc.output('datauristring');
 
-        $('#pdf').attr('src', string +"#view=FitH");
+            $('#pdf_link').click(function () {
+                doc.save(string);
+            })
+
+            const viewer = document.querySelector('.pdf-viewer');
+            let currentPDF = {}
+
+            function loadPDF(file) {
+                const pdfFile = pdfjsLib.getDocument(file);
+                resetCurrentPDF();
+                pdfFile.promise.then((doc) => {
+                    currentPDF.file = doc;
+                    currentPDF.countOfPages = doc.numPages;
+                    renderCurrentPage();
+                });
+
+            }
+
+            function renderCurrentPage() {
+                currentPDF.file.getPage(currentPDF.currentPage).then((page) => {
+                    var context = viewer.getContext('2d');
+                    var viewport = page.getViewport({ scale: currentPDF.zoom, });
+                    viewer.height = viewport.height;
+                    viewer.width = viewport.width;
+
+                    var renderContext = {
+                        canvasContext: context,
+                        viewport: viewport
+                    };
+                    page.render(renderContext);
+                });
+            }
+
+            loadPDF(string)
+
+            function resetCurrentPDF() {
+                currentPDF = {
+                    file: null,
+                    countOfPages: 0,
+                    currentPage: 1,
+                    zoom: 1.5
+                }
+            }
+
         </script>
     }
 

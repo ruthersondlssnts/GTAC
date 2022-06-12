@@ -15,6 +15,53 @@
     </div>
 
     <div class="card-body">
+        @if (User.IsInRole("Admin"))
+        {
+            <form asp-action="Index" asp-area="Dashboard" asp-route-fromEnroll="@ViewBag.fromEnroll" asp-route-toEnroll="@ViewBag.toEnroll" asp-route-fromGrad="@ViewBag.fromGrad" asp-route-toGrad="@ViewBag.toGrad" method="get">
+                <div class="form-row justify-content-center">
+                    <div class="form-group col-md-4 ">
+                        <label class="control-label">Enrollment Date <span><button class="btn btn-sm btn-info ml-3" type="button" onclick="clearDates(true)">Clear</button></span></label>
+                        <div class="row mr-3">
+                            <div class="input-group date col-lg-6" id="datepicker1" data-target-input="nearest">
+                                <input onkeypress="return false;" placeholder="from" name="fromEnroll" type="text" class="form-control datetimepicker-input datetimepicker-input1" data-target="#datepicker1" />
+                                <div class="input-group-append" data-target="#datepicker1" data-toggle="datetimepicker">
+                                    <div class="input-group-text" style="background:white"><i class="fa fa-calendar"></i></div>
+                                </div>
+                            </div>
+                            <div class="input-group date col-lg-6" id="datepicker2" data-target-input="nearest">
+                                <input onkeypress="return false;" placeholder="to" type="text" name="toEnroll" class="form-control datetimepicker-input datetimepicker-input2" data-target="#datepicker2" />
+                                <div class="input-group-append" data-target="#datepicker2" data-toggle="datetimepicker">
+                                    <div class="input-group-text" style="background:white"><i class="fa fa-calendar"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="control-label">Graduation Date <span><button class="btn btn-sm btn-info ml-3" type="button" onclick="clearDates()">Clear</button></span></label>
+                        <div class="row">
+                            <div class="input-group date col-lg-6" id="datepicker3" data-target-input="nearest">
+                                <input onkeypress="return false;" placeholder="from" type="text" name="fromGrad" class="form-control datetimepicker-input datetimepicker-input3" data-target="#datepicker3" />
+                                <div class="input-group-append" data-target="#datepicker3" data-toggle="datetimepicker">
+                                    <div class="input-group-text" style="background:white"><i class="fa fa-calendar"></i></div>
+                                </div>
+                            </div>
+                            <div class="input-group date col-lg-6" id="datepicker4" data-target-input="nearest">
+                                <input onkeypress="return false;" placeholder="to" type="text" name="toGrad" class="form-control datetimepicker-input datetimepicker-input4" data-target="#datepicker4" />
+                                <div class="input-group-append" data-target="#datepicker4" data-toggle="datetimepicker">
+                                    <div class="input-group-text" style="background:white"><i class="fa fa-calendar"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-2" style="position: relative;margin-top: 42px;">
+                        <input type="submit" value="View" class="btn btn-primary" style="position: absolute;bottom: 0;">
+                    </div>
+                </div>
+            </form>
+            <hr />
+
+        }
+
         @*<a asp-action="Create" class="btn btn-primary mb-3">Create</a>*@
         <div class="table-responsive">
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -29,12 +76,19 @@
                         <th>
                             Graduated
                         </th>
-                        <th>
-                            Account
-                        </th>
-                        <th>
-                            Instructor
-                        </th>
+                        @if (!User.IsInRole("Instructor"))
+                        {
+                            <th>
+                                Account
+                            </th>
+                            <th>
+                                Instructor
+                            </th>
+                            <th>
+                                Request
+                            </th>
+                        }
+
 
                         <th></th>
                     </tr>
@@ -44,6 +98,9 @@
                     {
                         <tr>
                             <td>
+                                <span>
+                                    <img id="preview" src="~/images/users/@(item.User.PhotoPath ?? "img-prev.jpg" )" style="height:30px; width:30px;" class="rounded-circle" />
+                                </span>
                                 @item.User.Firstname @item.User.Lastname
                             </td>
                             <td>
@@ -66,15 +123,27 @@
                                     <span>No</span>
                                 }
                             </td>
-                            <td>
-                                <label class="switch" style="margin-bottom:0">
-                                    <input type="checkbox" class="primary" @(item.User.IsActivated == null ? "checked" : item.User.IsActivated == true ? "checked" : "" ) onclick='handleChkClick(this,"@item.UserId")'>
-                                    <span class="slider round"></span>
-                                </label>
-                            </td>
-                            <td>
-                                @item?.Instructor?.Firstname @item?.Instructor?.Lastname
-                            </td>
+                            @if (!User.IsInRole("Instructor"))
+                            {
+                                <td>
+                                    <label class="switch" style="margin-bottom:0">
+                                        <input type="checkbox" class="primary" @(item.User.IsActivated == null ? "checked" : item.User.IsActivated == true ? "checked" : "" ) onclick='handleChkClick(this,"@item.UserId")'>
+                                        <span class="slider round"></span>
+                                    </label>
+                                </td>
+                                <td>
+                                    @item?.Instructor?.Firstname @item?.Instructor?.Lastname
+                                </td>
+
+                                <th>
+                                    @if (item.User.IsProfileApproved == false)
+                                    {
+                                        <span>Profile Change</span>
+                                    }
+                                </th>
+                            }
+
+
                             <td>
                                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                                 <a asp-action="Details" asp-route-id="@item.Id">Details</a>
@@ -93,8 +162,50 @@
 @section Scripts {
     <script>
         $(function () {
+            $('#datepicker1').datetimepicker({
+                format: 'L',
+                date:  new Date('@ViewBag.fromEnroll')
+            });
+            $('#datepicker2').datetimepicker({
+                format: 'L',
+                date:  new Date('@ViewBag.toEnroll')
+            });
+            $("#datepicker1").on("change.datetimepicker", function (e) {
+                $('#datepicker2').datetimepicker('minDate', e.date);
+            });
+            $("#datepicker2").on("change.datetimepicker", function (e) {
+                $('#datepicker1').datetimepicker('maxDate', e.date);
+            });
+
+
+            $('#datepicker3').datetimepicker({
+                format: 'L',
+                date:  new Date('@ViewBag.fromGrad')
+            });
+            $('#datepicker4').datetimepicker({
+                format: 'L',
+                date:  new Date('@ViewBag.toGrad')
+            });
+            $("#datepicker3").on("change.datetimepicker", function (e) {
+                $('#datepicker4').datetimepicker('minDate', e.date);
+            });
+            $("#datepicker4").on("change.datetimepicker", function (e) {
+                $('#datepicker3').datetimepicker('maxDate', e.date);
+            });
+
             $('#dataTable').DataTable();
         });
+
+        function clearDates(isEnroll) {
+            if (isEnroll) {
+                $('#datepicker1').datetimepicker('clear');
+                $('#datepicker2').datetimepicker('clear');
+            }
+            else {
+                $('#datepicker3').datetimepicker('clear');
+                $('#datepicker4').datetimepicker('clear');
+            }
+        }
 
         function handleChkClick(cb, id) {
             $.ajax({

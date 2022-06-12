@@ -23,6 +23,7 @@ namespace GTAC.Data
         public DbSet<Quiz_Student> Quiz_Students { get; set; }
         public DbSet<Certificate> Certificates { get; set; }
         public DbSet<ActivityLog> ActivityLogs { get; set; }
+        public DbSet<StudentChangeRequest> StudentChangeRequests { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

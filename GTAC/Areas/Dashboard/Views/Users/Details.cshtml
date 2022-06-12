@@ -12,6 +12,8 @@
                 <h6 class="m-0 font-weight-bold text-primary">Company User Details</h6>
             </div>
             <div class="card-body">
+                <img id="preview" src="~/images/users/@(Model.User.PhotoPath ?? "img-prev.jpg" )" style="height:100px; width:100px; display:block" class="m-3 mx-auto rounded-circle" />
+
                 <dl class="row">
                     <dt class="col-lg-4">
                         Fullname

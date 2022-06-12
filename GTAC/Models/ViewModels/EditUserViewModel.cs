@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 
 namespace GTAC.Models.ViewModels
 {
@@ -13,6 +14,8 @@ namespace GTAC.Models.ViewModels
 
         [Required]
         public string Middlename { get; set; }
+        public IFormFile Photo { get; set; }
+        public string PhotoPath { get; set; }
 
         public string Suffix { get; set; }
 
@@ -23,6 +26,7 @@ namespace GTAC.Models.ViewModels
         public string PhoneNumber { get; set; }
 
         [Required]
+        [DataType(DataType.Date)]
         public string Birthday { get; set; }
 
         [Required]

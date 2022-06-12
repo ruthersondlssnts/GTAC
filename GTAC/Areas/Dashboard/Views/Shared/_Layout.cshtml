@@ -120,7 +120,7 @@
                     }
                 </a>
             </li>
-            @if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("Staff"))
+            @if (User.IsInRole("Manager") || User.IsInRole("Staff"))
             {
                 <!-- Nav Item - Requests -->
                 <li class="nav-item @ViewData["NavRequests"]">
@@ -165,7 +165,7 @@
                 </a>
             </li>
 
-            @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+            @if (User.IsInRole("Admin"))
             {
                 <!-- Nav Item - Students -->
                 <li class="nav-item @ViewData["NavUsers"]">
@@ -245,6 +245,15 @@
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                  aria-labelledby="userDropdown">
+                                @if (!User.IsInRole("Admin") && !User.IsInRole("Staff") && !User.IsInRole("Manager") && !User.IsInRole("Instructor"))
+                                {
+                                    <a class="dropdown-item" asp-area="Dashboard" asp-controller="Students" asp-action="ViewProfile">
+                                        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Profile
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                }
+
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout

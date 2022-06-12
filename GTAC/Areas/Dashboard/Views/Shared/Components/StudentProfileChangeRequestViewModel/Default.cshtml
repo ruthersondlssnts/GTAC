@@ -1,0 +1,80 @@
+﻿@model GTAC.Models.StudentChangeRequest
+
+@{
+    ViewData["Title"] = "Default";
+}
+
+
+@if (Model != null)
+{
+    <div class="col-lg-6">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Your Change Request Details</h6>
+            </div>
+            <div class="card-body">
+                <img id="preview" src="~/images/users/@(Model.PhotoPath ?? Model.User.PhotoPath ?? "img-prev.jpg" )" style="height:100px; width:100px; display:block" class="m-3 mx-auto rounded-circle" />
+                <dl class="row">
+                    <dt class="col-lg-4">
+                        First Name
+                    </dt>
+                    <dd class="col-lg-8">
+                        @Model.Firstname
+                    </dd>
+                    <dt class="col-lg-4">
+                        Last Name
+                    </dt>
+
+                    <dd class="col-lg-8">
+                        @Model.Lastname
+                    </dd>
+                    <dt class="col-lg-4">
+                        Middle Name
+                    </dt>
+                    <dd class="col-lg-8">
+                        @Model.Middlename
+                    </dd>
+                    <dt class="col-lg-4">
+                        Suffix
+                    </dt>
+                    <dd class="col-lg-8">
+                        @Model.Suffix
+                    </dd>
+
+                    <dt class="col-lg-4">
+                        Phone
+                    </dt>
+                    <dd class="col-lg-8">
+                        @Model.PhoneNumber
+                    </dd>
+                    <dt class="col-lg-4">
+                        Birthday
+                    </dt>
+                    <dd class="col-lg-8">
+                        @Model.Birthday
+                    </dd>
+                    <dt class="col-lg-4">
+                        Address
+                    </dt>
+                    <dd class="col-lg-8">
+                        @Model.Address
+                    </dd>
+                    <dt class="col-lg-4">
+                        Status
+                    </dt>
+                    <dd class="col-lg-8">
+                        @Model.Status
+                    </dd>
+                </dl>
+                @if (Model.Status == Status.Pending)
+                {
+                    <form asp-action="DeleteChangeRequest" asp-area="Dashboard" asp-controller="Students">
+                        <input type="hidden" asp-for="Id" />
+                        <input type="submit" value="Cancel" class="btn btn-danger" />
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+}
+

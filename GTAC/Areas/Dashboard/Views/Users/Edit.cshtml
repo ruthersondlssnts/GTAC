@@ -10,11 +10,17 @@
                 <h6 class="m-0 font-weight-bold text-primary">Edit Company User</h6>
             </div>
             <div class="card-body">
-                <form asp-action="Edit" method="post">
+                <form asp-action="Edit" method="post" enctype="multipart/form-data">
                     <div asp-validation-summary="ModelOnly" as class="text-danger"></div>
                     <input type="hidden" asp-for="Password" />
+                    <input type="hidden" asp-for="PhotoPath" />
                     <input type="hidden" asp-for="Id" />
                     <div class="row">
+                        <div class="form-group col-12">
+                            <img id="preview" src="~/images/users/@(Model.PhotoPath ?? "img-prev.jpg" )" style="height:100px; width:100px; display:block" class="mx-auto rounded-circle" />
+                            <label class="control-label">Profile Image</label>
+                            <input onchange="photoChange()" asp-for="Photo" data-val="false" class="form-control" accept="image/png, image/jpeg" />
+                        </div>
                         <div class="form-group col-lg-6">
                             <label asp-for="Firstname"></label>
                             <input asp-for="Firstname" class="form-control" />
@@ -46,7 +52,7 @@
                         </div>
                         <div class="form-group col-lg-6">
                             <label asp-for="Birthday"></label>
-                            <input asp-for="Birthday" class="form-control" />
+                            <input asp-for="Birthday" class="form-control" value="@Convert.ToDateTime(Model.Birthday).ToString("yyyy-MM-dd")" />
                             <span asp-validation-for="Birthday" class="text-danger"></span>
                         </div>
                     </div>
@@ -94,4 +100,9 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        function photoChange() {
+            $('#preview').attr('src', URL.createObjectURL(event.target.files[0]));
+        }
+    </script>
 }

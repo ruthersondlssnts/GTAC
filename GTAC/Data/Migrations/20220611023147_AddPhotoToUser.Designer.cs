@@ -4,14 +4,16 @@ using GTAC.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GTAC.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220611023147_AddPhotoToUser")]
+    partial class AddPhotoToUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -258,49 +260,6 @@ namespace GTAC.Data.Migrations
                     b.ToTable("Students");
                 });
 
-            modelBuilder.Entity("GTAC.Models.StudentChangeRequest", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Birthday")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Firstname")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Lastname")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Middlename")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhotoPath")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Suffix")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("StudentChangeRequests");
-                });
-
             modelBuilder.Entity("GTAC.Models.User", b =>
                 {
                     b.Property<string>("Id")
@@ -332,9 +291,6 @@ namespace GTAC.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool?>("IsActivated")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("IsProfileApproved")
                         .HasColumnType("bit");
 
                     b.Property<string>("Lastname")
@@ -611,14 +567,6 @@ namespace GTAC.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("GTAC.Models.StudentChangeRequest", b =>
-                {
-                    b.HasOne("GTAC.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

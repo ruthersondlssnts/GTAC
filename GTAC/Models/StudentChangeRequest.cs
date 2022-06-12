@@ -1,27 +1,24 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GTAC.Models
 {
-    public class User : IdentityUser
+    public class StudentChangeRequest
     {
-        [Required]
+        [Key]
+        public Guid Id { get; set; }
         public string Firstname { get; set; }
-        [Required]
         public string Lastname { get; set; }
-        [Required]
         public string Middlename { get; set; }
         public string Suffix { get; set; }
-        public bool? IsActivated { get; set; }
-        [Required]
         public string Address { get; set; }
-        [Required]
         public DateTime Birthday { get; set; }
         public string PhotoPath { get; set; }
-        public bool? IsProfileApproved { get; set; }
-
+        public string PhoneNumber { get; set; }
+        public Status Status { get; set; }
+        public string UserId { get; set; }
+        [ForeignKey("UserId")]
+        public virtual User User { get; set; }
     }
 }

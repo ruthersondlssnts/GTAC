@@ -1,0 +1,103 @@
+﻿@model GTAC.Models.Student
+@{
+    ViewData["Title"] = "Students";
+}
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Student Profile</h6>
+            </div>
+            <div class="card-body">
+                <img id="preview" src="~/images/users/@(Model.User.PhotoPath ?? "img-prev.jpg" )" style="height:100px; width:100px; display:block" class="m-3 mx-auto rounded-circle" />
+                <dl class="row">
+                    <dt class="col-lg-4">
+                        First Name
+                    </dt>
+                    <dd class="col-lg-8">
+                        @Model.User.Firstname
+                    </dd>
+                    <dt class="col-lg-4">
+                        Last Name
+                    </dt>
+
+                    <dd class="col-lg-8">
+                        @Model.User.Lastname
+                    </dd>
+                    <dt class="col-lg-4">
+                        Middle Name
+                    </dt>
+                    <dd class="col-lg-8">
+                        @Model.User.Middlename
+                    </dd>
+                    <dt class="col-lg-4">
+                        Suffix
+                    </dt>
+                    <dd class="col-lg-8">
+                        @Model.User.Suffix
+                    </dd>
+
+                    <dt class="col-lg-4">
+                        Phone
+                    </dt>
+                    <dd class="col-lg-8">
+                        @Model.User.PhoneNumber
+                    </dd>
+                    <dt class="col-lg-4">
+                        Birthday
+                    </dt>
+                    <dd class="col-lg-8">
+                        @Model.User.Birthday
+                    </dd>
+                    <dt class="col-lg-4">
+                        Address
+                    </dt>
+                    <dd class="col-lg-8">
+                        @Model.User.Address
+                    </dd>
+                    <dt class="col-lg-4">
+                        Email
+                    </dt>
+                    <dd class="col-lg-8">
+                        @Model.User.Email
+                    </dd>
+                    <dt class="col-lg-4">
+                        Instructor
+                    </dt>
+                    <dd class="col-lg-8">
+                        @Model.Instructor.Firstname @Model.Instructor.Lastname
+                    </dd>
+                    <dt class="col-lg-4">
+                        Enrolled At
+                    </dt>
+                    <dd class="col-lg-8">
+                        @Model.EnrolledAt
+                    </dd>
+                    <dt class="col-lg-4">
+                        Graduated At
+                    </dt>
+                    <dd class="col-lg-8">
+                        @Model.GraduatedAt
+                    </dd>
+                </dl>
+                @if (Model.EnrolledAt != null)
+                {
+                    <div>
+                        <a asp-action="EditProfile" asp-route-id="@Model.UserId">Edit</a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    @await Component.InvokeAsync(typeof(GTAC.ViewComponents.StudentProfileChangeRequestViewModel))
+
+</div>
+
+@section Scripts {
+
+
+}
+
+

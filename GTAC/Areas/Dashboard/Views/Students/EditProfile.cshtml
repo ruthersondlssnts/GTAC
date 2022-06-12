@@ -1,21 +1,25 @@
-﻿@model GTAC.Models.ViewModels.CreateUserViewModel
+﻿@model GTAC.Models.ViewModels.EditUserViewModel
 @{
-    ViewData["Title"] = "Users";
-    ViewData["NavUsers"] = "active";
+    ViewData["Title"] = "Students";
+    ViewData["NavStudents"] = "active";
 }
 <div class="row">
     <div class="col-lg-6">
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Create a new account</h6>
+                <h6 class="m-0 font-weight-bold text-primary">Edit Profile</h6>
             </div>
             <div class="card-body">
-                <form asp-action="Create" method="post" enctype="multipart/form-data">
+                <form asp-action="EditProfile" method="post" enctype="multipart/form-data">
                     <div asp-validation-summary="ModelOnly" as class="text-danger"></div>
+                    <input type="hidden" asp-for="Password" />
+                    <input type="hidden" asp-for="Email" />
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="PhotoPath" />
 
                     <div class="row">
                         <div class="form-group col-12">
-                            <img id="preview" src="~/images/users/img-prev.jpg" style="height:100px; width:100px; display:block" class="mx-auto rounded-circle" />
+                            <img id="preview" src="~/images/users/@(Model.PhotoPath ?? "img-prev.jpg" )" style="height:100px; width:100px; display:block" class="mx-auto rounded-circle" />
                             <label class="control-label">Profile Image</label>
                             <input onchange="photoChange()" asp-for="Photo" data-val="false" class="form-control" accept="image/png, image/jpeg" />
                         </div>
@@ -50,51 +54,21 @@
                         </div>
                         <div class="form-group col-lg-6">
                             <label asp-for="Birthday"></label>
-                            <input asp-for="Birthday" type="date" class="form-control" placeholder="mm/dd/yyyy" />
+                            <input asp-for="Birthday" class="form-control" value="@Convert.ToDateTime(Model.Birthday).ToString("yyyy-MM-dd")" />
                             <span asp-validation-for="Birthday" class="text-danger"></span>
                         </div>
                     </div>
-
-
                     <div class="form-group">
                         <label asp-for="Address"></label>
                         <input asp-for="Address" class="form-control" />
                         <span asp-validation-for="Address" class="text-danger"></span>
                     </div>
-                    <div class="row">
-                        <div class="form-group col-lg-6">
-                            <label asp-for="Email"></label>
-                            <input asp-for="Email" class="form-control" />
-                            <span asp-validation-for="Email" class="text-danger"></span>
-                        </div>
-                        <div class="form-group col-lg-6">
-                            <label asp-for="Role"></label>
-                            <select asp-for="Role" asp-items="ViewBag.Roles" class="form-control">
-                                <option value="">Select Role</option>
-                            </select>
-                            <span asp-validation-for="Role" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>New Password</label>
-                        <input asp-for="Password" class="form-control" />
-                        <span asp-validation-for="Password" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-group">
-                        <label asp-for="ConfirmPassword"></label>
-                        <input asp-for="ConfirmPassword" class="form-control" />
-                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">Register</button> |
-                    <a asp-action="Index">Back to List</a>
+                    <button type="submit" class="btn btn-primary">Request Change</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
-
 
 
 @section Scripts {

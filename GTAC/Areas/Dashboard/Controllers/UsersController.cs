@@ -2,6 +2,7 @@
 using GTAC.Models;
 using GTAC.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,23 +10,26 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace GTAC.Areas.Dashboard.Controllers
 {
     [Area("Dashboard")]
-    [Authorize(Roles = "Admin,Manager")]
+    [Authorize(Roles = "Admin")]
     public class UsersController : Controller
     {
         private readonly UserManager<User> _userManager;
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly RoleManager<IdentityRole> _roleManager;
-        public UsersController(ApplicationDbContext context, UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
+        public UsersController(ApplicationDbContext context, UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
             _userManager = userManager;
             _roleManager = roleManager;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public async Task<IActionResult> UpdateAccountStatus(string id, bool status)
@@ -103,6 +107,20 @@ namespace GTAC.Areas.Dashboard.Controllers
                     IsActivated = true
                 };
 
+                if (user.Photo != null)
+                {
+                    string filename = "";
+                    string uploadsDir = Path.Combine(_webHostEnvironment.WebRootPath, "images/users");
+                    filename = Guid.NewGuid() + Path.GetExtension(user.Photo.FileName);
+                    string filePath = Path.Combine(uploadsDir, filename);
+                    FileStream fs = new FileStream(filePath, FileMode.Create);
+                    await user.Photo.CopyToAsync(fs);
+                    fs.Close();
+
+                    appUser.PhotoPath = filename;
+                }
+
+
                 IdentityResult result = await _userManager.CreateAsync(appUser, user.Password);
 
                 if (result.Succeeded)
@@ -141,7 +159,8 @@ namespace GTAC.Areas.Dashboard.Controllers
                 Birthday = user.Birthday.ToString(),
                 PhoneNumber = user.PhoneNumber,
                 Role = role.FirstOrDefault(),
-                Id = user.Id
+                Id = user.Id,
+                PhotoPath = user.PhotoPath
             };
 
             ViewData["Roles"] = new SelectList(_roleManager.Roles, "Name", "Name");
@@ -166,6 +185,16 @@ namespace GTAC.Areas.Dashboard.Controllers
                 user.Address = uvm.Address;
                 user.Birthday = Convert.ToDateTime(uvm.Birthday);
                 user.PhoneNumber = uvm.PhoneNumber;
+
+                if (uvm.Photo != null)
+                {
+                    string filename = user.PhotoPath;
+                    string uploadsDir = Path.Combine(_webHostEnvironment.WebRootPath, "images/users");
+                    string filePath = Path.Combine(uploadsDir, filename);
+                    FileStream fs = new FileStream(filePath, FileMode.Create);
+                    await uvm.Photo.CopyToAsync(fs);
+                    fs.Close();
+                }
 
                 IdentityResult result = await _userManager.UpdateAsync(user);
 

@@ -29,6 +29,10 @@
     <Compile Remove="Data\Migrations\20220521092710_CreateActivityLog.Designer.cs" />
     <Compile Remove="Data\Migrations\20220529061046_AddAccountActivatin.cs" />
     <Compile Remove="Data\Migrations\20220529061046_AddAccountActivatin.Designer.cs" />
+    <Compile Remove="Data\Migrations\20220611064416_ChangesUser.cs" />
+    <Compile Remove="Data\Migrations\20220611064416_ChangesUser.Designer.cs" />
+    <Compile Remove="Data\Migrations\20220611064805_Changes2.cs" />
+    <Compile Remove="Data\Migrations\20220611064805_Changes2.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -55,28 +59,57 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\images\users\" />
     <Folder Include="wwwroot\lib\" />
     <Folder Include="wwwroot\modules\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="ReportDataSet\dsStudents.cs">
+    <Compile Update="ReportDataSet\dsActivityLogs.cs">
+      <DependentUpon>dsActivityLogs.xsd</DependentUpon>
+    </Compile>
+    <Compile Update="ReportDataSet\dsActivityLogs.Designer.cs">
+      <DependentUpon>dsActivityLogs.xsd</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="ReportDataSet\dsStudents - Copy.cs">
       <DependentUpon>dsStudents.xsd</DependentUpon>
     </Compile>
-    <Compile Update="ReportDataSet\dsStudents.Designer.cs">
+    <Compile Update="ReportDataSet\dsStudents - Copy.Designer.cs">
       <DependentUpon>dsStudents.xsd</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Update="ReportDataSet\dsStudents.cs">
+      <DependentUpon>dsStudents.xsd</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="ReportDataSet\dsActivityLogs.xsc">
+      <DependentUpon>dsActivityLogs.xsd</DependentUpon>
+    </None>
+    <None Update="ReportDataSet\dsActivityLogs.xsd">
+      <SubType>Designer</SubType>
+      <LastGenOutput>dsActivityLogs.Designer.cs</LastGenOutput>
+      <Generator>MSDataSetGenerator</Generator>
+    </None>
+    <None Update="ReportDataSet\dsActivityLogs.xss">
+      <DependentUpon>dsActivityLogs.xsd</DependentUpon>
+    </None>
+    <None Update="ReportDataSet\dsStudents - Copy.xsc">
+      <DependentUpon>dsStudents.xsd</DependentUpon>
+    </None>
+    <None Update="ReportDataSet\dsStudents - Copy.xss">
+      <DependentUpon>dsStudents.xsd</DependentUpon>
+    </None>
     <None Update="ReportDataSet\dsStudents.xsc">
       <DependentUpon>dsStudents.xsd</DependentUpon>
     </None>
     <None Update="ReportDataSet\dsStudents.xsd">
       <SubType>Designer</SubType>
-      <LastGenOutput>dsStudents.Designer.cs</LastGenOutput>
+      <LastGenOutput>dsActivityLogs.Designer.cs</LastGenOutput>
       <Generator>MSDataSetGenerator</Generator>
     </None>
     <None Update="ReportDataSet\dsStudents.xss">
