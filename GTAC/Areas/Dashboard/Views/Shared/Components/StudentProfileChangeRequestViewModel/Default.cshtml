@@ -63,7 +63,7 @@
                         Status
                     </dt>
                     <dd class="col-lg-8">
-                        @Model.Status
+                        @GTAC.Helpers.EnumExtensions.GetDisplayName(Model.Status)
                     </dd>
                 </dl>
                 @if (Model.Status == Status.Pending)

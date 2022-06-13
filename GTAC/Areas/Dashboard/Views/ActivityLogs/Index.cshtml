@@ -47,7 +47,7 @@
                     </select>
                 </div>
                 <div class="form-group col-md-3 mt-auto">
-                    <input type="submit" value="View" class="btn btn-primary">
+                    <input type="submit" value="Search" class="btn btn-primary">
                     <a target="_blank" asp-area="Dashboard" asp-action="Print" asp-route-dateFromParam="@ViewBag.dateFromParam" asp-route-dateToParam="@ViewBag.dateToParam" asp-route-areaParam="@ViewBag.area" asp-route-actionParam="@ViewBag.action" class="btn btn-primary">
                         <i class="fas fa-download fa-sm text-white-50"></i> Generate Report
                     </a>
@@ -84,7 +84,7 @@
                                 @item.CreatedAt.ToString("hh:mm tt")
                             </td>
                             <td>
-                                @item.Area
+                                @GTAC.Helpers.EnumExtensions.GetDisplayName(item.Area)
                             </td>
                             <td>
                                 @item.Description

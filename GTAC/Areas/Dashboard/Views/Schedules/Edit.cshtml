@@ -145,7 +145,12 @@
                         <div class="row">
                             <div class="form-group col-md-5">
                                 <label asp-for="Status" class="control-label"></label>
-                                <select asp-for="Status" class="form-control" asp-items="@Html.GetEnumSelectList<Status>()"></select>
+                                <select class="form-control" asp-for="Status">
+                                    <option value="">Select Status</option>
+                                    <option value="1">Approved</option>
+                                    <option value="2">Reject</option>
+                                    <option value="3">Done</option>
+                                </select>
                                 <span asp-validation-for="Status" class="text-danger"></span>
                             </div>
 

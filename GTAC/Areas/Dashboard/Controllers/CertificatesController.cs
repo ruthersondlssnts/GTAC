@@ -105,6 +105,13 @@ namespace GTAC.Areas.Dashboard.Controllers
         }
 
         // GET: Dashboard/Certificates/Edit/5
+        public IActionResult InsertLog()
+        {
+            ActivityLog.Create(_userManager.GetUserId(User), Area.Certificate, Models.Action.Download, "Downloaded a Certificate", _context);
+            return Ok();
+        }
+
+        // GET: Dashboard/Certificates/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)

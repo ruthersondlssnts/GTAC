@@ -69,7 +69,7 @@
                         Status
                     </dt>
                     <dd class="col-lg-8">
-                        @Model.Status
+                        @GTAC.Helpers.EnumExtensions.GetDisplayName(Model.Status)
                     </dd>
                     <dt class="col-lg-4">
                         Approved At
@@ -79,7 +79,6 @@
                     </dd>
                 </dl>
                 <div>
-                    <a asp-action="Edit" class="btn btn-primary" asp-route-id="@Model.Id">Edit</a> |
                     <a asp-action="Index">Back to List</a>
                 </div>
             </div>

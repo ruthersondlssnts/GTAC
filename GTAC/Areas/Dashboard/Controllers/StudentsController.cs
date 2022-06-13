@@ -135,6 +135,8 @@ namespace GTAC.Areas.Dashboard.Controllers
 
                 _context.Remove(request);
 
+                ActivityLog.Create(_userManager.GetUserId(User), Area.RequestProfileChange, Models.Action.Edit, "Edited Request Profile Change to Approved", _context);
+
 
                 await _context.SaveChangesAsync();
             }
@@ -151,6 +153,8 @@ namespace GTAC.Areas.Dashboard.Controllers
                         System.IO.File.Delete(filePath);
                     }
                 }
+                ActivityLog.Create(_userManager.GetUserId(User), Area.RequestProfileChange, Models.Action.Edit, "Edited Request Profile Change to Rejected", _context);
+
                 _context.Remove(request);
                 await _context.SaveChangesAsync();
             }
@@ -217,6 +221,8 @@ namespace GTAC.Areas.Dashboard.Controllers
                 user.IsProfileApproved = false;
                 IdentityResult result = await _userManager.UpdateAsync(user);
                 await _context.SaveChangesAsync();
+                ActivityLog.Create(_userManager.GetUserId(User), Area.RequestProfileChange, Models.Action.Create, "Created Request Profile Change", _context);
+
                 return RedirectToAction(nameof(ViewProfile));
                 //IdentityResult result = await _userManager.UpdateAsync(user);
 
@@ -239,6 +245,13 @@ namespace GTAC.Areas.Dashboard.Controllers
                 return View();
             }
         }
+        public async Task<IActionResult> TotalPendingRequests()
+        {
+            var applicationDbContext = await _context.Users.CountAsync(r => r.IsProfileApproved == false);
+
+            return Json(new { totalRequests = applicationDbContext });
+        }
+
 
 
         // GET: Dashboard/Students/Details/5
@@ -264,9 +277,11 @@ namespace GTAC.Areas.Dashboard.Controllers
             ViewBag.StudSched = await _context.Schedules.Where(s => s.StudentId == id).FirstOrDefaultAsync();
             ViewBag.ChangeRequest = null;
 
-            if (student.User.IsProfileApproved == false)
+            if (student.User.IsProfileApproved == false && (User.IsInRole("Manager") || User.IsInRole("Staff")))
             {
                 ViewBag.ChangeRequest = await _context.StudentChangeRequests.Where(s => s.UserId == student.UserId).FirstOrDefaultAsync();
+                ActivityLog.Create(_userManager.GetUserId(User), Area.RequestProfileChange, Models.Action.View, "Viewed Request Profile Change of " + student.User.Firstname, _context);
+
             }
             return View(student);
         }
@@ -380,7 +395,7 @@ namespace GTAC.Areas.Dashboard.Controllers
                     System.IO.File.Delete(filePath);
                 }
             }
-
+            ActivityLog.Create(_userManager.GetUserId(User), Area.RequestProfileChange, Models.Action.Delete, "Deleted Request Profile Change", _context);
             await _context.SaveChangesAsync();
             // ActivityLog.Create(_userManager.GetUserId(User), Area., Models.Action.Delete, "Deleted Request for Reschedule", _context);
             return RedirectToAction(nameof(ViewProfile));

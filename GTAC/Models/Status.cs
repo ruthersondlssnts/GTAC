@@ -22,7 +22,9 @@ namespace GTAC.Models
         Module,
         Certificate,
         [Display(Name = "Company User")]
-        CompanyUser
+        CompanyUser,
+        [Display(Name = "Request Profile Change")]
+        RequestProfileChange
     }
 
     public enum Action
@@ -31,5 +33,6 @@ namespace GTAC.Models
         Edit,
         View,
         Delete,
+        Download,
     }
 }

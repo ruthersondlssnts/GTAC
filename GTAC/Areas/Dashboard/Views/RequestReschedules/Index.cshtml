@@ -91,7 +91,7 @@
                                 </div>
                             </td>
                             <td>
-                                @item.Status
+                                @GTAC.Helpers.EnumExtensions.GetDisplayName(item.Status)
                             </td>
                             <td>
                                 @item.CreatedAt.ToString("MM/dd/yyyy h:mm tt")

@@ -4,6 +4,28 @@
     ViewData["Title"] = "Students";
     ViewData["NavStudents"] = "active";
 }
+<!-- Content Row -->
+<div class="row">
+    <!-- Pending Requests Card Example -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1 ">
+                            Pending Profile Change Requests
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800 total-request">0</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="card shadow mb-4">
     <div class="card-header py-3">
         <div class="d-sm-flex align-items-center justify-content-between">
@@ -54,7 +76,7 @@
                         </div>
                     </div>
                     <div class="form-group col-md-2" style="position: relative;margin-top: 42px;">
-                        <input type="submit" value="View" class="btn btn-primary" style="position: absolute;bottom: 0;">
+                        <input type="submit" value="Search" class="btn btn-primary" style="position: absolute;bottom: 0;">
                     </div>
                 </div>
             </form>
@@ -220,6 +242,17 @@
             });
 
         }
+
+        $.ajax({
+            url: "/Dashboard/Students/TotalPendingRequests",
+            type: "get",
+            success: function (res) {
+                $('.total-request').text(res.totalRequests);
+            },
+            error: function (err) {
+                console.log(err)
+            }
+        });
     </script>
 }
 

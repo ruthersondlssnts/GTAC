@@ -6,6 +6,9 @@
 @if (ViewBag.isValid)
 {
     <script src='https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js"
+            integrity="sha512-U5C477Z8VvmbYAoV4HDq17tf4wG6HXPC6/KM9+0/wEXQQ13gmKY2Zb0Z2vu0VNUWch4GlJ+Tl/dfoLOH4i2msw==" crossorigin="anonymous"
+            referrerpolicy="no-referrer"></script>
     <style>
         .container-iframe {
             position: relative;
@@ -42,7 +45,9 @@
                             <canvas class="pdf-viewer responsive-iframe">
                             </canvas>
                         </main>
-                        <button id="pdf_link" class="btn btn-primary">Download Pdf</button>
+                        <button id="pdf_link" class="mx-auto mt-4 btn btn-primary" style="display: block;">
+                            Download Pdf
+                        </button>
                     </div>
                     @if (User.IsInRole("Admin") || User.IsInRole("Instructor") || User.IsInRole("Manager") || User.IsInRole("Staff"))
                     {
@@ -71,7 +76,7 @@
                                         Status
                                     </dt>
                                     <dd class="col-lg-8">
-                                        @Model.Status
+                                        @GTAC.Helpers.EnumExtensions.GetDisplayName(Model.Status)
                                     </dd>
                                 </dl>
                                 <div>
@@ -111,7 +116,17 @@
             var string = doc.output('datauristring');
 
             $('#pdf_link').click(function () {
-                doc.save(string);
+                doc.save("certificate");
+                $.ajax({
+                    url: "/Dashboard/Certificates/InsertLog",
+                    type: "post",
+                    success: function (res) {
+
+                    },
+                    error: function (err) {
+                        console.log(err)
+                    }
+                });
             })
 
             const viewer = document.querySelector('.pdf-viewer');

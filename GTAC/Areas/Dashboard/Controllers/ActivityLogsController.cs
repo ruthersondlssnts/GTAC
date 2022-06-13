@@ -1,5 +1,6 @@
 ﻿using AspNetCore.Reporting;
 using GTAC.Data;
+using GTAC.Helpers;
 using GTAC.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -63,7 +64,7 @@ namespace GTAC.Areas.Dashboard.Controllers
                  .Select(a => new
                  {
                      Account = a.User.Firstname + " " + a.User.Lastname,
-                     Area = a.Area.ToString(),
+                     Area = EnumExtensions.GetDisplayName(a.Area),
                      Action = a.Description,
                      Time = a.CreatedAt
                  })
