@@ -131,20 +131,23 @@
                 </li>
             }
 
-            <!-- Nav Item - Modules -->
-            <li class="nav-item @ViewData["NavModules"]">
-                <a class="nav-link" asp-area="Dashboard" asp-controller="Modules" asp-action="Index">
-                    <i class="fas fa-fw fa-file-pdf"></i>
-                    <span>Modules</span>
-                </a>
-            </li>
-            <!-- Nav Item - Quizzes -->
-            <li class="nav-item @ViewData["NavQuizzes"]">
-                <a class="nav-link" asp-area="Dashboard" asp-controller="Quizzes" asp-action="Index">
-                    <i class="fas fa-fw fa-file-alt"></i>
-                    <span>Quizzes</span>
-                </a>
-            </li>
+            @if (!User.IsInRole("Admin") && !User.IsInRole("Manager"))
+            {
+                <!-- Nav Item - Modules -->
+                <li class="nav-item @ViewData["NavModules"]">
+                    <a class="nav-link" asp-area="Dashboard" asp-controller="Modules" asp-action="Index">
+                        <i class="fas fa-fw fa-file-pdf"></i>
+                        <span>Modules</span>
+                    </a>
+                </li>
+                <!-- Nav Item - Quizzes -->
+                <li class="nav-item @ViewData["NavQuizzes"]">
+                    <a class="nav-link" asp-area="Dashboard" asp-controller="Quizzes" asp-action="Index">
+                        <i class="fas fa-fw fa-file-alt"></i>
+                        <span>Quizzes</span>
+                    </a>
+                </li>
+            }
 
             @if (User.IsInRole("Admin") || User.IsInRole("Staff") || User.IsInRole("Manager") || User.IsInRole("Instructor"))
             {

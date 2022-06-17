@@ -116,7 +116,15 @@ namespace GTAC.Areas.Dashboard.Controllers
                 if (request.PhotoPath != null)
                 {
                     string uploadsDir = Path.Combine(_webHostEnvironment.WebRootPath, "images/users");
-                    string filePath = Path.Combine(uploadsDir, user.PhotoPath);
+                    string filePath = "";
+                    if (user.PhotoPath != null)
+                    {
+                        filePath = Path.Combine(uploadsDir, user.PhotoPath);
+                    }
+                    else
+                    {
+                        filePath = Path.Combine(uploadsDir, Guid.NewGuid().ToString());
+                    }
                     if ((System.IO.File.Exists(filePath)))
                     {
                         System.IO.File.Delete(filePath);
